@@ -3,7 +3,7 @@
  * Class used to hold GooglePlace Photo data 
  */
 
-package com.android.aces.townportal;
+package com.android.projecte.townportal;
 
 import android.graphics.Bitmap;
 

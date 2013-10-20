@@ -4,9 +4,11 @@
  *   categories for user to select
  */
 
-package com.android.aces.townportal;
+package com.android.projecte.townportal;
 
 import java.util.Vector;
+
+import com.android.projecte.townportal.R;
 
 import android.net.Uri;
 import android.os.Bundle;

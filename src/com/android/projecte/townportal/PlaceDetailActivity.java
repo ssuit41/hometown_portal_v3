@@ -4,7 +4,9 @@
  *    when user clicks on Place from MapActivity page
  */
 
-package com.android.aces.townportal;
+package com.android.projecte.townportal;
+
+import com.android.projecte.townportal.R;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

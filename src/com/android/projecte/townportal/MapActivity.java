@@ -4,7 +4,9 @@
  *   sub-categories of user selected category
  */
 
-package com.android.aces.townportal;
+package com.android.projecte.townportal;
+
+import com.android.projecte.townportal.R;
 
 import android.app.TabActivity;
 import android.content.Intent;

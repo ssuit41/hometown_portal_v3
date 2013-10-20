@@ -3,7 +3,7 @@
  * Class used to hold GooglePlace Detail data 
  */
 
-package com.android.aces.townportal;
+package com.android.projecte.townportal;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

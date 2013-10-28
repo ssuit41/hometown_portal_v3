@@ -7,101 +7,119 @@ package com.android.projecte.townportal;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Place {
-	private String id;
-	private String icon;
-	private String name;
-	private String vicinity;
-	private Double latitude;
-	private Double longitude;
-	private String placeReference;
 
-	public String getId() {
-		return id;
-	}
+    private String id;
+    private String icon;
+    private String name;
+    private String vicinity;
+    private Double latitude;
+    private Double longitude;
+    private String placeReference;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
 
-	public String getIcon() {
-		return (icon);
-	}
+        return id;
+    }
 
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
+    public void setId( String id ) {
 
-	public Double getLatitude() {
-		return latitude;
-	}
+        this.id = id;
+    }
 
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
-	}
+    public String getIcon() {
 
-	public Double getLongitude() {
-		return longitude;
-	}
+        return ( icon );
+    }
 
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
-	}
+    public void setIcon( String icon ) {
 
-	public String getName() {
-		return name;
-	}
+        this.icon = icon;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Double getLatitude() {
 
-	public String getVicinity() {
-		return vicinity;
-	}
+        return latitude;
+    }
 
-	public void setVicinity(String vicinity) {
-		this.vicinity = vicinity;
-	}
+    public void setLatitude( Double latitude ) {
 
-	static Place jsonToPlace(JSONObject toPlace) {
-		try {
-			
-			Place result = new Place();
-			JSONObject geometry = (JSONObject) toPlace.get("geometry");
-			JSONObject location = (JSONObject) geometry.get("location");
-			result.setLatitude((Double) location.get("lat"));
-			result.setLongitude((Double) location.get("lng"));
-			result.setIcon(toPlace.getString("icon"));
-			result.setName(toPlace.getString("name"));
-			result.setVicinity(toPlace.getString("vicinity"));
-			result.setId(toPlace.getString("id"));
-			result.setPlaceReference(toPlace.getString("reference"));
-			
-			return result;
-			
-		} catch (JSONException ex) {
-			Logger.getLogger(Place.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		return null;
-	}
+        this.latitude = latitude;
+    }
 
-	@Override
-	public String toString() {
-		// return "Place{" + "id=" + id + ", icon=" + icon + ", name=" + name +
-		// ", latitude=" + latitude + ", longitude=" + longitude + '}';
-		return this.name;
-	}
+    public Double getLongitude() {
 
+        return longitude;
+    }
 
-	public String getPlaceReference() {
-		return placeReference;
-	}
+    public void setLongitude( Double longitude ) {
 
-	public void setPlaceReference(String placeReference) {
-		this.placeReference = placeReference;
-	}
+        this.longitude = longitude;
+    }
+
+    public String getName() {
+
+        return name;
+    }
+
+    public void setName( String name ) {
+
+        this.name = name;
+    }
+
+    public String getVicinity() {
+
+        return vicinity;
+    }
+
+    public void setVicinity( String vicinity ) {
+
+        this.vicinity = vicinity;
+    }
+
+    static Place jsonToPlace( JSONObject toPlace ) {
+
+        try {
+
+            Place result = new Place();
+            JSONObject geometry = (JSONObject) toPlace.get( "geometry" );
+            JSONObject location = (JSONObject) geometry.get( "location" );
+            result.setLatitude( (Double) location.get( "lat" ) );
+            result.setLongitude( (Double) location.get( "lng" ) );
+            result.setIcon( toPlace.getString( "icon" ) );
+            result.setName( toPlace.getString( "name" ) );
+            result.setVicinity( toPlace.getString( "vicinity" ) );
+            result.setId( toPlace.getString( "id" ) );
+            result.setPlaceReference( toPlace.getString( "reference" ) );
+
+            return result;
+
+        } catch ( JSONException ex ) {
+            Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null,
+                    ex );
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+
+        // return "Place{" + "id=" + id + ", icon=" + icon + ", name=" + name +
+        // ", latitude=" + latitude + ", longitude=" + longitude + '}';
+        return this.name;
+    }
+
+    public String getPlaceReference() {
+
+        return placeReference;
+    }
+
+    public void setPlaceReference( String placeReference ) {
+
+        this.placeReference = placeReference;
+    }
 }

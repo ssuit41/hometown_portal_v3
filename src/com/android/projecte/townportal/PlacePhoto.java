@@ -9,23 +9,27 @@ import android.graphics.Bitmap;
 
 public class PlacePhoto {
 
-	private String photoReference;
-	private Bitmap photo;
+    private String photoReference;
+    private Bitmap photo;
 
-	public String getPhotoReference() {
-		return photoReference;
-	}
+    public String getPhotoReference() {
 
-	public void setPhotoReference(String photoReference) {
-		this.photoReference = photoReference;
-	}
+        return photoReference;
+    }
 
-	public Bitmap getPhoto() {
-		return photo;
-	}
+    public void setPhotoReference( String photoReference ) {
 
-	public void setPhoto(Bitmap photo) {
-		this.photo = photo;
-	}
+        this.photoReference = photoReference;
+    }
+
+    public Bitmap getPhoto() {
+
+        return photo;
+    }
+
+    public void setPhoto( Bitmap photo ) {
+
+        this.photo = photo;
+    }
 
 }

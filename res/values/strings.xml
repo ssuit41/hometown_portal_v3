@@ -14,8 +14,8 @@
     <string name="locations_prompt">Select Location</string>
 
     <string-array name="locations">
-        <item>Panama City</item>
         <item>My Location</item>
+        <item>Panama City</item>
     </string-array>
 
     <string name="title_activity_restaurant">RestaurantActivity</string>

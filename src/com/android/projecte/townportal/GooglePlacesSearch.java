@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -27,136 +28,143 @@ import android.graphics.BitmapFactory;
 
 public class GooglePlacesSearch {
 
-	public String location = "30.205971,-85.858862";
-	public String radius = "16100"; // in meters - about 10 miles
-	public String types;
-	public String sensor = "false";
-	public String APIKey = "AIzaSyBz7p2E8oDDBYJYvL3RM3cFjHCJDkpuqwU";
-	public String reference = null;
-	BitmapFactory.Options bmOptions;
+    public String location = "30.205971,-85.858862";
+    public String radius = "16100"; // in meters - about 10 miles
+    public String types;
+    public String sensor = "false";
+    public String APIKey = "AIzaSyBz7p2E8oDDBYJYvL3RM3cFjHCJDkpuqwU";
+    public String reference = null;
+    BitmapFactory.Options bmOptions;
 
-	public GooglePlacesSearch(String placeType, String geoLocation) {
-		types = placeType;
-		location = geoLocation;
+    public GooglePlacesSearch(String placeType, String geoLocation) {
 
-	}
+        types = placeType;
+        location = geoLocation;
 
-	public String FormGoogleSearchURL() {
-		String returnVal = new String();
+    }
 
-		returnVal = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
-		returnVal += location + "&radius=" + radius + "&types=" + types
-				+ "&sensor=" + sensor + "&key=" + APIKey;
+    public String FormGoogleSearchURL() {
 
-		return (returnVal);
-	}
+        String returnVal = new String();
 
-	public ArrayList<Place> findPlaces() {
-		String urlString = FormGoogleSearchURL();
-		
-		try {
-			String json = getJSON(urlString);
-			JSONObject object = new JSONObject(json);
-			JSONArray array = object.getJSONArray("results");
+        returnVal = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
+        returnVal += location + "&radius=" + radius + "&types=" + types
+                + "&sensor=" + sensor + "&key=" + APIKey;
 
-			ArrayList<Place> arrayList = new ArrayList<Place>();
-			for (int i = 0; i < array.length(); i++) {
-				try {
-					Place place = Place.jsonToPlace((JSONObject) array.get(i));
-					arrayList.add(place);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			return arrayList;
-		} catch (JSONException ex) {
-			ex.printStackTrace();
-		}
-		return null;
-	}
+        return ( returnVal );
+    }
 
-	protected String getJSON(String _URL) {
-		return getURLContent(_URL);
-	}
+    public ArrayList<Place> findPlaces() {
 
-	private String getURLContent(String _URL) {
-		StringBuilder content = new StringBuilder();
-		try {
-			URL url = new URL(_URL);
-			URLConnection urlConnection = url.openConnection();
-			BufferedReader bufferedReader = new BufferedReader(
-					new InputStreamReader(urlConnection.getInputStream()), 8);
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-				content.append(line + "\n");
-			}
-			bufferedReader.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return content.toString();
-	}
+        String urlString = FormGoogleSearchURL();
 
-	public String GetPlaceDetailUrl(String placeRef) {
-		String returnVal = new String();
+        try {
+            String json = getJSON( urlString );
+            JSONObject object = new JSONObject( json );
+            JSONArray array = object.getJSONArray( "results" );
 
-		returnVal = "https://maps.googleapis.com/maps/api/place/details/json?reference=";
-		returnVal += placeRef + "&sensor=" + sensor + "&key=" + APIKey;
+            ArrayList<Place> arrayList = new ArrayList<Place>();
+            for ( int i = 0; i < array.length(); i++ ) {
+                try {
+                    Place place = Place
+                            .jsonToPlace( (JSONObject) array.get( i ) );
+                    arrayList.add( place );
+                } catch ( Exception e ) {
+                    e.printStackTrace();
+                }
+            }
+            return arrayList;
+        } catch ( JSONException ex ) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
-		return (returnVal);
-	}
+    protected String getJSON( String _URL ) {
 
-	public String GetPlaceDetailPhotoUrl(String photoRef) {
+        return getURLContent( _URL );
+    }
 
-		String returnVal = new String();
-		returnVal = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400";
-		returnVal += "&photoreference=" + photoRef + "&sensor=" + sensor
-				+ "&key=" + APIKey;
+    private String getURLContent( String _URL ) {
 
-		return (returnVal);
-	}
+        StringBuilder content = new StringBuilder();
+        try {
+            URL url = new URL( _URL );
+            URLConnection urlConnection = url.openConnection();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader( urlConnection.getInputStream() ), 8 );
+            String line;
+            while ( ( line = bufferedReader.readLine() ) != null ) {
+                content.append( line + "\n" );
+            }
+            bufferedReader.close();
+        } catch ( Exception e ) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
 
-	//Gets PlaceDetails from Google Places passing Places reference
-	public PlaceDetail findPlaceDetail(String placeRef) {
+    public String GetPlaceDetailUrl( String placeRef ) {
 
-		PlaceDetail placeDetail = null;
-		String urlString = GetPlaceDetailUrl(placeRef);
+        String returnVal = new String();
 
-		try {
-			String json = getJSON(urlString);
-			JSONObject object = new JSONObject(json);
-			JSONObject result = object.getJSONObject("result");
+        returnVal = "https://maps.googleapis.com/maps/api/place/details/json?reference=";
+        returnVal += placeRef + "&sensor=" + sensor + "&key=" + APIKey;
 
-			placeDetail = PlaceDetail.jsonToPlaceDetail(result);
+        return ( returnVal );
+    }
 
-		} catch (JSONException ex) {
-			ex.printStackTrace();
-		}
-		return placeDetail;
-	}
+    public String GetPlaceDetailPhotoUrl( String photoRef ) {
 
-	//Gets Places Photo from Google Photos passing photo reference
-	public PlacePhoto findPlacePhoto(String photoReference) {
-		
-		PlacePhoto placePhoto = new PlacePhoto();
-		String urlString = GetPlaceDetailPhotoUrl(photoReference);
-		
-		try {
+        String returnVal = new String();
+        returnVal = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400";
+        returnVal += "&photoreference=" + photoRef + "&sensor=" + sensor
+                + "&key=" + APIKey;
 
-			HttpClient client = new DefaultHttpClient();
-			HttpGet request = new HttpGet();
-			request.setURI(new URI(urlString));
-			HttpResponse response = client.execute(request);
-			HttpEntity entity = response.getEntity();
-			InputStream in = entity.getContent();
-			Bitmap photo = BitmapFactory.decodeStream(in);
+        return ( returnVal );
+    }
 
-			placePhoto.setPhoto(photo);
+    // Gets PlaceDetails from Google Places passing Places reference
+    public PlaceDetail findPlaceDetail( String placeRef ) {
 
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return placePhoto;
-	}
+        PlaceDetail placeDetail = null;
+        String urlString = GetPlaceDetailUrl( placeRef );
+
+        try {
+            String json = getJSON( urlString );
+            JSONObject object = new JSONObject( json );
+            JSONObject result = object.getJSONObject( "result" );
+
+            placeDetail = PlaceDetail.jsonToPlaceDetail( result );
+
+        } catch ( JSONException ex ) {
+            ex.printStackTrace();
+        }
+        return placeDetail;
+    }
+
+    // Gets Places Photo from Google Photos passing photo reference
+    public PlacePhoto findPlacePhoto( String photoReference ) {
+
+        PlacePhoto placePhoto = new PlacePhoto();
+        String urlString = GetPlaceDetailPhotoUrl( photoReference );
+
+        try {
+
+            HttpClient client = new DefaultHttpClient();
+            HttpGet request = new HttpGet();
+            request.setURI( new URI( urlString ) );
+            HttpResponse response = client.execute( request );
+            HttpEntity entity = response.getEntity();
+            InputStream in = entity.getContent();
+            Bitmap photo = BitmapFactory.decodeStream( in );
+
+            placePhoto.setPhoto( photo );
+
+        } catch ( Exception ex ) {
+            ex.printStackTrace();
+        }
+        return placePhoto;
+    }
 
 }

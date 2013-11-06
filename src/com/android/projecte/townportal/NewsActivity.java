@@ -49,10 +49,10 @@ public class NewsActivity extends Activity {
 
         super.onCreate( savedInstanceState );
         
-        // Remove title bar
-        this.requestWindowFeature( Window.FEATURE_NO_TITLE );
-        
+        // Use custom title bar
+        requestWindowFeature( Window.FEATURE_CUSTOM_TITLE );
         setContentView( R.layout.activity_news );
+        getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.news_title );
         
         newsList = (ListView) findViewById( R.id.newsList );
         webView = (WebView) findViewById( R.id.webView );

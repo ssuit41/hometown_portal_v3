@@ -63,8 +63,7 @@ public class NewsActivity extends Activity {
         newsList.setOnItemClickListener( new OnItemClickListener() {
 
             @Override
-            public void onItemClick( AdapterView<?> adapterView, View view, int position,
-                    long id ) {
+            public void onItemClick( AdapterView<?> adapterView, View view, int position, long id ) {
 
                 viewingArticle = true;
                 

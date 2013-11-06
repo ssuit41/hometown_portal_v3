@@ -22,5 +22,7 @@
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_place_detail">PlaceDetail</string>
     <string name="hello_world">Hello world!</string>
+    <string name="rssUrl">http://www.feedyes.com/feed.php?f=Kv2Z3MG3CaXLXoQ8</string>
+    <string name="title_activity_news">NewsActivity</string>
 
 </resources>

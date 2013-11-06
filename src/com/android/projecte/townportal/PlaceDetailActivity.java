@@ -1,5 +1,5 @@
 /* PlaceDetailActivity.java
- * Electric Sheep - K.Hall, C.Munoz, A.Reaves
+ * Project E - Eric Daniels
  * Used with Place Detail activity page to display detailed information
  *    when user clicks on Place from MapActivity page
  */
@@ -18,8 +18,7 @@ import android.widget.TextView;
 
 public class PlaceDetailActivity extends Activity {
 
-    TextView nameTextView, addressTextView, phoneNumberTextView,
-            websiteTextView;
+    TextView nameTextView, addressTextView, phoneNumberTextView, websiteTextView;
     ImageView photoImageView;
 
     @Override
@@ -30,8 +29,7 @@ public class PlaceDetailActivity extends Activity {
         // Use custom title bar
         requestWindowFeature( Window.FEATURE_CUSTOM_TITLE );
         setContentView( R.layout.activity_main );
-        getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE,
-                R.layout.custom_title );
+        getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title );
         setContentView( R.layout.activity_place_detail );
 
         // Set Place detail TextViews
@@ -56,8 +54,7 @@ public class PlaceDetailActivity extends Activity {
         websiteTextView.setMovementMethod( LinkMovementMethod.getInstance() );
 
         if ( mWebsite != null ) {
-            websiteTextView.setText( Html.fromHtml( "<a href=" + mWebsite + ">"
-                    + mWebsite ) );
+            websiteTextView.setText( Html.fromHtml( "<a href=" + mWebsite + ">" + mWebsite ) );
         }
 
         // Set Photo ImageView

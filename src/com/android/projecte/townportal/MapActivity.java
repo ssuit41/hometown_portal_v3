@@ -1,5 +1,5 @@
 /* MapActivity.java
- * Electric Sheep - K.Hall, C.Munoz, A.Reaves
+ * Project E - Eric Daniels
  * Used with Google Maps activity page to display tabs which are
  *   sub-categories of user selected category
  */
@@ -43,29 +43,21 @@ public class MapActivity extends TabActivity implements
         Intent tabIntent; // Reusable Intent for each tab
 
         // Tab 1 - first tab is required, others may be null
-        tabIntent = new Intent().setClass( this, GooglePlacesMap.class )
-                .putExtra( "type", pt1.getGoogleName() );
-        spec = tabHost.newTabSpec( pt1.getDisplayName() )
-                .setIndicator( pt1.getDisplayName() ).setContent( tabIntent );
+        tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt1.getGoogleName() );
+        spec = tabHost.newTabSpec( pt1.getDisplayName() ).setIndicator( pt1.getDisplayName() ).setContent( tabIntent );
         tabHost.addTab( spec );
 
         // Tab 2
         if ( pt2 != null ) {
-            tabIntent = new Intent().setClass( this, GooglePlacesMap.class )
-                    .putExtra( "type", pt2.getGoogleName() );
-            spec = tabHost.newTabSpec( pt2.getDisplayName() )
-                    .setIndicator( pt2.getDisplayName() )
-                    .setContent( tabIntent );
+            tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt2.getGoogleName() );
+            spec = tabHost.newTabSpec( pt2.getDisplayName() ).setIndicator( pt2.getDisplayName() ).setContent( tabIntent );
             tabHost.addTab( spec );
         }
 
         // Tab 3
         if ( pt3 != null ) {
-            tabIntent = new Intent().setClass( this, GooglePlacesMap.class )
-                    .putExtra( "type", pt3.getGoogleName() );
-            spec = tabHost.newTabSpec( pt3.getDisplayName() )
-                    .setIndicator( pt3.getDisplayName() )
-                    .setContent( tabIntent );
+            tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt3.getGoogleName() );
+            spec = tabHost.newTabSpec( pt3.getDisplayName() ).setIndicator( pt3.getDisplayName() ).setContent( tabIntent );
             tabHost.addTab( spec );
         }
 
@@ -75,8 +67,7 @@ public class MapActivity extends TabActivity implements
         // http://www.speakingcode.com/2011/10/17/adjust-height-of-android-tabwidget/
         int heightValue = 30;
         for ( int i = 0; i < tabHost.getTabWidget().getTabCount(); i++ ) {
-            tabHost.getTabWidget().getChildAt( i ).getLayoutParams().height = (int) ( heightValue * this
-                    .getResources().getDisplayMetrics().density );
+            tabHost.getTabWidget().getChildAt( i ).getLayoutParams().height = (int) ( heightValue * this.getResources().getDisplayMetrics().density );
         }
 
     }
@@ -91,8 +82,7 @@ public class MapActivity extends TabActivity implements
     }
 
     @Override
-    public void onItemSelected( AdapterView<?> arg0, View arg1, int arg2,
-            long arg3 ) {
+    public void onItemSelected( AdapterView<?> arg0, View arg1, int arg2, long arg3 ) {
 
         return;
     }

@@ -1,5 +1,5 @@
 /* GooglePlacesSearch.java
- * Electric Sheep - K.Hall, C.Munoz, A.Reaves
+ * Project E - Eric Daniels
  * Uses JSON query to retrieve GooglePlaces information 
  *    about places with type selected by user
  */
@@ -49,7 +49,7 @@ public class GooglePlacesSearch {
 
         returnVal = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
         returnVal += location + "&radius=" + radius + "&types=" + types
-                + "&sensor=" + sensor + "&key=" + APIKey;
+                    + "&sensor=" + sensor + "&key=" + APIKey;
 
         return ( returnVal );
     }
@@ -64,17 +64,23 @@ public class GooglePlacesSearch {
             JSONArray array = object.getJSONArray( "results" );
 
             ArrayList<Place> arrayList = new ArrayList<Place>();
+            
             for ( int i = 0; i < array.length(); i++ ) {
+                
                 try {
-                    Place place = Place
-                            .jsonToPlace( (JSONObject) array.get( i ) );
+                    
+                    Place place = Place.jsonToPlace( (JSONObject) array.get( i ) );
                     arrayList.add( place );
+                    
                 } catch ( Exception e ) {
+                    
                     e.printStackTrace();
                 }
             }
             return arrayList;
+            
         } catch ( JSONException ex ) {
+            
             ex.printStackTrace();
         }
         return null;
@@ -91,14 +97,16 @@ public class GooglePlacesSearch {
         try {
             URL url = new URL( _URL );
             URLConnection urlConnection = url.openConnection();
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader( urlConnection.getInputStream() ), 8 );
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( urlConnection.getInputStream() ), 8 );
             String line;
-            while ( ( line = bufferedReader.readLine() ) != null ) {
+            
+            while ( ( line = bufferedReader.readLine() ) != null )
                 content.append( line + "\n" );
-            }
+            
             bufferedReader.close();
+            
         } catch ( Exception e ) {
+            
             e.printStackTrace();
         }
         return content.toString();
@@ -118,8 +126,7 @@ public class GooglePlacesSearch {
 
         String returnVal = new String();
         returnVal = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400";
-        returnVal += "&photoreference=" + photoRef + "&sensor=" + sensor
-                + "&key=" + APIKey;
+        returnVal += "&photoreference=" + photoRef + "&sensor=" + sensor + "&key=" + APIKey;
 
         return ( returnVal );
     }
@@ -131,6 +138,7 @@ public class GooglePlacesSearch {
         String urlString = GetPlaceDetailUrl( placeRef );
 
         try {
+            
             String json = getJSON( urlString );
             JSONObject object = new JSONObject( json );
             JSONObject result = object.getJSONObject( "result" );

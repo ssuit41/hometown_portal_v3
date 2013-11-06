@@ -1,5 +1,5 @@
 /* PlaceDetail.java
- * Electric Sheep - K.Hall, C.Munoz, A.Reaves
+ * Project E - Eric Daniels
  * Class used to hold GooglePlace Detail data 
  */
 
@@ -78,38 +78,43 @@ public class PlaceDetail {
         PlaceDetail placeDetail = null;
 
         try {
+            
             placeDetail = new PlaceDetail();
 
             if ( !( result.isNull( "photos" ) ) ) {
+                
                 JSONArray photos = result.getJSONArray( "photos" );
                 JSONObject photo = photos.getJSONObject( 0 );
                 placeDetail.setPhotoRef( photo.getString( "photo_reference" ) );
             }
 
             if ( !( result.isNull( "formatted_phone_number" ) ) ) {
-                String phoneNumber = result
-                        .getString( "formatted_phone_number" );
+                
+                String phoneNumber = result.getString( "formatted_phone_number" );
                 placeDetail.setPhoneNumber( phoneNumber );
             }
 
             if ( !( result.isNull( "formatted_address" ) ) ) {
+                
                 String address = result.getString( "formatted_address" );
                 placeDetail.setAddress( address );
             }
 
             if ( !( result.isNull( "website" ) ) ) {
+                
                 String website = result.getString( "website" );
                 placeDetail.setWebsite( website );
             }
 
             if ( !( result.isNull( "name" ) ) ) {
+                
                 String siteName = result.getString( "name" );
                 placeDetail.setSiteName( siteName );
             }
 
         } catch ( JSONException ex ) {
-            Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null,
-                    ex );
+            
+            Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null, ex );
         }
         return placeDetail;
     }

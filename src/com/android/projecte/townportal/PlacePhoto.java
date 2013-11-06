@@ -1,5 +1,5 @@
 /* PlacePhoto.java
- * Electric Sheep - K.Hall, C.Munoz, A.Reaves
+ * Project E - Eric Daniels
  * Class used to hold GooglePlace Photo data 
  */
 

@@ -1,5 +1,5 @@
 /* GooglePlacesMap.java
- * Electric Sheep - K.Hall, C.Munoz, A.Reaves
+ * Project E - Eric Daniels
  * Used with Google Maps activity page to display map of user selected category
  *   and ListView of places
  */
@@ -70,40 +70,37 @@ public class GooglePlacesMap extends Activity implements
             e.printStackTrace();
         }
 
-        bestProvider = locationManager.getBestProvider( new Criteria(), true );
-
-        if ( bestProvider == null ) {
-
-            Toast toast = Toast.makeText( this,
-                    "error: No location providers enabled", Toast.LENGTH_SHORT );
-            toast.setGravity( Gravity.CENTER_HORIZONTAL, 0, 0 );
-            toast.show();
-            return;
-        } else
-            locationManager.requestLocationUpdates( bestProvider, 6000, 20,
-                    this );
-
         spinner = (Spinner) findViewById( R.id.spinner1 );
         spinner.setOnItemSelectedListener( this );
+        
+        bestProvider = locationManager.getBestProvider( new Criteria(), true );
+        
+        if ( bestProvider == null ) {
 
-        String geoLocation = Double.toString( latitude ) + ","
-                + Double.toString( longitude );
+            Toast toast = Toast.makeText( this, "error: Please enable location services.", Toast.LENGTH_SHORT );
+            toast.setGravity( Gravity.CENTER_HORIZONTAL, 0, 0 );
+            toast.show();
+            spinner.setSelection( 1 );
+            
+        } else
+            locationManager.requestLocationUpdates( bestProvider, 6000, 20,  this );
+
+        String geoLocation = Double.toString( latitude ) + "," + Double.toString( longitude );
 
         gpsearch = new GooglePlacesSearch( type, geoLocation );
         lv = (ListView) findViewById( R.id.list );
         lv.setOnItemClickListener( this );
 
         mapView = (WebView) findViewById( R.id.mapview );
-        // enabling javascript
         mapView.getSettings().setJavaScriptEnabled( true );
 
         try {
-            mapView.loadData(
-                    getMapHTML( latitude, longitude, type, milesAway ),
-                    "text/html", null );
+            
+            mapView.loadData( getMapHTML( latitude, longitude, type, milesAway ), "text/html", null );
 
             // starting the AsynTask ListViewTask
             new ListViewTask().execute();
+            
         } catch ( Exception e ) {
             e.printStackTrace();
         }
@@ -214,12 +211,10 @@ public class GooglePlacesMap extends Activity implements
 
             placePhoto = thePlacePhoto;
 
-            Intent placeDetailIntent = new Intent( GooglePlacesMap.this,
-                    PlaceDetailActivity.class );
+            Intent placeDetailIntent = new Intent( GooglePlacesMap.this, PlaceDetailActivity.class );
             placeDetailIntent.putExtra( "name", placeDetail.getSiteName() );
             placeDetailIntent.putExtra( "address", placeDetail.getAddress() );
-            placeDetailIntent.putExtra( "phonenumber",
-                    placeDetail.getPhoneNumber() );
+            placeDetailIntent.putExtra( "phonenumber", placeDetail.getPhoneNumber() );
             placeDetailIntent.putExtra( "website", placeDetail.getWebsite() );
             placeDetailIntent.putExtra( "photo", placePhoto.getPhoto() );
 
@@ -249,15 +244,13 @@ public class GooglePlacesMap extends Activity implements
             // update latitude and longitude coordinates for each
             if ( bestProvider != null ) {
 
-                locationDetails = locationManager
-                        .getLastKnownLocation( bestProvider );
+                locationDetails = locationManager.getLastKnownLocation( bestProvider );
 
                 if ( locationDetails != null ) {
 
                     latitude = locationDetails.getLatitude();
                     longitude = locationDetails.getLongitude();
-                    geoLocation = Double.toString( latitude ) + ","
-                            + Double.toString( longitude );
+                    geoLocation = Double.toString( latitude ) + "," + Double.toString( longitude );
 
                     gpsearch = new GooglePlacesSearch( type, geoLocation );
                     // starting the AsynTask ListViewTask
@@ -265,9 +258,7 @@ public class GooglePlacesMap extends Activity implements
 
                     try {
                         mapView.stopLoading();
-                        mapView.loadData(
-                                getMapHTML( latitude, longitude, type,
-                                        milesAway ), "text/html", "UTF-8" );
+                        mapView.loadData( getMapHTML( latitude, longitude, type, milesAway ), "text/html", "UTF-8" );
 
                     } catch ( NullPointerException e ) {
                         e.printStackTrace();
@@ -278,9 +269,7 @@ public class GooglePlacesMap extends Activity implements
                     // Default to Panama City
                     spinner.setSelection( 1 );
                     Toast toast = Toast
-                            .makeText(
-                                    this,
-                                    "Failed to get current location. Defaulting to Panama City",
+                            .makeText( this, "Failed to get current location. Defaulting to Panama City. Try again soon.",
                                     Toast.LENGTH_SHORT );
                     toast.setGravity( Gravity.CENTER_HORIZONTAL, 0, 0 );
                     toast.show();
@@ -298,8 +287,7 @@ public class GooglePlacesMap extends Activity implements
             if ( !firstTime ) {
                 // only load again if this isn't first load that occurs in
                 // onCreate
-                String geoLocation = Double.toString( latitude ) + ","
-                        + Double.toString( longitude );
+                String geoLocation = Double.toString( latitude ) + "," + Double.toString( longitude );
                 gpsearch = new GooglePlacesSearch( type, geoLocation );
 
                 // starting the AsynTask ListViewTask
@@ -308,9 +296,7 @@ public class GooglePlacesMap extends Activity implements
 
             try {
                 mapView.stopLoading();
-                mapView.loadData(
-                        getMapHTML( latitude, longitude, type, milesAway ),
-                        "text/html", null );
+                mapView.loadData( getMapHTML( latitude, longitude, type, milesAway ), "text/html", null );
 
             } catch ( NullPointerException e ) {
                 e.printStackTrace();

@@ -1,5 +1,5 @@
 /* SplashActivity.java
- * Electric Sheep - K.Hall, C.Munoz, A.Reaves
+ * Project E - Eric Daniels
  * Splash page for Panama City Portal application
  */
 
@@ -28,8 +28,7 @@ public class SplashActivity extends Activity {
             public void run() {
 
                 finish();
-                Intent mainIntent = new Intent( SplashActivity.this,
-                        MainActivity.class );
+                Intent mainIntent = new Intent( SplashActivity.this, MainActivity.class );
                 startActivity( mainIntent );
             }
         };

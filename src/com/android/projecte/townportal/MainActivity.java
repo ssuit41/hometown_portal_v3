@@ -1,5 +1,5 @@
 /* MainActivity.java
- * Electric Sheep - K.Hall, C.Munoz, A.Reaves
+ * Project E - Eric Daniels
  * Main navigation page of HomeTown Portal application which displays 
  *   categories for user to select
  */
@@ -34,8 +34,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // Use custom title bar
         requestWindowFeature( Window.FEATURE_CUSTOM_TITLE );
         setContentView( R.layout.activity_main );
-        getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE,
-                R.layout.custom_title );
+        getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title );
 
         // Set up image buttons for each category with click listener
         // and add sub-categories to main category arrays if applicable
@@ -87,29 +86,40 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick( View v ) {
 
         switch ( v.getId() ) {
+        
         case R.id.btnFood:
+            
             openPlaceList( vFood.get( 0 ), vFood.get( 1 ), vFood.get( 2 ) );
             break;
+            
         case R.id.btnEntertainment:
+            
             openPlaceList( vEnt.get( 0 ), vEnt.get( 1 ), vEnt.get( 2 ) );
             break;
+            
         case R.id.btnShopping:
+            
             openPlaceList( vShop.get( 0 ), vShop.get( 1 ), vShop.get( 2 ) );
             break;
+            
         case R.id.btnSchools:
+            
             openPlaceList( vSchool.get( 0 ), vSchool.get( 1 ), null );
             break;
+            
         case R.id.btnEmployment:
-            Intent browserIntentEmploy = new Intent(
-                    Intent.ACTION_VIEW,
+            
+            Intent browserIntentEmploy = new Intent( Intent.ACTION_VIEW,
                     Uri.parse( "http://m.monster.com/JobSearch/Search?jobtitle=&keywords=&where=Panama+City%2C+FL" ) );
             startActivity( browserIntentEmploy );
             break;
+            
         case R.id.btnNews:
-            Intent browserIntentNews = new Intent( Intent.ACTION_VIEW,
-                    Uri.parse( "http://m.newsherald.com" ) );
-            startActivity( browserIntentNews );
+            
+            Intent newsIntent = new Intent( this, NewsActivity.class );
+            startActivity( newsIntent );
             break;
+            
         default:
             break;
         }
@@ -118,10 +128,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void openPlaceList( PlaceType type1, PlaceType type2,
             PlaceType type3 ) {
 
-        Intent intent = new Intent( MainActivity.this, MapActivity.class );
+        Intent intent = new Intent( this, MapActivity.class );
         intent.putExtra( "PlaceType1", type1 );
         intent.putExtra( "PlaceType2", type2 );
         intent.putExtra( "PlaceType3", type3 );
-        MainActivity.this.startActivity( intent );
+        startActivity( intent );
     }
 }

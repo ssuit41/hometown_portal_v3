@@ -1,5 +1,5 @@
 /* Place.java
- * Electric Sheep - K.Hall, C.Munoz, A.Reaves
+ * Project E - Eric Daniels
  * Class used to hold GooglePlace data 
  */
 
@@ -99,8 +99,8 @@ public class Place {
             return result;
 
         } catch ( JSONException ex ) {
-            Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null,
-                    ex );
+            
+            Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null, ex );
         }
         return null;
     }

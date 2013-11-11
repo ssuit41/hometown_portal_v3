@@ -52,7 +52,8 @@ public class NewsActivity extends Activity {
         // Use custom title bar
         requestWindowFeature( Window.FEATURE_CUSTOM_TITLE );
         setContentView( R.layout.activity_news );
-        getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.news_title );
+        getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title );
+        ((TextView) findViewById( R.id.title ) ).setText( R.string.news_text );
         
         newsList = (ListView) findViewById( R.id.newsList );
         webView = (WebView) findViewById( R.id.webView );

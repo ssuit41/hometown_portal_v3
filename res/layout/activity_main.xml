@@ -29,12 +29,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/restaurants"
-                android:contentDescription="@string/button_food" />
+                android:contentDescription="@string/food_text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_food"
+                android:text="@string/food_text"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -50,12 +50,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/entertainment"
-                android:contentDescription="@string/button_entertainment" />
+                android:contentDescription="@string/entertainment_text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_entertainment"
+                android:text="@string/entertainment_text"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -71,12 +71,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shopping"
-                android:contentDescription="@string/button_shopping" />
+                android:contentDescription="@string/shopping_text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_shopping"
+                android:text="@string/shopping_text"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
@@ -103,12 +103,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/schools"
-                android:contentDescription="@string/button_schools" />
+                android:contentDescription="@string/schools_text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_schools"
+                android:text="@string/schools_text"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -124,12 +124,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/employment"
-                android:contentDescription="@string/button_employment" />
+                android:contentDescription="@string/employment_text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_employment"
+                android:text="@string/employment_text"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -145,12 +145,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/news"
-                android:contentDescription="@string/button_news" />
+                android:contentDescription="@string/news_text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_news"
+                android:text="@string/news_text"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>

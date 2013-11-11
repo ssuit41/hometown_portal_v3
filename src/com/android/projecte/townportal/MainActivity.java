@@ -89,22 +89,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
         
         case R.id.btnFood:
             
-            openPlaceList( vFood.get( 0 ), vFood.get( 1 ), vFood.get( 2 ) );
+            openPlaceList( getResources().getString(R.string.food_text), 
+                    vFood.get( 0 ), vFood.get( 1 ), vFood.get( 2 ) );
             break;
             
         case R.id.btnEntertainment:
             
-            openPlaceList( vEnt.get( 0 ), vEnt.get( 1 ), vEnt.get( 2 ) );
+            openPlaceList( getResources().getString(R.string.entertainment_text),
+                    vEnt.get( 0 ), vEnt.get( 1 ), vEnt.get( 2 ) );
             break;
             
         case R.id.btnShopping:
             
-            openPlaceList( vShop.get( 0 ), vShop.get( 1 ), vShop.get( 2 ) );
+            openPlaceList( getResources().getString(R.string.shopping_text),
+                    vShop.get( 0 ), vShop.get( 1 ), vShop.get( 2 ) );
             break;
             
         case R.id.btnSchools:
             
-            openPlaceList( vSchool.get( 0 ), vSchool.get( 1 ), null );
+            openPlaceList( getResources().getString(R.string.schools_text),
+                    vSchool.get( 0 ), vSchool.get( 1 ), null );
             break;
             
         case R.id.btnEmployment:
@@ -125,10 +129,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void openPlaceList( PlaceType type1, PlaceType type2,
+    private void openPlaceList( String title, PlaceType type1, PlaceType type2,
             PlaceType type3 ) {
 
         Intent intent = new Intent( this, MapActivity.class );
+        intent.putExtra( "title", title );
         intent.putExtra( "PlaceType1", type1 );
         intent.putExtra( "PlaceType2", type2 );
         intent.putExtra( "PlaceType3", type3 );

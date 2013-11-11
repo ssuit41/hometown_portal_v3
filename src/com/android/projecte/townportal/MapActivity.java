@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 @SuppressWarnings ( "deprecation")
 public class MapActivity extends TabActivity implements
@@ -24,16 +25,18 @@ public class MapActivity extends TabActivity implements
 
         // http://stackoverflow.com/questions/2736389/how-to-pass-object-from-one-activity-to-another-in-android
         Intent intent = getIntent();
+        String title = ( String ) intent.getSerializableExtra( "title" );
         PlaceType pt1 = (PlaceType) intent.getSerializableExtra( "PlaceType1" );
         PlaceType pt2 = (PlaceType) intent.getSerializableExtra( "PlaceType2" );
         PlaceType pt3 = (PlaceType) intent.getSerializableExtra( "PlaceType3" );
 
         super.onCreate( savedInstanceState );
 
-        // Remove title bar
-        this.requestWindowFeature( Window.FEATURE_NO_TITLE );
-
+        // Use custom title bar
+        requestWindowFeature( Window.FEATURE_CUSTOM_TITLE );
         setContentView( R.layout.activity_map );
+        getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title );
+        ((TextView) findViewById( R.id.title ) ).setText( title );
 
         // Set up TabHost
         TabHost tabHost = (TabHost) findViewById( android.R.id.tabhost );

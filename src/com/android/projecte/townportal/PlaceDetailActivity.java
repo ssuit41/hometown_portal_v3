@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,11 +61,18 @@ public class PlaceDetailActivity extends Activity {
         // Set TextViews
         nameTextView.setText( mName );
         ratingTextView.setText( ratingToStar( (int) mRating ) );
-        priceTextView.setText( priceToDollar( mPrice ) );
         addressTextView.setText( mAddress );
         phoneNumberTextView.setText( mPhoneNumber );
         websiteTextView.setClickable( true );
         websiteTextView.setMovementMethod( LinkMovementMethod.getInstance() );
+        
+        String dollar = priceToDollar( mPrice );
+        
+        // Don't display dollar if it isn't there so we save space
+        if ( dollar.isEmpty() )
+            priceTextView.setVisibility( View.GONE );
+        else
+            priceTextView.setText( priceToDollar( mPrice ) );
 
         if ( mWebsite != null ) {
             websiteTextView.setText( Html.fromHtml( "<a href=" + mWebsite + ">" + mWebsite ) );

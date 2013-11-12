@@ -72,7 +72,7 @@ public class PlaceDetail {
 
         this.siteName = siteName;
     }
-
+    
     static PlaceDetail jsonToPlaceDetail( JSONObject result ) {
 
         PlaceDetail placeDetail = null;

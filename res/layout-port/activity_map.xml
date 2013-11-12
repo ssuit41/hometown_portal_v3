@@ -17,26 +17,31 @@
         <LinearLayout
             android:id="@+id/tab1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1" >
 
             <WebView
                 android:id="@+id/mapview"
+                android:layout_weight=".50"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="0dip"
                 android:layout_marginTop="30dp" />
-
+            
             <Spinner
                 android:id="@+id/spinner1"
+                android:layout_weight=".10"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dip"
                 android:entries="@array/locations"
                 android:prompt="@string/locations_prompt" />
 
             <ListView
                 android:id="@+id/list"
+                android:layout_weight=".40"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="0dip" />
+            
         </LinearLayout>
 
         <LinearLayout
@@ -52,6 +57,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
         </LinearLayout>
+        
     </FrameLayout>
 
 </TabHost>

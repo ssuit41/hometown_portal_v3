@@ -12,17 +12,20 @@
     <string name="schools_text">Schools</string>
     <string name="news_text">News</string>
     <string name="locations_prompt">Select Location</string>
+    <string name="loading_text">Loading&#8230;</string>
+    <string name="returnText">Press Back to Return</string>
+    <string name="courtesy">News courtesy of The News Herald</string>
+    <string name="title_activity_restaurant">RestaurantActivity</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_place_detail">PlaceDetail</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="newsSource">http://m.newsherald.com/</string>
+    <string name="topNews">Top%20News</string>
+    <string name="title_activity_news">NewsActivity</string>
 
     <string-array name="locations">
         <item>My Location</item>
         <item>Panama City</item>
     </string-array>
-
-    <string name="title_activity_restaurant">RestaurantActivity</string>
-    <string name="title_activity_map">MapActivity</string>
-    <string name="title_activity_place_detail">PlaceDetail</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="rssUrl">http://www.feedyes.com/feed.php?f=Kv2Z3MG3CaXLXoQ8</string>
-    <string name="title_activity_news">NewsActivity</string>
 
 </resources>

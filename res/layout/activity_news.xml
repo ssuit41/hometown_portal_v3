@@ -15,10 +15,17 @@
         android:layout_height="0dip"
         android:layout_weight="1" />
     
+    <!-- http://stackoverflow.com/questions/5049852/android-drawing-separator-divider-line-in-layout -->
+    <View android:id="@+id/divider"
+        android:layout_width="fill_parent"
+	    android:layout_height="1dp"
+	    android:background="@android:color/darker_gray" />
+    
     <TextView android:id="@+id/courtesy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="News courtesy of The News Herald" />
+        android:layout_marginTop="8dp"
+        android:text="@string/courtesy" />
     
     <WebView
         android:id="@+id/webView"

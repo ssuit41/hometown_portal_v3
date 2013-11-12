@@ -20,6 +20,8 @@ public class Place {
     private Double latitude;
     private Double longitude;
     private String placeReference;
+    private Double rating;
+    private int price;
 
     public String getId() {
 
@@ -80,7 +82,37 @@ public class Place {
 
         this.vicinity = vicinity;
     }
+    
+    public double getRating() {
+        
+        return this.rating;
+    }
+    
+    public void setRating( double rating ) {
 
+        this.rating = rating;
+    }
+    
+    public void setPrice( int price ) {
+
+        this.price = price;
+    }
+
+    public int getPrice() {
+
+        return this.price;
+    }
+    
+    public String getPlaceReference() {
+
+        return placeReference;
+    }
+
+    public void setPlaceReference( String placeReference ) {
+
+        this.placeReference = placeReference;
+    }
+    
     static Place jsonToPlace( JSONObject toPlace ) {
 
         try {
@@ -95,7 +127,26 @@ public class Place {
             result.setVicinity( toPlace.getString( "vicinity" ) );
             result.setId( toPlace.getString( "id" ) );
             result.setPlaceReference( toPlace.getString( "reference" ) );
+            
+            try {
+                
+                result.setRating( toPlace.getDouble( "rating" ) );
+            
+            } catch ( JSONException ex ) {
+                
+                result.setRating( 0 );
+            }
+            
+            try {
+                
+                result.setPrice( toPlace.getInt( "price_level" ) );
+            
+            } catch ( JSONException ex ) {
+                
+                result.setPrice( 0 );
+            }
 
+            
             return result;
 
         } catch ( JSONException ex ) {
@@ -107,19 +158,7 @@ public class Place {
 
     @Override
     public String toString() {
-
-        // return "Place{" + "id=" + id + ", icon=" + icon + ", name=" + name +
-        // ", latitude=" + latitude + ", longitude=" + longitude + '}';
+        
         return this.name;
-    }
-
-    public String getPlaceReference() {
-
-        return placeReference;
-    }
-
-    public void setPlaceReference( String placeReference ) {
-
-        this.placeReference = placeReference;
     }
 }

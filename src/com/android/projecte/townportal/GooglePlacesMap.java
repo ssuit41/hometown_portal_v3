@@ -39,7 +39,7 @@ public class GooglePlacesMap extends Activity implements
     public int milesAway = 10;
     private boolean firstTime = true;
 
-    GooglePlacesSearch gpsearch = null;
+    GooglePlacesSearch gpSearch = null;
     ArrayList<Place> arrayList = null;
     PlaceDetail placeDetail = null;
     PlacePhoto placePhoto = null;
@@ -87,7 +87,7 @@ public class GooglePlacesMap extends Activity implements
 
         String geoLocation = Double.toString( latitude ) + "," + Double.toString( longitude );
 
-        gpsearch = new GooglePlacesSearch( type, geoLocation );
+        gpSearch = new GooglePlacesSearch( type, geoLocation );
         lv = (ListView) findViewById( R.id.list );
         lv.setOnItemClickListener( this );
 
@@ -143,7 +143,7 @@ public class GooglePlacesMap extends Activity implements
         @Override
         protected ArrayList<Place> doInBackground( Void... unused ) {
 
-            arrayList = gpsearch.findPlaces();
+            arrayList = gpSearch.findPlaces();
             return arrayList;
         }
 
@@ -164,17 +164,17 @@ public class GooglePlacesMap extends Activity implements
     // AsyncTask to get Google Places Detail
     class DetailTask extends AsyncTask<Void, Void, PlaceDetail> {
 
-        private String placeReference;
+        private Place place;
 
-        public DetailTask(String placeRef) {
+        public DetailTask( Place place ) {
 
-            placeReference = placeRef;
+            this.place = place;
         }
 
         @Override
         protected PlaceDetail doInBackground( Void... unused ) {
 
-            placeDetail = gpsearch.findPlaceDetail( placeReference );
+            placeDetail = gpSearch.findPlaceDetail( this.place.getPlaceReference() );
             return placeDetail;
         }
 
@@ -183,44 +183,19 @@ public class GooglePlacesMap extends Activity implements
 
             placeDetail = theDetail;
 
-            // starting the AsyncTask PhotoTask
-            new PhotoTask( placeDetail.getPhotoRef() ).execute();
-
-        }
-    }
-
-    // Async Task to get Google Places Photo
-    class PhotoTask extends AsyncTask<Void, Void, PlacePhoto> {
-
-        private String photoReference;
-
-        public PhotoTask(String photoRef) {
-
-            photoReference = photoRef;
-        }
-
-        @Override
-        protected PlacePhoto doInBackground( Void... unused ) {
-
-            placePhoto = gpsearch.findPlacePhoto( photoReference );
-            return placePhoto;
-        }
-
-        @Override
-        protected void onPostExecute( PlacePhoto thePlacePhoto ) {
-
-            placePhoto = thePlacePhoto;
-
             Intent placeDetailIntent = new Intent( GooglePlacesMap.this, PlaceDetailActivity.class );
             placeDetailIntent.putExtra( "name", placeDetail.getSiteName() );
+            placeDetailIntent.putExtra( "rating", place.getRating() );
+            placeDetailIntent.putExtra( "price", place.getPrice() );
             placeDetailIntent.putExtra( "address", placeDetail.getAddress() );
             placeDetailIntent.putExtra( "phonenumber", placeDetail.getPhoneNumber() );
             placeDetailIntent.putExtra( "website", placeDetail.getWebsite() );
-            placeDetailIntent.putExtra( "photo", placePhoto.getPhoto() );
-
+            placeDetailIntent.putExtra( "photoRef", theDetail.getPhotoRef() );
+            placeDetailIntent.putExtra( "gpSearchType", type );
+            placeDetailIntent.putExtra( "gpSearchGeoLocation", Double.toString( latitude ) + "," + Double.toString( longitude ) );
+                
             startActivity( placeDetailIntent );
         }
-
     }
 
     @Override
@@ -228,10 +203,9 @@ public class GooglePlacesMap extends Activity implements
             long id ) {
 
         Place place = arrayList.get( (int) id );
-        String reference = place.getPlaceReference();
 
         // starting the AsyncTask DetailTask
-        new DetailTask( reference ).execute();
+        new DetailTask( place ).execute();
 
     }
 
@@ -252,7 +226,7 @@ public class GooglePlacesMap extends Activity implements
                     longitude = locationDetails.getLongitude();
                     geoLocation = Double.toString( latitude ) + "," + Double.toString( longitude );
 
-                    gpsearch = new GooglePlacesSearch( type, geoLocation );
+                    gpSearch = new GooglePlacesSearch( type, geoLocation );
                     // starting the AsynTask ListViewTask
                     new ListViewTask().execute();
 
@@ -288,7 +262,7 @@ public class GooglePlacesMap extends Activity implements
                 // only load again if this isn't first load that occurs in
                 // onCreate
                 String geoLocation = Double.toString( latitude ) + "," + Double.toString( longitude );
-                gpsearch = new GooglePlacesSearch( type, geoLocation );
+                gpSearch = new GooglePlacesSearch( type, geoLocation );
 
                 // starting the AsynTask ListViewTask
                 new ListViewTask().execute();

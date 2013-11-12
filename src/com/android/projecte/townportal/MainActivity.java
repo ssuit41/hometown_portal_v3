@@ -89,25 +89,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
         
         case R.id.btnFood:
             
-            openPlaceList( getResources().getString(R.string.food_text), 
+            openPlaceList( getString(R.string.food_text), 
                     vFood.get( 0 ), vFood.get( 1 ), vFood.get( 2 ) );
             break;
             
         case R.id.btnEntertainment:
             
-            openPlaceList( getResources().getString(R.string.entertainment_text),
+            openPlaceList( getString(R.string.entertainment_text),
                     vEnt.get( 0 ), vEnt.get( 1 ), vEnt.get( 2 ) );
             break;
             
         case R.id.btnShopping:
             
-            openPlaceList( getResources().getString(R.string.shopping_text),
+            openPlaceList( getString(R.string.shopping_text),
                     vShop.get( 0 ), vShop.get( 1 ), vShop.get( 2 ) );
             break;
             
         case R.id.btnSchools:
             
-            openPlaceList( getResources().getString(R.string.schools_text),
+            openPlaceList( getString(R.string.schools_text),
                     vSchool.get( 0 ), vSchool.get( 1 ), null );
             break;
             

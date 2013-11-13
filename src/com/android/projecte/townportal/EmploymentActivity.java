@@ -173,7 +173,7 @@ public class EmploymentActivity extends Activity {
     protected void onSaveInstanceState( Bundle outState ) {
         
         webView.saveState( outState );
-        outState.putBoolean( "viewingArticle", viewingJob );
+        outState.putBoolean( "viewingJob", viewingJob );
         super.onSaveInstanceState(outState);     
     }
 
@@ -181,7 +181,7 @@ public class EmploymentActivity extends Activity {
     protected void onRestoreInstanceState( Bundle state ) {
         
         webView.restoreState( state );
-        viewingJob = state.getBoolean( "viewingArticle" );
+        viewingJob = state.getBoolean( "viewingJob" );
         
         // Keep showing article
         if ( viewingJob ) {

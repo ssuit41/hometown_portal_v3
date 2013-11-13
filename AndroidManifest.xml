@@ -37,7 +37,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>
             -->
         </activity>
         <activity
@@ -53,7 +53,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.GooglePlacesMap" />
                 <category android:name="android.intent.category.GooglePlacesMap" />
-            </intent-filter>
+            </intent-filter>
             -->
         </activity>
         <activity
@@ -67,6 +67,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.android.projecte.townportal.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.android.projecte.townportal.EmploymentActivity"
+            android:label="@string/title_activity_employment" >
         </activity>
     </application>
 

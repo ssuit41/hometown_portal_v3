@@ -10,25 +10,25 @@
     android:gravity="center"
     tools:context=".NewsActivity" >
 
-    <ListView android:id="@+id/newsList"
+    <ListView android:id="@+id/jobList"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1" />
     
     <!-- http://stackoverflow.com/questions/5049852/android-drawing-separator-divider-line-in-layout -->
-    <View android:id="@+id/newsDivider"
+    <View android:id="@+id/emplDivider"
         android:layout_width="fill_parent"
 	    android:layout_height="1dp"
 	    android:background="@android:color/darker_gray" />
     
-    <TextView android:id="@+id/newsCourtesy"
+    <TextView android:id="@+id/emplCourtesy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/newsCourtesy" />
+        android:text="@string/emplCourtesy" />
     
     <WebView
-        android:id="@+id/newsWebView"
+        android:id="@+id/emplWebView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="gone" />

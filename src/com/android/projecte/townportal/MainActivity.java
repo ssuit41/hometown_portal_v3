@@ -10,7 +10,6 @@ import java.util.Vector;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -87,43 +86,48 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         switch ( v.getId() ) {
         
-        case R.id.btnFood:
+        case R.id.btnFood: {
             
             openPlaceList( getString(R.string.food_text), 
                     vFood.get( 0 ), vFood.get( 1 ), vFood.get( 2 ) );
             break;
+        }
             
-        case R.id.btnEntertainment:
+        case R.id.btnEntertainment: {
             
             openPlaceList( getString(R.string.entertainment_text),
                     vEnt.get( 0 ), vEnt.get( 1 ), vEnt.get( 2 ) );
             break;
-            
-        case R.id.btnShopping:
+        }
+        
+        case R.id.btnShopping: {
             
             openPlaceList( getString(R.string.shopping_text),
                     vShop.get( 0 ), vShop.get( 1 ), vShop.get( 2 ) );
-            break;
-            
-        case R.id.btnSchools:
+            break; 
+        }
+
+        case R.id.btnSchools: {
             
             openPlaceList( getString(R.string.schools_text),
                     vSchool.get( 0 ), vSchool.get( 1 ), null );
-            break;
+            break; 
+        }
+        
+        case R.id.btnEmployment: {
             
-        case R.id.btnEmployment:
-            
-            Intent browserIntentEmploy = new Intent( Intent.ACTION_VIEW,
-                    Uri.parse( "http://m.monster.com/JobSearch/Search?jobtitle=&keywords=&where=Panama+City%2C+FL" ) );
-            startActivity( browserIntentEmploy );
-            break;
-            
-        case R.id.btnNews:
+            Intent employmentIntent = new Intent( this, EmploymentActivity.class );
+            startActivity( employmentIntent );
+            break; 
+        }
+        
+        case R.id.btnNews:{
             
             Intent newsIntent = new Intent( this, NewsActivity.class );
             startActivity( newsIntent );
             break;
-            
+        }
+        
         default:
             break;
         }

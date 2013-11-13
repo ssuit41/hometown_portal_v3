@@ -1,18 +1,24 @@
 package com.android.projecte.townportal;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -35,19 +41,22 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class NewsActivity extends Activity {
+@SuppressLint ( "SetJavaScriptEnabled")
+public class EmploymentActivity extends Activity {
 
-    private List<NewsItem> newsItems = new Vector<NewsItem>();
-    private ArrayAdapter<NewsItem> adapter;
-    private ListView newsList;
+    private List<JobItem> jobItems = new Vector<JobItem>();
+    private ArrayAdapter<JobItem> adapter;
+    private ListView jobList;
     private WebView webView;
     private TextView courtesyText, titleText, loadingText;
     private View divider;
     
-    private Boolean viewingArticle = false;
-    private String newsSource;
+    private Boolean viewingJob = false;
+    private String jobsSource;
     
     private LayoutInflater layoutInflater;
+    
+    final private Integer MAX_DESC_LENGTH = 200;
     
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -56,19 +65,19 @@ public class NewsActivity extends Activity {
         
         // Use custom title bar
         requestWindowFeature( Window.FEATURE_CUSTOM_TITLE );
-        setContentView( R.layout.activity_news );
+        setContentView( R.layout.activity_employment );
         getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title );
-        ((TextView) findViewById( R.id.title ) ).setText( R.string.news_text );
+        ((TextView) findViewById( R.id.title ) ).setText( R.string.empl_text );
         
         layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
-        newsList = (ListView) findViewById( R.id.newsList );
-        webView = (WebView) findViewById( R.id.newsWebView );
-        courtesyText = (TextView) findViewById( R.id.newsCourtesy );
+        jobList = (ListView) findViewById( R.id.jobList );
+        webView = (WebView) findViewById( R.id.emplWebView );
+        courtesyText = (TextView) findViewById( R.id.emplCourtesy );
         titleText = (TextView) findViewById( R.id.title );
         loadingText = (TextView) findViewById( R.id.loading );
-        divider = findViewById( R.id.newsDivider );
-        newsSource = getString( R.string.newsSource );
+        divider = findViewById( R.id.emplDivider );
+        jobsSource = getString( R.string.jobsRss );
         
         webView.setWebViewClient( new WebViewClient() {
             
@@ -95,8 +104,9 @@ public class NewsActivity extends Activity {
                 loadingText.setVisibility( View.INVISIBLE );
             }
         });
+        webView.getSettings().setJavaScriptEnabled( true );
         
-        adapter = new ArrayAdapter<NewsItem>( this, android.R.layout.simple_list_item_2, newsItems ) {
+        adapter = new ArrayAdapter<JobItem>( this, android.R.layout.simple_list_item_2, jobItems ) {
             
             @Override
             // Support shading and two text items
@@ -104,12 +114,19 @@ public class NewsActivity extends Activity {
                 
                 // Got some help from http://stackoverflow.com/questions/11722885/what-is-difference-between-android-r-layout-simple-list-item-1-and-android-r-lay
                 
-                NewsItem newsItem = (NewsItem) this.getItem( position );
+                JobItem jobItem = (JobItem) this.getItem( position );
                 
                 convertView = layoutInflater.inflate( android.R.layout.simple_list_item_2, parent, false );
                 
-                ( (TextView) convertView.findViewById( android.R.id.text1 ) ).setText( newsItem.title );
-                ( (TextView) convertView.findViewById( android.R.id.text2 ) ).setText( newsItem.description );
+                ( (TextView) convertView.findViewById( android.R.id.text1 ) ).setText( jobItem.title );
+                
+                // Shorten description
+                String description = jobItem.description;
+                
+                if ( description.length() > MAX_DESC_LENGTH )
+                    description = description.substring( 0, MAX_DESC_LENGTH ) + "\u2026";
+                
+                ( (TextView) convertView.findViewById( android.R.id.text2 ) ).setText( description );
                 
                 if( position % 2 != 0 )
                     convertView.setBackgroundResource( R.color.gray );
@@ -118,22 +135,32 @@ public class NewsActivity extends Activity {
             }
         };
         
-        newsList.setAdapter( adapter );
-        newsList.setOnItemClickListener( new OnItemClickListener() {
+        jobList.setAdapter( adapter );
+        jobList.setOnItemClickListener( new OnItemClickListener() {
 
             @Override
             public void onItemClick( AdapterView<?> adapterView, View view, int position, long id ) {
 
-                viewingArticle = true;
+                viewingJob = true;
                 titleText.setText( R.string.returnText );
                 
-                newsList.setVisibility( View.GONE );
+                jobList.setVisibility( View.GONE );
                 divider.setVisibility( View.GONE );
                 courtesyText.setVisibility( View.GONE );
                 loadingText.setVisibility( View.VISIBLE );
                 
-                // Load mobile version of article for visibility purposes
-                webView.loadUrl( ( (NewsItem) adapterView.getItemAtPosition( position ) ).link.replaceFirst( "www", "m" ) );
+                // Transform link to mobile version for visibility purposes
+                // http://stackoverflow.com/questions/1277157/java-regex-replace-with-capturing-group helped
+                String url = ( (JobItem) adapterView.getItemAtPosition( position ) ).link.replace( "jobview", "m" );
+                
+                Pattern pattern = Pattern.compile(".com/.*-([0-9]+)\\.aspx");
+                Matcher matcher = pattern.matcher( url );
+                
+                // Should always return true
+                if ( matcher.find() )
+                    url = matcher.replaceFirst( ".com/" + matcher.group( 1 ) );
+                
+                webView.loadUrl( url );
                 webView.setVisibility( View.VISIBLE );
             }    
             
@@ -146,7 +173,7 @@ public class NewsActivity extends Activity {
     protected void onSaveInstanceState( Bundle outState ) {
         
         webView.saveState( outState );
-        outState.putBoolean( "viewingArticle", viewingArticle );
+        outState.putBoolean( "viewingArticle", viewingJob );
         super.onSaveInstanceState(outState);     
     }
 
@@ -154,14 +181,14 @@ public class NewsActivity extends Activity {
     protected void onRestoreInstanceState( Bundle state ) {
         
         webView.restoreState( state );
-        viewingArticle = state.getBoolean( "viewingArticle" );
+        viewingJob = state.getBoolean( "viewingArticle" );
         
         // Keep showing article
-        if ( viewingArticle ) {
+        if ( viewingJob ) {
 
             titleText.setText( R.string.returnText ); 
             
-            newsList.setVisibility( View.GONE );
+            jobList.setVisibility( View.GONE );
             divider.setVisibility( View.GONE );
             courtesyText.setVisibility( View.GONE );
             webView.setVisibility( View.VISIBLE );
@@ -176,15 +203,15 @@ public class NewsActivity extends Activity {
         
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             
-            if ( viewingArticle ) {
+            if ( viewingJob ) {
                 
                 webView.setVisibility( View.GONE );
-                newsList.setVisibility( View.VISIBLE );
+                jobList.setVisibility( View.VISIBLE );
                 divider.setVisibility( View.VISIBLE );
                 courtesyText.setVisibility( View.VISIBLE );
                 
-                viewingArticle = false;
-                titleText.setText( R.string.news_text );
+                viewingJob = false;
+                titleText.setText( R.string.empl_text );
                 
                 webView.loadUrl("about:blank");
                 
@@ -199,7 +226,7 @@ public class NewsActivity extends Activity {
     public boolean onCreateOptionsMenu( Menu menu ) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate( R.menu.news, menu );
+        getMenuInflater().inflate( R.menu.employment, menu );
         return true;
     }
 
@@ -221,21 +248,21 @@ public class NewsActivity extends Activity {
         return super.onOptionsItemSelected( item );
     }
 
-    private class RssTask extends AsyncTask<Void, Void, List<NewsItem>> {
+    private class RssTask extends AsyncTask<Void, Void, List<JobItem>> {
 
         public RssTask() {
 
         }
 
         @Override
-        protected List<NewsItem> doInBackground( Void... arg0 ) {
+        protected List<JobItem> doInBackground( Void... arg0 ) {
 
             // Some ideas borrowed from
             // http://stackoverflow.com/questions/11879208/how-to-show-a-rss-feed-url-in-android-app-in-eclipse
 
-            List<NewsItem> newsItems = getNewsItems();
+            List<JobItem> jobItems = getJobItems();
             
-            return newsItems;
+            return jobItems;
         }
         
         @Override
@@ -246,12 +273,12 @@ public class NewsActivity extends Activity {
         }
         
         @Override
-        protected void onPostExecute( List<NewsItem> newsItems ) {
+        protected void onPostExecute( List<JobItem> jobItems ) {
             
             adapter.clear();
             
-            for ( int i = 0 ; i < newsItems.size(); ++i )
-                adapter.add( newsItems.get( i ) );
+            for ( int i = 0 ; i < jobItems.size(); ++i )
+                adapter.add( jobItems.get( i ) );
             
             adapter.notifyDataSetChanged();
             
@@ -259,11 +286,11 @@ public class NewsActivity extends Activity {
         }
     }
 
-    private class NewsItem {
+    private class JobItem {
 
         private String title, description, link;
 
-        public NewsItem( String title, String description, String link ) {
+        public JobItem( String title, String description, String link ) {
 
             this.title = title;
             this.description = description;
@@ -276,39 +303,47 @@ public class NewsActivity extends Activity {
             return title;
         }
     }
-
-    private List<NewsItem> getNewsItems() {
+    
+    private InputStream getWebContents( String url ) {
         
-        List<NewsItem> result = new Vector<NewsItem>();
+        DefaultHttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet( url );
 
-        // Create Document from XML content
+        HttpResponse response = null;
+
+        try {
+            response = client.execute( get );
+            HttpEntity message = response.getEntity();
+            return message.getContent();
+            
+        } catch ( ClientProtocolException e ) {
+            e.printStackTrace();
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+       
+        return null;
+    }
+
+    private List<JobItem> getJobItems() {
+        
+        List<JobItem> result = new Vector<JobItem>();
+
+        // Create Document from RSS content
         try {
             
-            Document htmlDoc = Jsoup.connect( String.format( newsSource + "default.aspx?section=%s", 
-                    getString( R.string.topNews ) ) ).get();
+            Document rssDoc = Jsoup.parse( getWebContents( this.jobsSource ), "UTF-8", "", Parser.xmlParser() );
             
-            Elements newsItems = htmlDoc.select("li[data-icon]");
+            Elements jobItems = rssDoc.select("item");
             
-            for ( Element element : newsItems ) {
+            for ( Element element : jobItems ) {
                 
-                String title = element.select( "div[id=storySummary] h1, h2, h3, h4, h5, h6" ).get( 0 ).text();
-                String description = element.select( "div[id=storySummary] p" ).get( 0 ).text();
-                String link = null;
-                
-                // Get true link
-                List<NameValuePair> uriPairs = URLEncodedUtils.parse( new URI( newsSource + element.select( "a" ).get( 0 ).attr( "href" ) ),
-                        "UTF-8" );
-                for ( NameValuePair nvp : uriPairs ) {
-                    
-                    if ( nvp.getName().equalsIgnoreCase( "link" ) ) {
-                        
-                        link = nvp.getValue();
-                        break;
-                    }
-                }
+                String title = element.select( "title" ).get( 0 ).text();
+                String description = element.select( "description" ).get( 0 ).text();
+                String link = element.select( "link" ).get( 0 ).text();
 
                 if ( title != null && link != null && description != null )
-                    result.add( new NewsItem( title, description, link ) );
+                    result.add( new JobItem( title, description, link ) );
             }
             
         } catch ( IOException e ) {
@@ -316,9 +351,6 @@ public class NewsActivity extends Activity {
             // TODO Auto-generated catch block
             e.printStackTrace();
             
-        } catch ( URISyntaxException e ) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
 
         return result;

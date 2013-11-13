@@ -8,27 +8,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".NewsActivity" >
+    tools:context=".FeedActivity" >
 
-    <ListView android:id="@+id/newsList"
+    <ListView android:id="@+id/feedList"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1" />
     
     <!-- http://stackoverflow.com/questions/5049852/android-drawing-separator-divider-line-in-layout -->
-    <View android:id="@+id/newsDivider"
+    <View android:id="@+id/feedDivider"
         android:layout_width="fill_parent"
 	    android:layout_height="1dp"
 	    android:background="@android:color/darker_gray" />
     
-    <TextView android:id="@+id/newsCourtesy"
+    <TextView android:id="@+id/feedCourtesy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/newsCourtesy" />
+        android:layout_marginTop="8dp" />
     
     <WebView
-        android:id="@+id/newsWebView"
+        android:id="@+id/feedWebView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="gone" />

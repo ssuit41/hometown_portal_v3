@@ -32,5 +32,6 @@
     </string-array>
 
     <string name="title_activity_employment">EmploymentActivity</string>
+    <string name="title_activity_feed">FeedActivity</string>
 
 </resources>

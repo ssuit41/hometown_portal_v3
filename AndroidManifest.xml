@@ -72,6 +72,10 @@
             android:name="com.android.projecte.townportal.EmploymentActivity"
             android:label="@string/title_activity_employment" >
         </activity>
+        <activity
+            android:name="com.android.projecte.townportal.FeedActivity"
+            android:label="@string/title_activity_feed" >
+        </activity>
     </application>
 
 </manifest>

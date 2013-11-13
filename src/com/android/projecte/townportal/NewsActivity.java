@@ -42,6 +42,8 @@ final public class NewsActivity extends FeedActivity {
             @Override
             public void onItemClick( AdapterView<?> adapterView, View view, int position, long id ) {
 
+            	Item item = (Item) adapterView.getItemAtPosition( position );
+            	
             	if ( ( position + 1 ) == items.size() ) {
             		
             		Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -49,6 +51,11 @@ final public class NewsActivity extends FeedActivity {
                     startActivity( intent );
                     
                     return;
+                    
+            	} else if ( position == 0 && item.title.equals( "Refresh" ) ) {
+            		
+            		new RssTask().execute();
+            		return;
             	}
             	
             	viewingItem = true;
@@ -60,7 +67,7 @@ final public class NewsActivity extends FeedActivity {
                 loadingText.setVisibility( View.VISIBLE );
                 
                 // Load mobile version of article for visibility purposes
-                webView.loadUrl( ( (Item) adapterView.getItemAtPosition( position ) ).link.replaceFirst( "www", "m" ) );
+                webView.loadUrl( item.link.replaceFirst( "www", "m" ) );
                 webView.setVisibility( View.VISIBLE );
             }    
             
@@ -72,6 +79,9 @@ final public class NewsActivity extends FeedActivity {
 		
 		List<Item> result = new Vector<Item>();
 
+		// Allow user to refresh
+		result.add( new Item( "Refresh", null, null ) );
+		
         // Create Document from XML content
         try {
             
@@ -113,7 +123,7 @@ final public class NewsActivity extends FeedActivity {
         }
         
         // Let user see more articles
-        result.add( new Item( "View More", null, null ) );
+        result.add( new Item( "See More", null, null ) );
 
         return result;
 	}

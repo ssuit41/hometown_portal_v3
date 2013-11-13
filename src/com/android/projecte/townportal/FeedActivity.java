@@ -65,21 +65,29 @@ public abstract class FeedActivity extends Activity {
                 
                 // Got some help from http://stackoverflow.com/questions/11722885/what-is-difference-between-android-r-layout-simple-list-item-1-and-android-r-lay
                 
-            	Item jobItem = (Item) this.getItem( position );
+            	Item item = (Item) this.getItem( position );
                 
                 convertView =  ( (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE) )
                 		.inflate( android.R.layout.simple_list_item_2, parent, false );
                 
-                ( (TextView) convertView.findViewById( android.R.id.text1 ) ).setText( jobItem.title );
+                ( (TextView) convertView.findViewById( android.R.id.text1 ) ).setText( item.title );
                 
-                // Center view more text
-                if ( ( position + 1 ) == items.size() && jobItem.title.equals( "View More" ) ) {
+                // Center see more text
+                if ( ( position + 1 ) == items.size() && item.title.equals( "See More" ) ) {
                 	
                 	( (TextView) convertView.findViewById( android.R.id.text1 ) ).setGravity( Gravity.CENTER );
+                	( (TextView) convertView.findViewById( android.R.id.text1 ) )
+                		.setTextColor( getContext().getResources().getColor( R.color.darkBlue ) );
+                	
+                } else if ( position == 0 && item.title.equals( "Refresh" ) ) {
+                	
+                	( (TextView) convertView.findViewById( android.R.id.text1 ) ).setGravity( Gravity.CENTER );
+                	( (TextView) convertView.findViewById( android.R.id.text1 ) )
+                		.setTextColor( getContext().getResources().getColor( R.color.darkBlue ) );
                 }
                 
                 // Shorten description
-                String description = jobItem.description;
+                String description = item.description;
                 
                 if ( description != null && description.length() > MAX_DESC_LENGTH )
                     description = description.substring( 0, MAX_DESC_LENGTH ) + "\u2026";

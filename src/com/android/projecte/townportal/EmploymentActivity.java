@@ -47,6 +47,8 @@ public class EmploymentActivity extends FeedActivity {
             @Override
             public void onItemClick( AdapterView<?> adapterView, View view, int position, long id ) {
 
+            	Item item = (Item) adapterView.getItemAtPosition( position );
+            	
             	if ( ( position + 1 ) == items.size() ) {
             		
             		Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -54,6 +56,11 @@ public class EmploymentActivity extends FeedActivity {
                     startActivity( intent );
                     
                     return;
+                    
+            	} else if ( position == 0 && item.title.equals( "Refresh" ) ) {
+            		
+            		new RssTask().execute();
+            		return;
             	}
             	
                 viewingItem = true;
@@ -66,7 +73,7 @@ public class EmploymentActivity extends FeedActivity {
                 
                 // Transform link to mobile version for visibility purposes
                 // http://stackoverflow.com/questions/1277157/java-regex-replace-with-capturing-group helped
-                String url = ( (Item) adapterView.getItemAtPosition( position ) ).link.replace( "jobview", "m" );
+                String url = item.link.replace( "jobview", "m" );
                 
                 Pattern pattern = Pattern.compile(".com/.*-([0-9]+)\\.aspx");
                 Matcher matcher = pattern.matcher( url );
@@ -109,6 +116,9 @@ public class EmploymentActivity extends FeedActivity {
     protected List<Item> getItems() {
         
         List<Item> result = new Vector<Item>();
+        
+        // Allow user to refresh
+        result.add( new Item( "Refresh", null, null ) );
 
         // Create Document from RSS content
         try {
@@ -135,7 +145,7 @@ public class EmploymentActivity extends FeedActivity {
         }
 
         // Let user see more jobs
-        result.add( new Item( "View More", null, null ) );
+        result.add( new Item( "See More", null, null ) );
         
         return result;
     }

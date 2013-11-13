@@ -11,11 +11,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -33,10 +35,9 @@ public abstract class FeedActivity extends Activity {
     protected View divider;
     
     protected Boolean viewingItem = false;
+    protected String title, viewMoreUrl;
     
-    protected LayoutInflater layoutInflater;
-    
-    protected String title;
+    final private Integer MAX_DESC_LENGTH = 200;
     
     @SuppressLint("SetJavaScriptEnabled")
 	@Override
@@ -49,14 +50,50 @@ public abstract class FeedActivity extends Activity {
         setContentView( R.layout.activity_feed );
         getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title );
         
-        layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        
         list = (ListView) findViewById( R.id.feedList );
         webView = (WebView) findViewById( R.id.feedWebView );
         courtesyText = (TextView) findViewById( R.id.feedCourtesy );
         titleText = (TextView) findViewById( R.id.title );
         loadingText = (TextView) findViewById( R.id.loading );
         divider = findViewById( R.id.feedDivider );
+        
+        adapter = new ArrayAdapter<Item>( this, android.R.layout.simple_list_item_2, items ) {
+            
+            @Override
+            // Support shading and two text items
+            public View getView( int position, View convertView, ViewGroup parent ) {
+                
+                // Got some help from http://stackoverflow.com/questions/11722885/what-is-difference-between-android-r-layout-simple-list-item-1-and-android-r-lay
+                
+            	Item jobItem = (Item) this.getItem( position );
+                
+                convertView =  ( (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE) )
+                		.inflate( android.R.layout.simple_list_item_2, parent, false );
+                
+                ( (TextView) convertView.findViewById( android.R.id.text1 ) ).setText( jobItem.title );
+                
+                // Center view more text
+                if ( ( position + 1 ) == items.size() && jobItem.title.equals( "View More" ) ) {
+                	
+                	( (TextView) convertView.findViewById( android.R.id.text1 ) ).setGravity( Gravity.CENTER );
+                }
+                
+                // Shorten description
+                String description = jobItem.description;
+                
+                if ( description != null && description.length() > MAX_DESC_LENGTH )
+                    description = description.substring( 0, MAX_DESC_LENGTH ) + "\u2026";
+                
+                ( (TextView) convertView.findViewById( android.R.id.text2 ) ).setText( description );
+                
+                if( position % 2 != 0 )
+                    convertView.setBackgroundResource( R.color.gray );
+                
+                return convertView;
+            }
+        };
+        
+        list.setAdapter( adapter );
         
         webView.setWebViewClient( new WebViewClient() {
             

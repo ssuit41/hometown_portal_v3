@@ -13,12 +13,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 final public class NewsActivity extends FeedActivity {
@@ -32,39 +32,25 @@ final public class NewsActivity extends FeedActivity {
 		
 		newsSource = getString( R.string.newsSource );
 		title = getString( R.string.news_text );
+		viewMoreUrl = getString( R.string.newsViewMore );
 		
 		((TextView) findViewById( R.id.title ) ).setText( title );
 		courtesyText.setText( getString( R.string.newsCourtesy ) );
-		
-		adapter = new ArrayAdapter<Item>( this, android.R.layout.simple_list_item_2, items ) {
-            
-            @Override
-            // Support shading and two text items
-            public View getView( int position, View convertView, ViewGroup parent ) {
-                
-                // Got some help from http://stackoverflow.com/questions/11722885/what-is-difference-between-android-r-layout-simple-list-item-1-and-android-r-lay
-                
-            	Item item = (Item) this.getItem( position );
-                
-                convertView = layoutInflater.inflate( android.R.layout.simple_list_item_2, parent, false );
-                
-                ( (TextView) convertView.findViewById( android.R.id.text1 ) ).setText( item.title );
-                ( (TextView) convertView.findViewById( android.R.id.text2 ) ).setText( item.description );
-                
-                if( position % 2 != 0 )
-                    convertView.setBackgroundResource( R.color.gray );
-                
-                return convertView;
-            }
-    	};
-        
-        list.setAdapter( adapter );
 		
 		list.setOnItemClickListener( new OnItemClickListener() {
 
             @Override
             public void onItemClick( AdapterView<?> adapterView, View view, int position, long id ) {
 
+            	if ( ( position + 1 ) == items.size() ) {
+            		
+            		Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData( Uri.parse( viewMoreUrl ) );
+                    startActivity( intent );
+                    
+                    return;
+            	}
+            	
             	viewingItem = true;
                 titleText.setText( R.string.returnText );
                 
@@ -125,6 +111,9 @@ final public class NewsActivity extends FeedActivity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        // Let user see more articles
+        result.add( new Item( "View More", null, null ) );
 
         return result;
 	}

@@ -22,9 +22,11 @@
     <string name="title_activity_place_detail">PlaceDetail</string>
     <string name="hello_world">Hello world!</string>
     <string name="newsSource">http://m.newsherald.com/</string>
+    <string name="newsViewMore">http://m.newsherald.com</string>
     <string name="topNews">Top%20News</string>
     <string name="title_activity_news">NewsActivity</string>
     <string name="jobsRss">http://rss.jobsearch.monster.com/rssquery.ashx?where=Panama+City%2C+FL</string>
+    <string name="jobsViewMore">http://m.monster.com/JobSearch/Search?jobtitle=&amp;keywords=&amp;where=Panama+City%2C+FL</string>
 
     <string-array name="locations">
         <item>My Location</item>

@@ -18,19 +18,17 @@ import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class EmploymentActivity extends FeedActivity {
     
 	private String jobsSource;
-	
-    final private Integer MAX_DESC_LENGTH = 200;
     
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -39,45 +37,25 @@ public class EmploymentActivity extends FeedActivity {
         
         jobsSource = getString( R.string.jobsRss );
 		title = getString( R.string.empl_text );
+		viewMoreUrl = getString( R.string.jobsViewMore );
 		
 		((TextView) findViewById( R.id.title ) ).setText( title );
 		courtesyText.setText( getString( R.string.emplCourtesy ) );
         
-        adapter = new ArrayAdapter<Item>( this, android.R.layout.simple_list_item_2, items ) {
-            
-            @Override
-            // Support shading and two text items
-            public View getView( int position, View convertView, ViewGroup parent ) {
-                
-                // Got some help from http://stackoverflow.com/questions/11722885/what-is-difference-between-android-r-layout-simple-list-item-1-and-android-r-lay
-                
-            	Item jobItem = (Item) this.getItem( position );
-                
-                convertView = layoutInflater.inflate( android.R.layout.simple_list_item_2, parent, false );
-                
-                ( (TextView) convertView.findViewById( android.R.id.text1 ) ).setText( jobItem.title );
-                
-                // Shorten description
-                String description = jobItem.description;
-                
-                if ( description.length() > MAX_DESC_LENGTH )
-                    description = description.substring( 0, MAX_DESC_LENGTH ) + "\u2026";
-                
-                ( (TextView) convertView.findViewById( android.R.id.text2 ) ).setText( description );
-                
-                if( position % 2 != 0 )
-                    convertView.setBackgroundResource( R.color.gray );
-                
-                return convertView;
-            }
-        };
-        
-        list.setAdapter( adapter );
         list.setOnItemClickListener( new OnItemClickListener() {
 
             @Override
             public void onItemClick( AdapterView<?> adapterView, View view, int position, long id ) {
 
+            	if ( ( position + 1 ) == items.size() ) {
+            		
+            		Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData( Uri.parse( viewMoreUrl ) );
+                    startActivity( intent );
+                    
+                    return;
+            	}
+            	
                 viewingItem = true;
                 titleText.setText( R.string.returnText );
                 
@@ -156,6 +134,9 @@ public class EmploymentActivity extends FeedActivity {
             
         }
 
+        // Let user see more jobs
+        result.add( new Item( "View More", null, null ) );
+        
         return result;
     }
 }

@@ -1,20 +1,16 @@
 /* GooglePlacesSearch.java
  * Project E - Eric Daniels
- * Uses JSON query to retrieve GooglePlaces information 
- *    about places with type selected by user
  */
 
 package com.android.projecte.townportal;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -26,6 +22,11 @@ import org.json.JSONObject;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+/*
+ * Google Places Search
+ * Description: Uses JSON query to retrieve Google Places information 
+ *    			about places with a type selected by user.
+ */
 public class GooglePlacesSearch {
 
     public String location = "30.205971,-85.858862";
@@ -162,16 +163,17 @@ public class GooglePlacesSearch {
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
             request.setURI( new URI( urlString ) );
+            
             HttpResponse response = client.execute( request );
-            HttpEntity entity = response.getEntity();
-            InputStream in = entity.getContent();
-            Bitmap photo = BitmapFactory.decodeStream( in );
+            Bitmap photo = BitmapFactory.decodeStream( response.getEntity().getContent() );
 
-            placePhoto.setPhoto( photo );
+            placePhoto.photo = photo;
 
         } catch ( Exception ex ) {
+        	
             ex.printStackTrace();
         }
+        
         return placePhoto;
     }
 

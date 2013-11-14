@@ -1,6 +1,5 @@
 /* PlaceDetail.java
  * Project E - Eric Daniels
- * Class used to hold GooglePlace Detail data 
  */
 
 package com.android.projecte.townportal;
@@ -8,125 +7,57 @@ package com.android.projecte.townportal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 
+/*
+ * Place Detail
+ * Description: Data structure used to store details of a place
+ * 				in a Place Detail Activity.
+ */
 public class PlaceDetail {
 
-    private String phoneNumber = null;
-    private String address = null;
-    private String website = null;
-    private String photoRef = null;
-    private String siteName = null;
-    private Bitmap sitePhoto = null;
-
-    public String getPhoneNumber() {
-
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber( String phoneNumber ) {
-
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getAddress() {
-
-        return address;
-    }
-
-    public void setAddress( String address ) {
-
-        this.address = address;
-    }
-
-    public String getWebsite() {
-
-        return website;
-    }
-
-    public void setWebsite( String website ) {
-
-        this.website = website;
-    }
-
-    public String getPhotoRef() {
-
-        return photoRef;
-    }
-
-    public void setPhotoRef( String photoRef ) {
-
-        this.photoRef = photoRef;
-    }
-
-    public String getSiteName() {
-
-        return siteName;
-    }
-
-    public void setSiteName( String siteName ) {
-
-        this.siteName = siteName;
-    }
+    public String phoneNumber = null, address = null, website = null, photoRef = null, siteName = null;
+    public Bitmap sitePhoto = null;
     
+    // Create PlaceDetail from JSON
     static PlaceDetail jsonToPlaceDetail( JSONObject result ) {
 
         PlaceDetail placeDetail = null;
 
-        try {
-            
-            placeDetail = new PlaceDetail();
-
-            if ( !( result.isNull( "photos" ) ) ) {
-                
-                JSONArray photos = result.getJSONArray( "photos" );
-                JSONObject photo = photos.getJSONObject( 0 );
-                placeDetail.setPhotoRef( photo.getString( "photo_reference" ) );
-            }
-
-            if ( !( result.isNull( "formatted_phone_number" ) ) ) {
-                
-                String phoneNumber = result.getString( "formatted_phone_number" );
-                placeDetail.setPhoneNumber( phoneNumber );
-            }
-
-            if ( !( result.isNull( "formatted_address" ) ) ) {
-                
-                String address = result.getString( "formatted_address" );
-                placeDetail.setAddress( address );
-            }
-
-            if ( !( result.isNull( "website" ) ) ) {
-                
-                String website = result.getString( "website" );
-                placeDetail.setWebsite( website );
-            }
-
-            if ( !( result.isNull( "name" ) ) ) {
-                
-                String siteName = result.getString( "name" );
-                placeDetail.setSiteName( siteName );
-            }
-
-        } catch ( JSONException ex ) {
-            
-            Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null, ex );
-        }
-        return placeDetail;
-    }
-
-    public Bitmap getSitePhoto() {
-
-        return sitePhoto;
-    }
-
-    public void setSitePhoto( Bitmap sitePhoto ) {
-
-        this.sitePhoto = sitePhoto;
-    }
-
+		try {
+		    
+			// Create and set place detail
+		    placeDetail = new PlaceDetail();
+		
+		    if ( !result.isNull( "photos" ) ) {
+		        
+		    	JSONObject photo = result.getJSONArray( "photos" ).getJSONObject( 0 );
+		        placeDetail.photoRef = photo.getString( "photo_reference" );
+		    }
+		
+		    if ( !result.isNull( "formatted_phone_number" ) )
+		        placeDetail.phoneNumber =  result.getString( "formatted_phone_number" );;
+		
+		    if ( !result.isNull( "formatted_address" ) )
+		        placeDetail.address = result.getString( "formatted_address" );;
+		
+		    if ( !result.isNull( "website" ) )
+		        placeDetail.website = result.getString( "website" );;
+		
+		    if ( !result.isNull( "name" ) )
+		        placeDetail.siteName = result.getString( "name" );
+		    
+		}
+		
+		catch ( JSONException ex ) {
+		    
+		    Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null, ex );
+		}
+		
+		return placeDetail;
+   }
+    
 }

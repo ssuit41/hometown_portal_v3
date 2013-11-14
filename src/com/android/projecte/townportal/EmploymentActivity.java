@@ -1,3 +1,7 @@
+/* EmploymentActivity.java
+ * Project E - Eric Daniels
+ */
+
 package com.android.projecte.townportal;
 
 import java.io.IOException;
@@ -18,94 +22,58 @@ import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-public class EmploymentActivity extends FeedActivity {
+/*
+ * Employment Activity
+ * Description: A Feed Activity that gets job listings from Monster.
+ */
+final public class EmploymentActivity extends FeedActivity {
     
 	private String jobsSource;
     
-    @Override
+    @SuppressLint("SetJavaScriptEnabled")
+	@Override
     protected void onCreate( Bundle savedInstanceState ) {
 
         super.onCreate( savedInstanceState );
         
-        jobsSource = getString( R.string.jobsRss );
-		title = getString( R.string.empl_text );
-		viewMoreUrl = getString( R.string.jobsViewMore );
+        // JavaScript makes the Monster mobile site function better
+        this.webView.getSettings().setJavaScriptEnabled( true );
+        
+        // Get strings
+        this.jobsSource = getString( R.string.jobsRss );
+        this.title = getString( R.string.empl_text );
+        this.seeMoreUrl = getString( R.string.jobsViewMore );
 		
-		((TextView) findViewById( R.id.title ) ).setText( title );
-		courtesyText.setText( getString( R.string.emplCourtesy ) );
-        
-        list.setOnItemClickListener( new OnItemClickListener() {
-
-            @Override
-            public void onItemClick( AdapterView<?> adapterView, View view, int position, long id ) {
-
-            	Item item = (Item) adapterView.getItemAtPosition( position );
-            	
-            	if ( ( position + 1 ) == items.size() ) {
-            		
-            		Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData( Uri.parse( viewMoreUrl ) );
-                    startActivity( intent );
-                    
-                    return;
-                    
-            	} else if ( position == 0 && item.title.equals( "Refresh" ) ) {
-            		
-            		new RssTask().execute();
-            		return;
-            	}
-            	
-                viewingItem = true;
-                titleText.setText( R.string.returnText );
-                
-                list.setVisibility( View.GONE );
-                divider.setVisibility( View.GONE );
-                courtesyText.setVisibility( View.GONE );
-                loadingText.setVisibility( View.VISIBLE );
-                
-                // Transform link to mobile version for visibility purposes
-                // http://stackoverflow.com/questions/1277157/java-regex-replace-with-capturing-group helped
-                String url = item.link.replace( "jobview", "m" );
-                
-                Pattern pattern = Pattern.compile(".com/.*-([0-9]+)\\.aspx");
-                Matcher matcher = pattern.matcher( url );
-                
-                // Should always return true
-                if ( matcher.find() )
-                    url = matcher.replaceFirst( ".com/" + matcher.group( 1 ) );
-                
-                webView.loadUrl( url );
-                webView.setVisibility( View.VISIBLE );
-            }    
-            
-        });
-        
-        new RssTask().execute();
+        // Set title and courtesy
+		((TextView) findViewById( R.id.title ) ).setText( this.title );
+		this.courtesyText.setText( getString( R.string.emplCourtesy ) );
     }
     
+    /*
+     * Get Web Contents
+     * Descriptions: Retrieves a page from a given URL.
+     */
     private InputStream getWebContents( String url ) {
         
         DefaultHttpClient client = new DefaultHttpClient();
-        HttpGet get = new HttpGet( url );
-
-        HttpResponse response = null;
-
+        
         try {
-            response = client.execute( get );
+        	
+        	// Get HTML from URL
+        	HttpResponse response = client.execute( new HttpGet( url ) );
             HttpEntity message = response.getEntity();
             return message.getContent();
             
         } catch ( ClientProtocolException e ) {
+        	
             e.printStackTrace();
+            
         } catch ( IOException e ) {
+        	
             e.printStackTrace();
         }
        
@@ -113,6 +81,10 @@ public class EmploymentActivity extends FeedActivity {
     }
 
     @Override
+    /*
+     * Get Items
+     * Description: Gets a list of items for display in the ListView.
+     */
     protected List<Item> getItems() {
         
         List<Item> result = new Vector<Item>();
@@ -140,13 +112,27 @@ public class EmploymentActivity extends FeedActivity {
         } catch ( IOException e ) {
             
             // TODO Auto-generated catch block
-            e.printStackTrace();
-            
+            e.printStackTrace(); 
         }
 
         // Let user see more jobs
         result.add( new Item( "See More", null, null ) );
         
         return result;
+    }
+    
+    @Override
+    protected String modifyUrl( String url ) {
+    	
+    	// Transform link to mobile version for visibility purposes
+        url = url.replace( "jobview", "m" );
+        
+        Matcher matcher = Pattern.compile(".com/.*-([0-9]+)\\.aspx").matcher( url );
+        
+        // Should always return true
+        if ( matcher.find() )
+            url = matcher.replaceFirst( ".com/" + matcher.group( 1 ) );
+        
+        return url;
     }
 }

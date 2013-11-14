@@ -1,7 +1,5 @@
 /* PlaceDetailActivity.java
  * Project E - Eric Daniels
- * Used with Place Detail activity page to display detailed information
- *    when user clicks on Place from MapActivity page
  */
 
 package com.android.projecte.townportal;
@@ -12,12 +10,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/*
+ * Place Detail Activity
+ * Description: Used with Place Detail Activity page to display detailed place 
+ * 				information when user clicks on a place in Map Activity.
+ */
 public class PlaceDetailActivity extends Activity {
 
     private TextView nameTextView, ratingTextView, priceTextView, 
@@ -80,14 +82,6 @@ public class PlaceDetailActivity extends Activity {
         
         new PhotoTask( getIntent().getExtras().getString( "photoRef" ) ).execute();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu ) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate( R.menu.place_detail, menu );
-        return true;
-    }
     
     // Async Task to get Google Places Photo
     class PhotoTask extends AsyncTask<Void, Void, PlacePhoto> {
@@ -108,7 +102,7 @@ public class PlaceDetailActivity extends Activity {
         @Override
         protected void onPostExecute( PlacePhoto thePlacePhoto ) {
 
-            Bitmap photo = thePlacePhoto.getPhoto();
+            Bitmap photo = thePlacePhoto.photo;
             
             // Set Photo ImageView
             if ( photo != null )
@@ -117,6 +111,11 @@ public class PlaceDetailActivity extends Activity {
 
     }
     
+    /*
+     * Rating to Star
+     * Description: Creates a star rating based off
+     * 				some integer out of 5.
+     */
     private String ratingToStar( int rating ) {
         
         String result = "";
@@ -133,6 +132,11 @@ public class PlaceDetailActivity extends Activity {
         return result;
     }
     
+    /*
+     * Price to Dollar
+     * Description: Creates a dollar representation
+     * 				of a price level.
+     */
     private String priceToDollar( int price ) {
         
         String result = "";

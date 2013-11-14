@@ -1,35 +1,24 @@
 /* PlaceType.java
  * Project E - Eric Daniels
- * Class used to hold GooglePlace type data 
  */
 
 package com.android.projecte.townportal;
 
 import java.io.Serializable;
 
+/*
+ * Place Type
+ * Description: Used for creation of tabs and using that tab
+ * 				to search Google Places API.
+ */
 public class PlaceType implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private String googleName;
-    private String displayName;
+    public String googleName, displayName;
 
-    public PlaceType() {
+    public PlaceType( String googleName, String displayName ) {
 
-    }
-
-    public PlaceType(String _googleName, String _displayName) {
-
-        googleName = _googleName;
-        displayName = _displayName;
-    }
-
-    public String getGoogleName() {
-
-        return googleName;
-    }
-
-    public String getDisplayName() {
-
-        return displayName;
+        this.googleName = googleName;
+        this.displayName = displayName;
     }
 }

@@ -1,3 +1,7 @@
+/* NewsActivity.java
+ * Project E - Eric Daniels
+ */
+
 package com.android.projecte.townportal;
 
 import java.io.IOException;
@@ -13,14 +17,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
+/*
+ * News Activity
+ * Description: A Feed Activity that gets news from The News Herald.
+ */
 final public class NewsActivity extends FeedActivity {
 
 	private String newsSource;
@@ -30,48 +33,14 @@ final public class NewsActivity extends FeedActivity {
 		
 		super.onCreate( savedInstanceState );
 		
+		// Get strings
 		newsSource = getString( R.string.newsSource );
 		title = getString( R.string.news_text );
-		viewMoreUrl = getString( R.string.newsViewMore );
+		seeMoreUrl = getString( R.string.newsViewMore );
 		
+		// Set title and courtesy
 		((TextView) findViewById( R.id.title ) ).setText( title );
 		courtesyText.setText( getString( R.string.newsCourtesy ) );
-		
-		list.setOnItemClickListener( new OnItemClickListener() {
-
-            @Override
-            public void onItemClick( AdapterView<?> adapterView, View view, int position, long id ) {
-
-            	Item item = (Item) adapterView.getItemAtPosition( position );
-            	
-            	if ( ( position + 1 ) == items.size() ) {
-            		
-            		Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData( Uri.parse( viewMoreUrl ) );
-                    startActivity( intent );
-                    
-                    return;
-                    
-            	} else if ( position == 0 && item.title.equals( "Refresh" ) ) {
-            		
-            		new RssTask().execute();
-            		return;
-            	}
-            	
-            	viewingItem = true;
-                titleText.setText( R.string.returnText );
-                
-                list.setVisibility( View.GONE );
-                divider.setVisibility( View.GONE );
-                courtesyText.setVisibility( View.GONE );
-                loadingText.setVisibility( View.VISIBLE );
-                
-                // Load mobile version of article for visibility purposes
-                webView.loadUrl( item.link.replaceFirst( "www", "m" ) );
-                webView.setVisibility( View.VISIBLE );
-            }    
-            
-        });
 	}
 	
 	@Override
@@ -82,14 +51,15 @@ final public class NewsActivity extends FeedActivity {
 		// Allow user to refresh
 		result.add( new Item( "Refresh", null, null ) );
 		
-        // Create Document from XML content
         try {
             
+        	// Download news items
             Document htmlDoc = Jsoup.connect( String.format( newsSource + "default.aspx?section=%s", 
                     getString( R.string.topNews ) ) ).get();
             
-            Elements newsItems = htmlDoc.select("li[data-icon]");
+            Elements newsItems = htmlDoc.select( "li[data-icon]" );
             
+            // Iterate through all items
             for ( Element element : newsItems ) {
                 
                 String title = element.select( "div[id=storySummary] h1, h2, h3, h4, h5, h6" ).get( 0 ).text();
@@ -97,8 +67,10 @@ final public class NewsActivity extends FeedActivity {
                 String link = null;
                 
                 // Get true link
-                List<NameValuePair> uriPairs = URLEncodedUtils.parse( new URI( newsSource + element.select( "a" ).get( 0 ).attr( "href" ) ),
-                        "UTF-8" );
+                List<NameValuePair> uriPairs = URLEncodedUtils.parse( 
+                		new URI( newsSource + element.select( "a" ).get( 0 ).attr( "href" ) ), "UTF-8" );
+                
+                // Find link within pairs
                 for ( NameValuePair nvp : uriPairs ) {
                     
                     if ( nvp.getName().equalsIgnoreCase( "link" ) ) {
@@ -108,17 +80,17 @@ final public class NewsActivity extends FeedActivity {
                     }
                 }
 
+                // Add the item if applicable
                 if ( title != null && link != null && description != null )
                     result.add( new Item( title, description, link ) );
             }
             
         } catch ( IOException e ) {
             
-            // TODO Auto-generated catch block
             e.printStackTrace();
             
         } catch ( URISyntaxException e ) {
-            // TODO Auto-generated catch block
+        	
             e.printStackTrace();
         }
         
@@ -127,4 +99,11 @@ final public class NewsActivity extends FeedActivity {
 
         return result;
 	}
+	
+	@Override
+    protected String modifyUrl( String url ) {
+    	
+		// Use mobile version of article for visibility purposes
+    	return url.replaceFirst( "www", "m" );
+    }
 }

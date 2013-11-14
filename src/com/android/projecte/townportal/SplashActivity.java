@@ -1,6 +1,5 @@
 /* SplashActivity.java
  * Project E - Eric Daniels
- * Splash page for Panama City Portal application
  */
 
 package com.android.projecte.townportal;
@@ -12,9 +11,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+/*
+ * Splash Activity
+ * Description: This splash page runs before getting into the MainActivity.
+ */
 public class SplashActivity extends Activity {
 
-    private long splashDelay = 5000;
+    private long splashDelay = 5000; // How long to be on our splash for
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -22,7 +25,7 @@ public class SplashActivity extends Activity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_splash );
 
-        TimerTask task = new TimerTask() {
+        new Timer().schedule( new TimerTask() {
 
             @Override
             public void run() {
@@ -31,10 +34,8 @@ public class SplashActivity extends Activity {
                 Intent mainIntent = new Intent( SplashActivity.this, MainActivity.class );
                 startActivity( mainIntent );
             }
-        };
-
-        Timer timer = new Timer();
-        timer.schedule( task, splashDelay );
+            
+        }, splashDelay );
     }
 
 }

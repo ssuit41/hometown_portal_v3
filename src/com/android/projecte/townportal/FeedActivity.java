@@ -1,30 +1,37 @@
+/* FeedActivity.java
+ * Project E - Eric Daniels
+ */
+
 package com.android.projecte.townportal;
 
 import java.util.List;
 import java.util.Vector;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/*
+ * Feed Activity
+ * Description: An abstract Activity whose purpose is to generate a
+ * 				dynamic ListView of items from some feed source.
+ */
 public abstract class FeedActivity extends Activity {
 
     protected List<Item> items = new Vector<Item>();
@@ -33,13 +40,11 @@ public abstract class FeedActivity extends Activity {
     protected WebView webView;
     protected TextView courtesyText, titleText, loadingText;
     protected View divider;
-    
     protected Boolean viewingItem = false;
-    protected String title, viewMoreUrl;
+    protected String title, seeMoreUrl;
     
     final private Integer MAX_DESC_LENGTH = 200;
     
-    @SuppressLint("SetJavaScriptEnabled")
 	@Override
     protected void onCreate( Bundle savedInstanceState ) {
 
@@ -50,14 +55,16 @@ public abstract class FeedActivity extends Activity {
         setContentView( R.layout.activity_feed );
         getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title );
         
-        list = (ListView) findViewById( R.id.feedList );
-        webView = (WebView) findViewById( R.id.feedWebView );
-        courtesyText = (TextView) findViewById( R.id.feedCourtesy );
-        titleText = (TextView) findViewById( R.id.title );
-        loadingText = (TextView) findViewById( R.id.loading );
-        divider = findViewById( R.id.feedDivider );
+        // Get Views
+        this.list = (ListView) findViewById( R.id.feedList );
+        this.webView = (WebView) findViewById( R.id.feedWebView );
+        this.courtesyText = (TextView) findViewById( R.id.feedCourtesy );
+        this.titleText = (TextView) findViewById( R.id.title );
+        this.loadingText = (TextView) findViewById( R.id.loading );
+        this.divider = findViewById( R.id.feedDivider );
         
-        adapter = new ArrayAdapter<Item>( this, android.R.layout.simple_list_item_2, items ) {
+        // Create custom adapter
+        this.adapter = new ArrayAdapter<Item>( this, android.R.layout.simple_list_item_2, items ) {
             
             @Override
             // Support shading and two text items
@@ -70,20 +77,18 @@ public abstract class FeedActivity extends Activity {
                 convertView =  ( (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE) )
                 		.inflate( android.R.layout.simple_list_item_2, parent, false );
                 
-                ( (TextView) convertView.findViewById( android.R.id.text1 ) ).setText( item.title );
+                TextView text1 = (TextView) convertView.findViewById( android.R.id.text1 ), 
+                		 text2 = (TextView) convertView.findViewById( android.R.id.text2 );
+                
+                text1.setText( item.title );
                 
                 // Center see more text
-                if ( ( position + 1 ) == items.size() && item.title.equals( "See More" ) ) {
+                if ( ( ( position + 1 ) == items.size() && item.title.equals( "See More" ) )
+                		|| ( position == 0 && item.title.equals( "Refresh" ) ) ) {
                 	
-                	( (TextView) convertView.findViewById( android.R.id.text1 ) ).setGravity( Gravity.CENTER );
-                	( (TextView) convertView.findViewById( android.R.id.text1 ) )
-                		.setTextColor( getContext().getResources().getColor( R.color.darkBlue ) );
+                	text1.setGravity( Gravity.CENTER );
+                	text1.setTextColor( getContext().getResources().getColor( R.color.darkBlue ) );
                 	
-                } else if ( position == 0 && item.title.equals( "Refresh" ) ) {
-                	
-                	( (TextView) convertView.findViewById( android.R.id.text1 ) ).setGravity( Gravity.CENTER );
-                	( (TextView) convertView.findViewById( android.R.id.text1 ) )
-                		.setTextColor( getContext().getResources().getColor( R.color.darkBlue ) );
                 }
                 
                 // Shorten description
@@ -92,26 +97,66 @@ public abstract class FeedActivity extends Activity {
                 if ( description != null && description.length() > MAX_DESC_LENGTH )
                     description = description.substring( 0, MAX_DESC_LENGTH ) + "\u2026";
                 
-                ( (TextView) convertView.findViewById( android.R.id.text2 ) ).setText( description );
+                text2.setText( description );
                 
-                if( position % 2 != 0 )
+                // Gray out even items
+                if( ( position % 2 ) != 0 )
                     convertView.setBackgroundResource( R.color.gray );
                 
                 return convertView;
             }
         };
         
-        list.setAdapter( adapter );
+        this.list.setAdapter( adapter );
         
+        this.list.setOnItemClickListener( new OnItemClickListener() {
+
+            @Override
+            public void onItemClick( AdapterView<?> adapterView, View view, int position, long id ) {
+
+            	Item item = (Item) adapterView.getItemAtPosition( position );
+            	
+            	// See More and Refresh functionality
+            	if ( ( position + 1 ) == items.size() && item.title.equals( "See More" ) ) {
+            		
+            		// Load into outside browser
+            		Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData( Uri.parse( seeMoreUrl ) );
+                    startActivity( intent );
+                    
+                    return;
+                    
+            	} else if ( position == 0 && item.title.equals( "Refresh" ) ) {
+            		
+            		// Get items again
+            		new FeedTask().execute();
+            		return;
+            	}
+            	
+            	// Show WebView only
+                viewingItem = true;
+                titleText.setText( R.string.returnText );
+                
+                list.setVisibility( View.GONE );
+                divider.setVisibility( View.GONE );
+                courtesyText.setVisibility( View.GONE );
+                loadingText.setVisibility( View.VISIBLE );
+                
+                webView.loadUrl( modifyUrl( item.link ) );
+                webView.setVisibility( View.VISIBLE );
+            }    
+            
+        });
+        
+        // Set custom WebViewClient
         webView.setWebViewClient( new WebViewClient() {
             
             @Override
             public boolean shouldOverrideUrlLoading (WebView view, String url) {
                 
-                // We need to start a new browser otherwise we will keep doing things in the
-                // WebView that may be undesirable for the user. The override is necessary
-                // because adding a custom WebViewClient takes away this standard behavior
-                // without one.
+                // We need to start a new browser otherwise we will keep loading pages in the
+                // WebView. The override is necessary because adding a custom WebViewClient takes
+            	// away this standard behavior without one.
                 // Found out how the standard way is done through:
                 // http://stackoverflow.com/questions/14665671/android-webview-open-certain-urls-inside-webview-the-rest-externally
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -125,30 +170,32 @@ public abstract class FeedActivity extends Activity {
             public void onPageFinished( WebView webview, String url ){
                 
                 super.onPageFinished( webview, url );
+                
                 loadingText.setVisibility( View.INVISIBLE );
             }
         });
         
-        webView.getSettings().setJavaScriptEnabled( true );
-        
-        new RssTask().execute();
+        new FeedTask().execute();
     }
     
     @Override
     protected void onSaveInstanceState( Bundle outState ) {
         
+    	// Save WebView and viewing state
         webView.saveState( outState );
         outState.putBoolean( "viewingItem", viewingItem );
+        
         super.onSaveInstanceState(outState);     
     }
 
     @Override
     protected void onRestoreInstanceState( Bundle state ) {
         
+    	// Load WebView and viewing state
         webView.restoreState( state );
         viewingItem = state.getBoolean( "viewingItem" );
         
-        // Keep showing article
+        // Check to see if we should keep showing article
         if ( viewingItem ) {
 
             titleText.setText( R.string.returnText ); 
@@ -166,72 +213,39 @@ public abstract class FeedActivity extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+    	// Specially handle back button while viewingItem
+        if ( keyCode == KeyEvent.KEYCODE_BACK && viewingItem ) {
+           
+            webView.setVisibility( View.GONE );
+            list.setVisibility( View.VISIBLE );
+            divider.setVisibility( View.VISIBLE );
+            courtesyText.setVisibility( View.VISIBLE );
             
-            if ( viewingItem ) {
-                
-                webView.setVisibility( View.GONE );
-                list.setVisibility( View.VISIBLE );
-                divider.setVisibility( View.VISIBLE );
-                courtesyText.setVisibility( View.VISIBLE );
-                
-                viewingItem = false;
-                titleText.setText( title );
-                
-                webView.loadUrl("about:blank");
-                
-                return true;
-            }
+            viewingItem = false;
+            titleText.setText( title );
+            
+            webView.loadUrl("about:blank");
+            
+            return true;
         }
         
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu ) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate( R.menu.feed, menu );
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected( MenuItem item ) {
-
-        switch ( item.getItemId() ) {
-        case android.R.id.home:
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            NavUtils.navigateUpFromSameTask( this );
-            return true;
-        }
-        return super.onOptionsItemSelected( item );
-    }
-
-    protected class RssTask extends AsyncTask<Void, Void, List<Item>> {
-
-        public RssTask() {
-
-        }
+    /*
+     * Feed Task
+     * Description: Grabs items from a specified feed implemented by
+     * 				a child class.
+     */
+    protected class FeedTask extends AsyncTask<Void, Void, List<Item>> {
 
         @Override
         protected List<Item> doInBackground( Void... arg0 ) {
-
-            // Some ideas borrowed from
-            // http://stackoverflow.com/questions/11879208/how-to-show-a-rss-feed-url-in-android-app-in-eclipse
-
-            List<Item> items = getItems();
             
-            return items;
+            return getItems();
         }
         
         @Override
-        
         protected void onPreExecute() {
             
             loadingText.setVisibility( View.VISIBLE );
@@ -240,6 +254,7 @@ public abstract class FeedActivity extends Activity {
         @Override
         protected void onPostExecute( List<Item> items ) {
             
+        	// Reset and add new items
             adapter.clear();
             
             for ( int i = 0 ; i < items.size(); ++i )
@@ -251,6 +266,10 @@ public abstract class FeedActivity extends Activity {
         }
     }
 
+    /*
+     * Item
+     * Description: Basic structure for storing feed data
+     */
     static protected class Item {
 
         protected String title, description, link;
@@ -261,13 +280,16 @@ public abstract class FeedActivity extends Activity {
             this.description = description;
             this.link = link;
         }
-
-        @Override
-        public String toString() {
-            
-            return title;
-        }
     }
 
+    /*
+     * Modify URL
+     * Description: Modifies a URL before loading it into the WebView.
+     */
+    protected String modifyUrl( String url ) {
+    	
+    	return url;
+    }
+    
     abstract protected List<Item> getItems();
 }

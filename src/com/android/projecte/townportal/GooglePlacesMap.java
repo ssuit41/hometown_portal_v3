@@ -1,7 +1,5 @@
 /* GooglePlacesMap.java
  * Project E - Eric Daniels
- * Used with Google Maps activity page to display map of user selected category
- *   and ListView of places
  */
 
 package com.android.projecte.townportal;
@@ -19,7 +17,6 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -29,6 +26,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 @SuppressLint ( "SetJavaScriptEnabled")
+/*
+ * Google Places Map Activity
+ * Description: Used with Map Activity to display map of a user 
+ * 				selected category and a ListView of relative places.
+ */
 public class GooglePlacesMap extends Activity implements
         AdapterView.OnItemSelectedListener, ListView.OnItemClickListener,
         View.OnClickListener, LocationListener {
@@ -41,7 +43,6 @@ public class GooglePlacesMap extends Activity implements
 
     GooglePlacesSearch gpSearch = null;
     ArrayList<Place> arrayList = null;
-    PlaceDetail placeDetail = null;
     PlacePhoto placePhoto = null;
 
     ListView lv = null;
@@ -107,15 +108,6 @@ public class GooglePlacesMap extends Activity implements
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu ) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate( R.menu.map, menu );
-        return true;
-
-    }
-
     private String getMapHTML( double latitude, double longitude, String type,
             int milesAway ) {
 
@@ -174,23 +166,20 @@ public class GooglePlacesMap extends Activity implements
         @Override
         protected PlaceDetail doInBackground( Void... unused ) {
 
-            placeDetail = gpSearch.findPlaceDetail( this.place.getPlaceReference() );
-            return placeDetail;
+            return gpSearch.findPlaceDetail( this.place.placeReference );
         }
 
         @Override
-        protected void onPostExecute( PlaceDetail theDetail ) {
-
-            placeDetail = theDetail;
+        protected void onPostExecute( PlaceDetail placeDetail ) {
 
             Intent placeDetailIntent = new Intent( GooglePlacesMap.this, PlaceDetailActivity.class );
-            placeDetailIntent.putExtra( "name", placeDetail.getSiteName() );
-            placeDetailIntent.putExtra( "rating", place.getRating() );
-            placeDetailIntent.putExtra( "price", place.getPrice() );
-            placeDetailIntent.putExtra( "address", placeDetail.getAddress() );
-            placeDetailIntent.putExtra( "phonenumber", placeDetail.getPhoneNumber() );
-            placeDetailIntent.putExtra( "website", placeDetail.getWebsite() );
-            placeDetailIntent.putExtra( "photoRef", theDetail.getPhotoRef() );
+            placeDetailIntent.putExtra( "name", placeDetail.siteName );
+            placeDetailIntent.putExtra( "rating", place.rating );
+            placeDetailIntent.putExtra( "price", place.price );
+            placeDetailIntent.putExtra( "address", placeDetail.address );
+            placeDetailIntent.putExtra( "phonenumber", placeDetail.phoneNumber );
+            placeDetailIntent.putExtra( "website", placeDetail.website );
+            placeDetailIntent.putExtra( "photoRef", placeDetail.photoRef );
             placeDetailIntent.putExtra( "gpSearchType", type );
             placeDetailIntent.putExtra( "gpSearchGeoLocation", Double.toString( latitude ) + "," + Double.toString( longitude ) );
                 
@@ -206,7 +195,6 @@ public class GooglePlacesMap extends Activity implements
 
         // starting the AsyncTask DetailTask
         new DetailTask( place ).execute();
-
     }
 
     public void onItemSelected( AdapterView<?> arg0, View arg1, int arg2,

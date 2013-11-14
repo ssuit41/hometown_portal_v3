@@ -30,13 +30,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/restaurants"
-                android:contentDescription="@string/food_text" />
+                android:contentDescription="@string/food_text"
+                android:onClick="onClick" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/food_text"
                 android:textSize="12sp" />
+            
         </LinearLayout>
 
         <LinearLayout
@@ -51,13 +53,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/entertainment"
-                android:contentDescription="@string/entertainment_text" />
+                android:contentDescription="@string/entertainment_text"
+                android:onClick="onClick" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/entertainment_text"
                 android:textSize="12sp" />
+            
         </LinearLayout>
 
         <LinearLayout
@@ -72,13 +76,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shopping"
-                android:contentDescription="@string/shopping_text" />
+                android:contentDescription="@string/shopping_text"
+                android:onClick="onClick" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/shopping_text"
                 android:textSize="12sp" />
+            
         </LinearLayout>
     </LinearLayout>
 
@@ -105,13 +111,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/schools"
-                android:contentDescription="@string/schools_text" />
+                android:contentDescription="@string/schools_text"
+                android:onClick="onClick" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/schools_text"
                 android:textSize="12sp" />
+            
         </LinearLayout>
 
         <LinearLayout
@@ -126,13 +134,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/employment"
-                android:contentDescription="@string/employment_text" />
+                android:contentDescription="@string/employment_text"
+                android:onClick="onClick" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/employment_text"
                 android:textSize="12sp" />
+            
         </LinearLayout>
 
         <LinearLayout
@@ -147,13 +157,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/news"
-                android:contentDescription="@string/news_text" />
+                android:contentDescription="@string/news_text"
+                android:onClick="onClick" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/news_text"
                 android:textSize="12sp" />
+            
         </LinearLayout>
     </LinearLayout>
 

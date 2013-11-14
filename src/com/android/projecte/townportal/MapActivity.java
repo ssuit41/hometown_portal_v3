@@ -1,7 +1,5 @@
 /* MapActivity.java
  * Project E - Eric Daniels
- * Used with Google Maps activity page to display tabs which are
- *   sub-categories of user selected category
  */
 
 package com.android.projecte.townportal;
@@ -9,7 +7,6 @@ package com.android.projecte.townportal;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -17,6 +14,11 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 @SuppressWarnings ( "deprecation")
+/*
+ * Map Activity
+ * Description: Used with Google Maps activity page to display tabs which are
+ *   			sub-categories of a user selected category.
+ */
 public class MapActivity extends TabActivity implements
         AdapterView.OnItemSelectedListener {
 
@@ -46,21 +48,21 @@ public class MapActivity extends TabActivity implements
         Intent tabIntent; // Reusable Intent for each tab
 
         // Tab 1 - first tab is required, others may be null
-        tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt1.getGoogleName() );
-        spec = tabHost.newTabSpec( pt1.getDisplayName() ).setIndicator( pt1.getDisplayName() ).setContent( tabIntent );
+        tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt1.googleName );
+        spec = tabHost.newTabSpec( pt1.displayName ).setIndicator( pt1.displayName ).setContent( tabIntent );
         tabHost.addTab( spec );
 
         // Tab 2
         if ( pt2 != null ) {
-            tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt2.getGoogleName() );
-            spec = tabHost.newTabSpec( pt2.getDisplayName() ).setIndicator( pt2.getDisplayName() ).setContent( tabIntent );
+            tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt2.googleName );
+            spec = tabHost.newTabSpec( pt2.displayName ).setIndicator( pt2.displayName ).setContent( tabIntent );
             tabHost.addTab( spec );
         }
 
         // Tab 3
         if ( pt3 != null ) {
-            tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt3.getGoogleName() );
-            spec = tabHost.newTabSpec( pt3.getDisplayName() ).setIndicator( pt3.getDisplayName() ).setContent( tabIntent );
+            tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt3.googleName );
+            spec = tabHost.newTabSpec( pt3.displayName ).setIndicator( pt3.displayName ).setContent( tabIntent );
             tabHost.addTab( spec );
         }
 
@@ -72,15 +74,6 @@ public class MapActivity extends TabActivity implements
         for ( int i = 0; i < tabHost.getTabWidget().getTabCount(); i++ ) {
             tabHost.getTabWidget().getChildAt( i ).getLayoutParams().height = (int) ( heightValue * this.getResources().getDisplayMetrics().density );
         }
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu ) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate( R.menu.map, menu );
-        return true;
 
     }
 

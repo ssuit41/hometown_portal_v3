@@ -34,7 +34,7 @@ public class PlaceDetailActivity extends Activity {
 
         super.onCreate( savedInstanceState );
 
-        gpSearch = new GooglePlacesSearch( getIntent().getExtras().getString( "gpSearchType" ), 
+        this.gpSearch = new GooglePlacesSearch( getIntent().getExtras().getString( "gpSearchType" ), 
                 getIntent().getExtras().getString( "gpSearchGeoLocation" ) );
         
         // Use custom title bar
@@ -44,41 +44,34 @@ public class PlaceDetailActivity extends Activity {
         ((TextView) findViewById( R.id.title ) ).setText( R.string.returnText );
 
         // Set Place detail TextViews
-        nameTextView = (TextView) findViewById( R.id.nameText );
-        ratingTextView = (TextView) findViewById( R.id.ratingText );
-        priceTextView = (TextView) findViewById( R.id.priceText );
-        addressTextView = (TextView) findViewById( R.id.addressText );
-        phoneNumberTextView = (TextView) findViewById( R.id.phoneNumberText );
-        websiteTextView = (TextView) findViewById( R.id.websiteText );
-        photoImageView = (ImageView) findViewById( R.id.photoImage );
-
-        // Set Place detail variables
-        String mName = getIntent().getExtras().getString( "name" );
-        double mRating = getIntent().getExtras().getDouble( "rating" );
-        int mPrice = getIntent().getExtras().getInt( "price" );
-        String mAddress = getIntent().getExtras().getString( "address" );
-        String mPhoneNumber = getIntent().getExtras().getString( "phonenumber" );
-        String mWebsite = getIntent().getExtras().getString( "website" );
+        this.nameTextView = (TextView) findViewById( R.id.nameText );
+        this.ratingTextView = (TextView) findViewById( R.id.ratingText );
+        this.priceTextView = (TextView) findViewById( R.id.priceText );
+        this.addressTextView = (TextView) findViewById( R.id.addressText );
+        this.phoneNumberTextView = (TextView) findViewById( R.id.phoneNumberText );
+        this.websiteTextView = (TextView) findViewById( R.id.websiteText );
+        this.photoImageView = (ImageView) findViewById( R.id.photoImage );
         
         // Set TextViews
-        nameTextView.setText( mName );
-        ratingTextView.setText( ratingToStar( (int) mRating ) );
-        addressTextView.setText( mAddress );
-        phoneNumberTextView.setText( mPhoneNumber );
-        websiteTextView.setClickable( true );
-        websiteTextView.setMovementMethod( LinkMovementMethod.getInstance() );
+        this.nameTextView.setText( getIntent().getExtras().getString( "name" ) );
+        this.ratingTextView.setText( ratingToStar( (int) getIntent().getExtras().getDouble( "rating" ) ) );
+        this.addressTextView.setText( getIntent().getExtras().getString( "address" ) );
+        this.phoneNumberTextView.setText( getIntent().getExtras().getString( "phonenumber" ) );
+        this.websiteTextView.setClickable( true );
+        this.websiteTextView.setMovementMethod( LinkMovementMethod.getInstance() );
         
-        String dollar = priceToDollar( mPrice );
+        String dollars = priceToDollar( getIntent().getExtras().getInt( "price" ) );
         
         // Don't display dollar if it isn't there so we save space
-        if ( dollar.isEmpty() )
+        if ( dollars.isEmpty() )
             priceTextView.setVisibility( View.GONE );
         else
-            priceTextView.setText( priceToDollar( mPrice ) );
+            priceTextView.setText( dollars );
 
-        if ( mWebsite != null ) {
-            websiteTextView.setText( Html.fromHtml( "<a href=" + mWebsite + ">" + mWebsite ) );
-        }
+        String website = getIntent().getExtras().getString( "website" );
+        
+        if ( website != null )
+            websiteTextView.setText( Html.fromHtml( "<a href=" + website + ">" + website ) );
         
         new PhotoTask( getIntent().getExtras().getString( "photoRef" ) ).execute();
     }
@@ -107,6 +100,8 @@ public class PlaceDetailActivity extends Activity {
             // Set Photo ImageView
             if ( photo != null )
                 photoImageView.setImageBitmap( photo );
+            else
+            	photoImageView.setVisibility( View.GONE );
         }
 
     }

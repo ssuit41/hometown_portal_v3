@@ -64,7 +64,7 @@ public abstract class FeedActivity extends Activity {
         this.divider = findViewById( R.id.feedDivider );
         
         // Create custom adapter
-        this.adapter = new ArrayAdapter<Item>( this, android.R.layout.simple_list_item_2, items ) {
+        this.adapter = new ArrayAdapter<Item>( this, android.R.layout.simple_list_item_2, this.items ) {
             
             @Override
             // Support shading and two text items
@@ -107,7 +107,7 @@ public abstract class FeedActivity extends Activity {
             }
         };
         
-        this.list.setAdapter( adapter );
+        this.list.setAdapter( this.adapter );
         
         this.list.setOnItemClickListener( new OnItemClickListener() {
 
@@ -149,7 +149,7 @@ public abstract class FeedActivity extends Activity {
         });
         
         // Set custom WebViewClient
-        webView.setWebViewClient( new WebViewClient() {
+        this.webView.setWebViewClient( new WebViewClient() {
             
             @Override
             public boolean shouldOverrideUrlLoading (WebView view, String url) {
@@ -182,8 +182,8 @@ public abstract class FeedActivity extends Activity {
     protected void onSaveInstanceState( Bundle outState ) {
         
     	// Save WebView and viewing state
-        webView.saveState( outState );
-        outState.putBoolean( "viewingItem", viewingItem );
+    	this.webView.saveState( outState );
+        outState.putBoolean( "viewingItem", this.viewingItem );
         
         super.onSaveInstanceState(outState);     
     }
@@ -192,19 +192,19 @@ public abstract class FeedActivity extends Activity {
     protected void onRestoreInstanceState( Bundle state ) {
         
     	// Load WebView and viewing state
-        webView.restoreState( state );
-        viewingItem = state.getBoolean( "viewingItem" );
+    	this.webView.restoreState( state );
+    	this.viewingItem = state.getBoolean( "viewingItem" );
         
         // Check to see if we should keep showing article
-        if ( viewingItem ) {
+        if ( this.viewingItem ) {
 
-            titleText.setText( R.string.returnText ); 
+        	this.titleText.setText( R.string.returnText ); 
             
-            list.setVisibility( View.GONE );
-            divider.setVisibility( View.GONE );
-            courtesyText.setVisibility( View.GONE );
-            webView.setVisibility( View.VISIBLE );
-            loadingText.setVisibility( View.VISIBLE );
+        	this.list.setVisibility( View.GONE );
+        	this.divider.setVisibility( View.GONE );
+        	this.courtesyText.setVisibility( View.GONE );
+        	this.webView.setVisibility( View.VISIBLE );
+        	this.loadingText.setVisibility( View.VISIBLE );
         }
         
         super.onRestoreInstanceState( state );    
@@ -214,17 +214,17 @@ public abstract class FeedActivity extends Activity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         
     	// Specially handle back button while viewingItem
-        if ( keyCode == KeyEvent.KEYCODE_BACK && viewingItem ) {
+        if ( keyCode == KeyEvent.KEYCODE_BACK && this.viewingItem ) {
            
-            webView.setVisibility( View.GONE );
-            list.setVisibility( View.VISIBLE );
-            divider.setVisibility( View.VISIBLE );
-            courtesyText.setVisibility( View.VISIBLE );
+        	this.webView.setVisibility( View.GONE );
+        	this.list.setVisibility( View.VISIBLE );
+        	this.divider.setVisibility( View.VISIBLE );
+        	this.courtesyText.setVisibility( View.VISIBLE );
             
-            viewingItem = false;
-            titleText.setText( title );
+        	this.viewingItem = false;
+        	this.titleText.setText( title );
             
-            webView.loadUrl("about:blank");
+        	this.webView.loadUrl("about:blank");
             
             return true;
         }

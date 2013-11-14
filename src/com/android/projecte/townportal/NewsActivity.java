@@ -34,13 +34,13 @@ final public class NewsActivity extends FeedActivity {
 		super.onCreate( savedInstanceState );
 		
 		// Get strings
-		newsSource = getString( R.string.newsSource );
-		title = getString( R.string.news_text );
-		seeMoreUrl = getString( R.string.newsViewMore );
+		this.newsSource = getString( R.string.newsSource );
+		this.title = getString( R.string.news_text );
+		this.seeMoreUrl = getString( R.string.newsViewMore );
 		
 		// Set title and courtesy
-		((TextView) findViewById( R.id.title ) ).setText( title );
-		courtesyText.setText( getString( R.string.newsCourtesy ) );
+		((TextView) findViewById( R.id.title ) ).setText( this.title );
+		this.courtesyText.setText( getString( R.string.newsCourtesy ) );
 	}
 	
 	@Override

@@ -5,7 +5,6 @@
 package com.android.projecte.townportal;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -64,14 +63,14 @@ public class PlaceDetailActivity extends Activity {
         
         // Don't display dollar if it isn't there so we save space
         if ( dollars.isEmpty() )
-            priceTextView.setVisibility( View.GONE );
+        	this.priceTextView.setVisibility( View.GONE );
         else
-            priceTextView.setText( dollars );
+        	this.priceTextView.setText( dollars );
 
         String website = getIntent().getExtras().getString( "website" );
         
         if ( website != null )
-            websiteTextView.setText( Html.fromHtml( "<a href=" + website + ">" + website ) );
+        	this.websiteTextView.setText( Html.fromHtml( "<a href=" + website + ">" + website ) );
         
         new PhotoTask( getIntent().getExtras().getString( "photoRef" ) ).execute();
     }
@@ -83,7 +82,7 @@ public class PlaceDetailActivity extends Activity {
 
         public PhotoTask( String photoRef ) {
 
-            photoReference = photoRef;
+        	this.photoReference = photoRef;
         }
 
         @Override
@@ -93,13 +92,11 @@ public class PlaceDetailActivity extends Activity {
         }
 
         @Override
-        protected void onPostExecute( PlacePhoto thePlacePhoto ) {
-
-            Bitmap photo = thePlacePhoto.photo;
+        protected void onPostExecute( PlacePhoto placePhoto ) {
             
             // Set Photo ImageView
-            if ( photo != null )
-                photoImageView.setImageBitmap( photo );
+            if ( placePhoto.photo != null )
+                photoImageView.setImageBitmap( placePhoto.photo );
             else
             	photoImageView.setVisibility( View.GONE );
         }

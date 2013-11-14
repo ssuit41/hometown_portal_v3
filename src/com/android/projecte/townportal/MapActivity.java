@@ -7,9 +7,7 @@ package com.android.projecte.townportal;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -19,8 +17,7 @@ import android.widget.TextView;
  * Description: Used with Google Maps activity page to display tabs which are
  *   			sub-categories of a user selected category.
  */
-public class MapActivity extends TabActivity implements
-        AdapterView.OnItemSelectedListener {
+public class MapActivity extends TabActivity {
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -75,17 +72,5 @@ public class MapActivity extends TabActivity implements
             tabHost.getTabWidget().getChildAt( i ).getLayoutParams().height = (int) ( heightValue * this.getResources().getDisplayMetrics().density );
         }
 
-    }
-
-    @Override
-    public void onItemSelected( AdapterView<?> arg0, View arg1, int arg2, long arg3 ) {
-
-        return;
-    }
-
-    @Override
-    public void onNothingSelected( AdapterView<?> arg0 ) {
-
-        return;
     }
 }

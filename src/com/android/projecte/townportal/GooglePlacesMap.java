@@ -264,7 +264,6 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
 
             this.mapView.stopLoading();
             this.mapView.loadData( getMapHTML( this.latitude, this.longitude, this.type, this.milesAway ), "text/html", "UTF-8" );
-
         }
     }
 

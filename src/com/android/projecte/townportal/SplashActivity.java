@@ -17,7 +17,7 @@ import android.os.Bundle;
  */
 public class SplashActivity extends Activity {
 
-    private long splashDelay = 5000; // How long to be on our splash for
+    final private long splashDelay = 5000; // How long to display the our splash for
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -35,7 +35,7 @@ public class SplashActivity extends Activity {
                 startActivity( mainIntent );
             }
             
-        }, splashDelay );
+        }, this.splashDelay );
     }
 
 }

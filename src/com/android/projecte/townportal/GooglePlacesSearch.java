@@ -29,18 +29,19 @@ import android.graphics.BitmapFactory;
  */
 public class GooglePlacesSearch {
 
-    public String location = "30.205971,-85.858862";
-    public String radius = "16100"; // in meters - about 10 miles
-    public String types;
-    public String sensor = "false";
-    public String APIKey = "AIzaSyBz7p2E8oDDBYJYvL3RM3cFjHCJDkpuqwU";
-    public String reference = null;
+    public String location = "30.205971,-85.858862",
+    		      radius = "16100", // in meters - about 10 miles
+                  types,
+                  sensor = "false",
+    		      APIKey = "AIzaSyBz7p2E8oDDBYJYvL3RM3cFjHCJDkpuqwU",
+    			  reference = null;
+    
     BitmapFactory.Options bmOptions;
 
     public GooglePlacesSearch(String placeType, String geoLocation) {
 
-        types = placeType;
-        location = geoLocation;
+    	this.types = placeType;
+    	this.location = geoLocation;
 
     }
 
@@ -49,8 +50,8 @@ public class GooglePlacesSearch {
         String returnVal = new String();
 
         returnVal = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
-        returnVal += location + "&radius=" + radius + "&types=" + types
-                    + "&sensor=" + sensor + "&key=" + APIKey;
+        returnVal += this.location + "&radius=" + this.radius + "&types=" + this.types
+                    + "&sensor=" + this.sensor + "&key=" + this.APIKey;
 
         return ( returnVal );
     }
@@ -118,7 +119,7 @@ public class GooglePlacesSearch {
         String returnVal = new String();
 
         returnVal = "https://maps.googleapis.com/maps/api/place/details/json?reference=";
-        returnVal += placeRef + "&sensor=" + sensor + "&key=" + APIKey;
+        returnVal += placeRef + "&sensor=" + this.sensor + "&key=" + this.APIKey;
 
         return ( returnVal );
     }
@@ -127,7 +128,7 @@ public class GooglePlacesSearch {
 
         String returnVal = new String();
         returnVal = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400";
-        returnVal += "&photoreference=" + photoRef + "&sensor=" + sensor + "&key=" + APIKey;
+        returnVal += "&photoreference=" + photoRef + "&sensor=" + this.sensor + "&key=" + this.APIKey;
 
         return ( returnVal );
     }

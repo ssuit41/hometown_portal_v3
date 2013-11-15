@@ -34,6 +34,8 @@ import android.widget.Toast;
  * Google Places Map Activity
  * Description: Used with Map Activity to display map of a user 
  * 				selected category and a ListView of relative places.
+ * Note: Uses fragments now to avoid deprecation
+ * 		 http://developer.android.com/guide/components/fragments.html
  */
 public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelectedListener {
 

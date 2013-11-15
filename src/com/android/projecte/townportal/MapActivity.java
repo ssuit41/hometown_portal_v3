@@ -15,6 +15,8 @@ import android.widget.TextView;
  * Map Activity
  * Description: Used with Google Maps activity page to display tabs which are
  *   			sub-categories of a user selected category.
+ * Note: Uses fragments now to avoid deprecation
+ * 		 http://developer.android.com/guide/components/fragments.html
  */
 public class MapActivity extends FragmentActivity {
 

@@ -41,6 +41,8 @@ final public class NewsActivity extends FeedActivity {
 		// Set title and courtesy
 		((TextView) findViewById( R.id.title ) ).setText( this.title );
 		this.courtesyText.setText( getString( R.string.newsCourtesy ) );
+		
+		new FeedTask().execute();
 	}
 	
 	@Override

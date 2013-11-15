@@ -174,8 +174,6 @@ public abstract class FeedActivity extends Activity {
                 loadingText.setVisibility( View.INVISIBLE );
             }
         });
-        
-        new FeedTask().execute();
     }
     
     @Override

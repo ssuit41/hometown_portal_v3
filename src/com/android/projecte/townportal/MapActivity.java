@@ -22,14 +22,14 @@ public class MapActivity extends TabActivity {
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
 
+        super.onCreate( savedInstanceState );
+        
         // http://stackoverflow.com/questions/2736389/how-to-pass-object-from-one-activity-to-another-in-android
         Intent intent = getIntent();
         String title = ( String ) intent.getSerializableExtra( "title" );
         PlaceType pt1 = (PlaceType) intent.getSerializableExtra( "PlaceType1" );
         PlaceType pt2 = (PlaceType) intent.getSerializableExtra( "PlaceType2" );
         PlaceType pt3 = (PlaceType) intent.getSerializableExtra( "PlaceType3" );
-
-        super.onCreate( savedInstanceState );
 
         // Use custom title bar
         requestWindowFeature( Window.FEATURE_CUSTOM_TITLE );
@@ -51,6 +51,7 @@ public class MapActivity extends TabActivity {
 
         // Tab 2
         if ( pt2 != null ) {
+        	
             tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt2.googleName );
             spec = tabHost.newTabSpec( pt2.displayName ).setIndicator( pt2.displayName ).setContent( tabIntent );
             tabHost.addTab( spec );
@@ -58,6 +59,7 @@ public class MapActivity extends TabActivity {
 
         // Tab 3
         if ( pt3 != null ) {
+        	
             tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt3.googleName );
             spec = tabHost.newTabSpec( pt3.displayName ).setIndicator( pt3.displayName ).setContent( tabIntent );
             tabHost.addTab( spec );
@@ -68,9 +70,9 @@ public class MapActivity extends TabActivity {
         // loop through all tab views and set height value
         // http://www.speakingcode.com/2011/10/17/adjust-height-of-android-tabwidget/
         int heightValue = 30;
-        for ( int i = 0; i < tabHost.getTabWidget().getTabCount(); i++ ) {
-            tabHost.getTabWidget().getChildAt( i ).getLayoutParams().height = (int) ( heightValue * this.getResources().getDisplayMetrics().density );
-        }
+        for ( int i = 0; i < tabHost.getTabWidget().getTabCount(); i++ )
+            tabHost.getTabWidget().getChildAt( i ).getLayoutParams().height = 
+            	(int) ( heightValue * this.getResources().getDisplayMetrics().density );
 
     }
 }

@@ -111,7 +111,6 @@ final public class EmploymentActivity extends FeedActivity {
             
         } catch ( IOException e ) {
             
-            // TODO Auto-generated catch block
             e.printStackTrace(); 
         }
 

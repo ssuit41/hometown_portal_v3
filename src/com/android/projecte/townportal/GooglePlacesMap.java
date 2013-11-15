@@ -34,8 +34,11 @@ import android.widget.Toast;
  */
 public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelectedListener {
 
-    public double latitude = 30.205971, longitude = -85.858862;
-    private String type, geoLocation, bestProvider;
+	// Panama City Beach Coordinates
+	final private double panamaLat = 30.205971, panamaLong = -85.858862;
+	
+    private double latitude, longitude;
+    private String type, bestProvider;
     private int milesAway = 10;
     private GooglePlacesSearch gpSearch = null;
     private ArrayList<Place> places = null;
@@ -84,7 +87,7 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
                 toast.show();
                 this.spinner.setSelection( 1 );
                 
-            } else
+            } else {
             	
             	// Ask for updates every once in a while but we don't actually care when we get them
                 this.locationManager.requestLocationUpdates( this.bestProvider, 6000, 20,  new LocationListener() {
@@ -102,9 +105,10 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
     				public void onStatusChanged(String provider, int status, Bundle extras) {}
                 	
                 });
+            }
         }
 
-        this.gpSearch = new GooglePlacesSearch( type, Double.toString( this.latitude ) + "," + Double.toString( this.longitude ) );
+        this.gpSearch = new GooglePlacesSearch( type, getGoogleCoordinates() );
         
         placesList.setOnItemClickListener( new OnItemClickListener() {
         	
@@ -117,32 +121,43 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
 
         
         this.mapView.getSettings().setJavaScriptEnabled( true );
-        this.mapView.loadData( getMapHTML( latitude, longitude, type, milesAway ), "text/html", null );
-        
-        new ListViewTask().execute();
+    }
+    
+    /*
+     * Get Google Coordinates
+     * Description: Generates Google Places API coordinates
+     */
+    private String getGoogleCoordinates() {
+    	
+    	return Double.toString( this.latitude ) + "," + Double.toString( this.longitude );
     }
 
+    /*
+     * Get Map HTML
+     * Description: Gets map HTML for location selected
+     */
     private String getMapHTML( double latitude, double longitude, String type, int milesAway ) {
 
         String radius;
         final int meters = 1609;
         radius = Integer.toString( meters * milesAway );
-        String googleCoordinates = Double.toString( latitude ) + ","
-                + Double.toString( longitude );
 
         // HTML and JavaScript source code retrieved from
         // https://developers.google.com/maps/documentation/javascript/examples/place-search
 
         String HTMLdata = "<html>  <head>    <title>Place searches</title>    <meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\">    <meta charset=\"utf-8\">    <link href=\"https://developers.google.com/maps/documentation/javascript/examples/default.css\" rel=\"stylesheet\">    <script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=places\"></script>    <script>var map;var infowindow;function initialize() {  var pyrmont = new google.maps.LatLng("
-                + googleCoordinates
+                + getGoogleCoordinates()
                 + ");  map = new google.maps.Map(document.getElementById('map-canvas'), {    mapTypeId: google.maps.MapTypeId.ROADMAP,    center: pyrmont,    zoom: 13  });  var request = {    location: pyrmont,    radius: "
                 + radius
-                + ",    types: ['"
-                + type
-                + "']  };  infowindow = new google.maps.InfoWindow();  var service = new google.maps.places.PlacesService(map);  service.nearbySearch(request, callback);}function callback(results, status) {  if (status == google.maps.places.PlacesServiceStatus.OK) {    for (var i = 0; i < results.length; i++) {      createMarker(results[i]);    }  }}function createMarker(place) {  var placeLoc = place.geometry.location;  var marker = new google.maps.Marker({    map: map,    position: place.geometry.location  });  google.maps.event.addListener(marker, 'click', function() {    infowindow.setContent(place.name);    infowindow.open(map, this);  });}google.maps.event.addDomListener(window, 'load', initialize);    </script>  </head>  <body>    <div id=\"map-canvas\" style=\"width: 100%;height: 100%; float:center\"></div>  </body></html>";
+                + ",    types: ['" + type + "']  };  infowindow = new google.maps.InfoWindow();  var service = new google.maps.places.PlacesService(map);  service.nearbySearch(request, callback);}function callback(results, status) {  if (status == google.maps.places.PlacesServiceStatus.OK) {    for (var i = 0; i < results.length; i++) {      createMarker(results[i]);    }  }}function createMarker(place) {  var placeLoc = place.geometry.location;  var marker = new google.maps.Marker({    map: map,    position: place.geometry.location  });  google.maps.event.addListener(marker, 'click', function() {    infowindow.setContent(place.name);    infowindow.open(map, this);  });}google.maps.event.addDomListener(window, 'load', initialize);    </script>  </head>  <body>    <div id=\"map-canvas\" style=\"width: 100%;height: 100%; float:center\"></div>  </body></html>";
+        
         return HTMLdata;
     }
 
+    /*
+     * ListView Task
+     * Description: AsyncTask to get Places.
+     */
     class ListViewTask extends AsyncTask<Void, Void, ArrayList<Place>> {
 
         @Override
@@ -153,20 +168,18 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
         }
 
         @Override
-        protected void onPostExecute( ArrayList<Place> _placesList ) {
+        protected void onPostExecute( ArrayList<Place> places ) {
 
-            try {
-                adapter = new ArrayAdapter<Place>( GooglePlacesMap.this,
-                        android.R.layout.simple_list_item_1, _placesList );
-                placesList.setAdapter( adapter );
-            } catch ( Exception e ) {
-                e.printStackTrace();
-            }
+        	adapter = new ArrayAdapter<Place>( GooglePlacesMap.this, android.R.layout.simple_list_item_1, places );
+            placesList.setAdapter( adapter );
 
         }
     }
 
-    // AsyncTask to get Google Places Detail
+    /* 
+     * Detail Task
+     * Description: AsyncTask to get Google Places Detail.
+     */
     class DetailTask extends AsyncTask<Void, Void, PlaceDetail> {
 
         private Place place;
@@ -185,6 +198,7 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
         @Override
         protected void onPostExecute( PlaceDetail placeDetail ) {
 
+        	// Load placeDetail into its activity
             Intent placeDetailIntent = new Intent( GooglePlacesMap.this, PlaceDetailActivity.class );
             placeDetailIntent.putExtra( "name", placeDetail.siteName );
             placeDetailIntent.putExtra( "rating", place.rating );
@@ -194,7 +208,7 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
             placeDetailIntent.putExtra( "website", placeDetail.website );
             placeDetailIntent.putExtra( "photoRef", placeDetail.photoRef );
             placeDetailIntent.putExtra( "gpSearchType", type );
-            placeDetailIntent.putExtra( "gpSearchGeoLocation", Double.toString( latitude ) + "," + Double.toString( longitude ) );
+            placeDetailIntent.putExtra( "gpSearchGeoLocation", getGoogleCoordinates() );
                 
             startActivity( placeDetailIntent );
         }
@@ -220,21 +234,13 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
 
                     this.latitude = this.locationDetails.getLatitude();
                     this.longitude = this.locationDetails.getLongitude();
-                    this.geoLocation = Double.toString( this.latitude ) + "," + Double.toString( this.longitude );
 
-                    this.gpSearch = new GooglePlacesSearch( this.type, this.geoLocation );
-                    // starting the AsynTask ListViewTask
+                    // Update GP Search Parameters
+                    this.gpSearch = new GooglePlacesSearch( this.type, getGoogleCoordinates() );
                     new ListViewTask().execute();
-
-                    try {
                     	
-                    	this.mapView.stopLoading();
-                    	this.mapView.loadData( getMapHTML( this.latitude, this.longitude, this.type, this.milesAway ), "text/html", "UTF-8" );
-
-                    } catch ( NullPointerException e ) {
-                    	
-                        e.printStackTrace();
-                    }
+                	this.mapView.stopLoading();
+                	this.mapView.loadData( getMapHTML( this.latitude, this.longitude, this.type, this.milesAway ), "text/html", "UTF-8" );
 
                 } else {
 
@@ -246,20 +252,17 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
                     toast.setGravity( Gravity.CENTER_HORIZONTAL, 0, 0 );
                     toast.show();
                 }
-
             }
-
         }
 
         if ( this.spinner.getSelectedItem().toString().equals( "Panama City" ) ) {
             
         	// update latitude and longitude coordinates for each
-        	this.latitude = 30.205971;
-        	this.longitude = -85.858862;
+        	this.latitude = this.panamaLat;
+        	this.longitude = this.panamaLong;
 
-        	this.gpSearch = new GooglePlacesSearch( type, Double.toString( this.latitude ) + "," + Double.toString( this.longitude ) );
-
-            // starting the AsynTask ListViewTask
+        	// Update GP Search Parameters
+        	this.gpSearch = new GooglePlacesSearch( type, getGoogleCoordinates() );
             new ListViewTask().execute();
 
             this.mapView.stopLoading();

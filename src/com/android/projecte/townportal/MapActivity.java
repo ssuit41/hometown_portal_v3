@@ -33,7 +33,7 @@ public class MapActivity extends TabActivity {
 
         // Use custom title bar
         requestWindowFeature( Window.FEATURE_CUSTOM_TITLE );
-        setContentView( R.layout.activity_map );
+        setContentView( R.layout.activity_map_tabs );
         getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title );
         ((TextView) findViewById( R.id.title ) ).setText( title );
 

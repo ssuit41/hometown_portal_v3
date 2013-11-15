@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
@@ -24,28 +25,23 @@
 		     android:layout_height="wrap_content"
 		     android:textSize="18sp" />
 	
-	     <TextView
-		     android:id="@+id/ratingText"
+	     <TextView android:id="@+id/ratingText"
 		     android:layout_width="wrap_content"
 		     android:layout_height="wrap_content" />
 	     
-	     <TextView
-		     android:id="@+id/priceText"
+	     <TextView android:id="@+id/priceText"
 		     android:layout_width="wrap_content"
 		     android:layout_height="wrap_content" />
 	     
-		 <TextView
-		     android:id="@+id/addressText"
+		 <TextView android:id="@+id/addressText"
 		     android:layout_width="wrap_content"
 		     android:layout_height="wrap_content" />
 		
-		 <TextView
-		     android:id="@+id/phoneNumberText"
+		 <TextView android:id="@+id/phoneNumberText"
 		     android:layout_width="wrap_content"
 		     android:layout_height="wrap_content" />
 		
-		 <TextView
-		     android:id="@+id/websiteText"
+		 <TextView android:id="@+id/websiteText"
 		     android:layout_width="wrap_content"
 		     android:layout_height="wrap_content" />
 	     

@@ -1,63 +1,26 @@
-<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/tabhost"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <TabWidget
-        android:id="@android:id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <FrameLayout
-        android:id="@android:id/tabcontent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="5dp" >
-
-        <LinearLayout
-            android:id="@+id/tab1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="1" >
-
-            <WebView
-                android:id="@+id/mapview"
-                android:layout_weight=".50"
-                android:layout_width="match_parent"
-                android:layout_height="0dip"
-                android:layout_marginTop="30dp" />
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:weightSum="1" >
+	
+	<WebView android:id="@+id/mapview"
+	   android:layout_weight=".50"
+	   android:layout_width="match_parent"
+	   android:layout_height="0dip"
+	   android:layout_marginTop="30dp" />
+	
+	<Spinner android:id="@+id/spinner1"
+	    android:layout_weight=".10"
+	    android:layout_width="match_parent"
+	    android:layout_height="0dip"
+	    android:entries="@array/locations"
+	    android:prompt="@string/locations_prompt" />
+	
+	<ListView android:id="@+id/list"
+	    android:layout_weight=".40"
+	    android:layout_width="match_parent"
+	    android:layout_height="0dip" />
             
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_weight=".10"
-                android:layout_width="match_parent"
-                android:layout_height="0dip"
-                android:entries="@array/locations"
-                android:prompt="@string/locations_prompt" />
-
-            <ListView
-                android:id="@+id/list"
-                android:layout_weight=".40"
-                android:layout_width="match_parent"
-                android:layout_height="0dip" />
-            
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tab2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tab3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-        </LinearLayout>
-        
-    </FrameLayout>
-
-</TabHost>
+</LinearLayout>

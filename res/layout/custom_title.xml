@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:background="#3366FF" >
 
-    <ImageView
-        android:id="@+id/back"
+    <ImageView android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,8 +14,7 @@
         android:contentDescription="@string/custom_title_desc"
         android:src="@drawable/ic_launcher_pc" />
 
-    <TextView
-        android:id="@+id/title"
+    <TextView android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
@@ -28,8 +26,7 @@
         android:textColor="#FFFFFF"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/loading"
+    <TextView android:id="@+id/loading"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"

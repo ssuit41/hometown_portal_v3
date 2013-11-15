@@ -4,20 +4,19 @@
 
 package com.android.projecte.townportal;
 
-import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTabHost;
 import android.view.Window;
-import android.widget.TabHost;
 import android.widget.TextView;
 
-@SuppressWarnings ( "deprecation")
 /*
  * Map Activity
  * Description: Used with Google Maps activity page to display tabs which are
  *   			sub-categories of a user selected category.
  */
-public class MapActivity extends TabActivity {
+public class MapActivity extends FragmentActivity {
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -38,31 +37,27 @@ public class MapActivity extends TabActivity {
         ((TextView) findViewById( R.id.title ) ).setText( title );
 
         // Set up TabHost
-        TabHost tabHost = (TabHost) findViewById( android.R.id.tabhost );
-        tabHost.setup( this.getLocalActivityManager() );
+        FragmentTabHost tabHost = (FragmentTabHost) findViewById( android.R.id.tabhost );
+        tabHost.setup( this, this.getSupportFragmentManager(), R.id.realtabcontent );
 
-        TabHost.TabSpec spec; // Reusable TabSpec for each tab
-        Intent tabIntent; // Reusable Intent for each tab
-
+        Bundle args = new Bundle();
+        
         // Tab 1 - first tab is required, others may be null
-        tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt1.googleName );
-        spec = tabHost.newTabSpec( pt1.displayName ).setIndicator( pt1.displayName ).setContent( tabIntent );
-        tabHost.addTab( spec );
+        args.putString( "type", pt1.googleName );
+        tabHost.addTab( tabHost.newTabSpec( pt1.displayName ).setIndicator( pt1.displayName ), GooglePlacesMap.class, args );
 
         // Tab 2
         if ( pt2 != null ) {
         	
-            tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt2.googleName );
-            spec = tabHost.newTabSpec( pt2.displayName ).setIndicator( pt2.displayName ).setContent( tabIntent );
-            tabHost.addTab( spec );
+        	args.putString( "type", pt2.googleName );
+            tabHost.addTab( tabHost.newTabSpec( pt2.displayName ).setIndicator( pt2.displayName ), GooglePlacesMap.class, args );
         }
 
         // Tab 3
         if ( pt3 != null ) {
         	
-            tabIntent = new Intent().setClass( this, GooglePlacesMap.class ).putExtra( "type", pt3.googleName );
-            spec = tabHost.newTabSpec( pt3.displayName ).setIndicator( pt3.displayName ).setContent( tabIntent );
-            tabHost.addTab( spec );
+        	args.putString( "type", pt3.googleName );
+            tabHost.addTab( tabHost.newTabSpec( pt3.displayName ).setIndicator( pt3.displayName ), GooglePlacesMap.class, args );
         }
 
         tabHost.setCurrentTab( 0 );

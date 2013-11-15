@@ -13,7 +13,8 @@
 	 <ImageView android:layout_weight=".66"
 	     android:id="@+id/photoImage"
 	     android:layout_width="0dip"
-	     android:layout_height="wrap_content" />
+	     android:layout_height="wrap_content"
+	     android:contentDescription="@string/placePhoto" />
 	
 	 <LinearLayout android:layout_weight=".33" 
 	    android:layout_width="0dip"

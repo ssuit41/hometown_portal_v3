@@ -7,7 +7,6 @@ package com.android.projecte.townportal;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
@@ -16,8 +15,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -32,7 +35,7 @@ import android.widget.Toast;
  * Description: Used with Map Activity to display map of a user 
  * 				selected category and a ListView of relative places.
  */
-public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelectedListener {
+public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelectedListener {
 
 	// Panama City Beach Coordinates
 	final private double panamaLat = 30.205971, panamaLong = -85.858862;
@@ -48,29 +51,34 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
     private Spinner spinner;
     private Location locationDetails;
     private WebView mapView;
-
+    private FragmentActivity context;
+    
     @Override
-    protected void onCreate( Bundle savedInstanceState ) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	
+    	View view = inflater.inflate( R.layout.activity_map, container, false );
+    	
+    	// Get views
+        this.spinner = (Spinner) view.findViewById( R.id.spinner1 );
+        this.mapView = (WebView) view.findViewById( R.id.mapview );
+        this.placesList = (ListView) view.findViewById( R.id.list );
         
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_map );
+        Bundle arguments = this.getArguments();
+        this.type = arguments.getString( "type" );
         
-        Bundle extras = getIntent().getExtras();
-        this.type = extras.getString( "type" );
+        this.context = this.getActivity();
         
-        // Get views
-        this.spinner = (Spinner) findViewById( R.id.spinner1 );
-        this.mapView = (WebView) findViewById( R.id.mapview );
-        this.placesList = (ListView) findViewById( R.id.list );
+        System.out.println( this.type );
+        System.out.println( this.spinner );
         
         this.spinner.setOnItemSelectedListener( this );
 
         // Acquire a reference to the system Location Manager
-        this.locationManager = (LocationManager) this.getSystemService( Context.LOCATION_SERVICE );
+        this.locationManager = (LocationManager) this.context.getSystemService( Context.LOCATION_SERVICE );
         
         if ( this.locationManager == null ) {
         	
-        	Toast toast = Toast.makeText( this, "error: Failed to use the Location Service.", Toast.LENGTH_SHORT );
+        	Toast toast = Toast.makeText( context, "error: Failed to use the Location Service.", Toast.LENGTH_SHORT );
             toast.setGravity( Gravity.CENTER_HORIZONTAL, 0, 0 );
             toast.show();
             this.spinner.setSelection( 1 );
@@ -82,7 +90,7 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
             
             if ( this.bestProvider == null ) {
 
-                Toast toast = Toast.makeText( this, "error: Please enable Location Services.", Toast.LENGTH_SHORT );
+                Toast toast = Toast.makeText( context, "error: Please enable Location Services.", Toast.LENGTH_SHORT );
                 toast.setGravity( Gravity.CENTER_HORIZONTAL, 0, 0 );
                 toast.show();
                 this.spinner.setSelection( 1 );
@@ -121,6 +129,8 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
 
         
         this.mapView.getSettings().setJavaScriptEnabled( true );
+    	
+    	return view;
     }
     
     /*
@@ -170,7 +180,7 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
         @Override
         protected void onPostExecute( ArrayList<Place> places ) {
 
-        	adapter = new ArrayAdapter<Place>( GooglePlacesMap.this, android.R.layout.simple_list_item_1, places );
+        	adapter = new ArrayAdapter<Place>( context, android.R.layout.simple_list_item_1, places );
             placesList.setAdapter( adapter );
 
         }
@@ -199,7 +209,7 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
         protected void onPostExecute( PlaceDetail placeDetail ) {
 
         	// Load placeDetail into its activity
-            Intent placeDetailIntent = new Intent( GooglePlacesMap.this, PlaceDetailActivity.class );
+            Intent placeDetailIntent = new Intent( context, PlaceDetailActivity.class );
             placeDetailIntent.putExtra( "name", placeDetail.siteName );
             placeDetailIntent.putExtra( "rating", place.rating );
             placeDetailIntent.putExtra( "price", place.price );
@@ -246,7 +256,7 @@ public class GooglePlacesMap extends Activity implements AdapterView.OnItemSelec
 
                     // Default to Panama City
                 	this.spinner.setSelection( 1 );
-                    Toast toast = Toast.makeText( this, "Failed to get current location. Defaulting to Panama City. Try again soon.",
+                    Toast toast = Toast.makeText( this.context, "Failed to get current location. Defaulting to Panama City. Try again soon.",
                                     Toast.LENGTH_SHORT );
                     
                     toast.setGravity( Gravity.CENTER_HORIZONTAL, 0, 0 );

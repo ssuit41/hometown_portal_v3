@@ -13,3 +13,4 @@ COP4656 Town Portal
 * Code improved everywhere and documented
 	* Fragments now being used in various parts of the App to avoid deprecation 
 * Activities now scalable across devices. No fixed sizes
+* Map WebView now supports updatable dragging/zooming

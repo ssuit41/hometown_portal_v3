@@ -40,10 +40,11 @@ public class GooglePlacesSearch {
     
     BitmapFactory.Options bmOptions;
 
-    public GooglePlacesSearch(String placeType, String geoLocation) {
+    public GooglePlacesSearch( String placeType, String geoLocation, int radius ) {
 
     	this.types = placeType;
     	this.location = geoLocation;
+    	this.radius = Integer.toString( radius );
     }
 
     /*
@@ -134,7 +135,7 @@ public class GooglePlacesSearch {
      * Get Place Detail URL
      * Description: Generates URL from a place reference
      */
-    private String GetPlaceDetailUrl( String placeRef ) {
+    private String getPlaceDetailUrl( String placeRef ) {
 
         String returnVal = new String();
 
@@ -163,7 +164,7 @@ public class GooglePlacesSearch {
     public PlaceDetail findPlaceDetail( String placeRef ) {
 
         PlaceDetail placeDetail = null;
-        String urlString = GetPlaceDetailUrl( placeRef );
+        String urlString = getPlaceDetailUrl( placeRef );
 
         try {
             

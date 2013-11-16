@@ -51,6 +51,7 @@ public class MapActivity extends FragmentActivity {
         // Tab 2
         if ( pt2 != null ) {
         	
+        	args = new Bundle();
         	args.putString( "type", pt2.googleName );
             tabHost.addTab( tabHost.newTabSpec( pt2.displayName ).setIndicator( pt2.displayName ), GooglePlacesMap.class, args );
         }
@@ -58,6 +59,7 @@ public class MapActivity extends FragmentActivity {
         // Tab 3
         if ( pt3 != null ) {
         	
+        	args = new Bundle();
         	args.putString( "type", pt3.googleName );
             tabHost.addTab( tabHost.newTabSpec( pt3.displayName ).setIndicator( pt3.displayName ), GooglePlacesMap.class, args );
         }

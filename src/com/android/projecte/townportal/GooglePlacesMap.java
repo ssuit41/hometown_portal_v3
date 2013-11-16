@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -41,6 +42,7 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
 
 	// Panama City Beach Coordinates
 	final private double panamaLat = 30.205971, panamaLong = -85.858862;
+	final private int defaultRadius = 5997;
 	
     private double latitude, longitude;
     private String type, bestProvider;
@@ -69,9 +71,6 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
         this.type = arguments.getString( "type" );
         
         this.context = this.getActivity();
-        
-        System.out.println( this.type );
-        System.out.println( this.spinner );
         
         this.spinner.setOnItemSelectedListener( this );
 
@@ -118,7 +117,7 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
             }
         }
 
-        this.gpSearch = new GooglePlacesSearch( type, getGoogleCoordinates() );
+        this.gpSearch = new GooglePlacesSearch( type, getGoogleCoordinates(), this.defaultRadius );
         
         placesList.setOnItemClickListener( new OnItemClickListener() {
         	
@@ -131,8 +130,32 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
 
         
         this.mapView.getSettings().setJavaScriptEnabled( true );
+        this.mapView.addJavascriptInterface( new WebAppInterface(context), "Android" );
     	
     	return view;
+    }
+    
+    /*
+     * Web App Interface
+     * Description: Links to our Google Maps WebView in order to receive events
+     * Help: http://developer.android.com/guide/webapps/webview.html
+     */
+    public class WebAppInterface {
+    	
+        Context context;
+
+        WebAppInterface( Context context ) {
+        	
+            this.context = context;
+        }
+
+        /** Perform a new search */
+        @JavascriptInterface
+        public void mapDragged( String coords, int radius ) {
+ 
+        	gpSearch = new GooglePlacesSearch( type, coords, radius );
+            new ListViewTask().execute();
+        }
     }
     
     /*
@@ -150,18 +173,16 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
      */
     private String getMapHTML( double latitude, double longitude, String type, int milesAway ) {
 
-        String radius;
-        final int meters = 1609;
-        radius = Integer.toString( meters * milesAway );
-
         // HTML and JavaScript source code retrieved from
         // https://developers.google.com/maps/documentation/javascript/examples/place-search
-
-        String HTMLdata = "<html>  <head>    <title>Place searches</title>    <meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\">    <meta charset=\"utf-8\">    <link href=\"https://developers.google.com/maps/documentation/javascript/examples/default.css\" rel=\"stylesheet\">    <script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=places\"></script>    <script>var map;var infowindow;function initialize() {  var pyrmont = new google.maps.LatLng("
+        
+        // Haversine distance formula from http://www.movable-type.co.uk/scripts/latlong.html
+        
+        String HTMLdata = "<html>  <head>    <title>Place searches</title>    <meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\">    <meta charset=\"utf-8\">    <link href=\"https://developers.google.com/maps/documentation/javascript/examples/default.css\" rel=\"stylesheet\">    <script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=places\"></script>    <script> function toRad( val ) { return val * Math.PI / 180; } function haversine( lat1, lon1, lat2, lon2 ) { var R = 6371; var dLat = toRad(lat2-lat1); var dLon = toRad(lon2-lon1); var lat1 = toRad(lat1); var lat2 = toRad(lat2); var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));  var d = R * c; return d; } google.maps.visualRefresh = true; var map; var markers = []; function clearMap(){ for ( var i = 0; i < markers.length; i++ ) markers[i].setMap( null );  markers = [];  } var infowindow;function initialize() {  var loc = new google.maps.LatLng("
                 + getGoogleCoordinates()
-                + ");  map = new google.maps.Map(document.getElementById('map-canvas'), {    mapTypeId: google.maps.MapTypeId.ROADMAP,    center: pyrmont,    zoom: 13  });  var request = {    location: pyrmont,    radius: "
-                + radius
-                + ",    types: ['" + type + "']  };  infowindow = new google.maps.InfoWindow();  var service = new google.maps.places.PlacesService(map);  service.nearbySearch(request, callback);}function callback(results, status) {  if (status == google.maps.places.PlacesServiceStatus.OK) {    for (var i = 0; i < results.length; i++) {      createMarker(results[i]);    }  }}function createMarker(place) {  var placeLoc = place.geometry.location;  var marker = new google.maps.Marker({    map: map,    position: place.geometry.location  });  google.maps.event.addListener(marker, 'click', function() {    infowindow.setContent(place.name);    infowindow.open(map, this);  });}google.maps.event.addDomListener(window, 'load', initialize);    </script>  </head>  <body>    <div id=\"map-canvas\" style=\"width: 100%;height: 100%; float:center\"></div>  </body></html>";
+                + ");  map = new google.maps.Map(document.getElementById('map-canvas'), {    mapTypeId: google.maps.MapTypeId.ROADMAP, center: loc, zoom: 13  }); function posChanged() { var bounds = map.getBounds(); var center = bounds.getCenter(); var northEast = bounds.getNorthEast(); clearMap(); var service = new google.maps.places.PlacesService(map); var r = haversine( center.lat(), center.lng(), northEast.lat(), northEast.lng() ) * 1000; service.nearbySearch( { location: center, radius: r, types: ['" + type + "']   } , callback);  Android.mapDragged( center.toUrlValue(), r ); }  google.maps.event.addListener(map, 'dragend', posChanged ); google.maps.event.addListener(map, 'zoom_changed', posChanged ); var request = {    location: loc,    radius: "
+                + Integer.toString( this.defaultRadius )
+                + ",    types: ['" + type + "']  };  infowindow = new google.maps.InfoWindow();  var service = new google.maps.places.PlacesService(map);  service.nearbySearch(request, callback);}function callback(results, status) {  if (status == google.maps.places.PlacesServiceStatus.OK) {    for (var i = 0; i < results.length; i++) {      createMarker(results[i]);    }  }}function createMarker(place) {  var placeLoc = place.geometry.location;  var marker = new google.maps.Marker({    map: map,    position: place.geometry.location  });  markers.push(marker); google.maps.event.addListener(marker, 'click', function() {    infowindow.setContent(place.name);    infowindow.open(map, this);  });}  google.maps.event.addDomListener(window, 'load', initialize);    </script>  </head>  <body>    <div id=\"map-canvas\" style=\"width: 100%;height: 100%; float:center\"></div>  </body></html>";
         
         return HTMLdata;
     }
@@ -248,7 +269,7 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
                     this.longitude = this.locationDetails.getLongitude();
 
                     // Update GP Search Parameters
-                    this.gpSearch = new GooglePlacesSearch( this.type, getGoogleCoordinates() );
+                    this.gpSearch = new GooglePlacesSearch( this.type, getGoogleCoordinates(), this.defaultRadius );
                     new ListViewTask().execute();
                     	
                 	this.mapView.stopLoading();
@@ -274,7 +295,7 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
         	this.longitude = this.panamaLong;
 
         	// Update GP Search Parameters
-        	this.gpSearch = new GooglePlacesSearch( type, getGoogleCoordinates() );
+        	this.gpSearch = new GooglePlacesSearch( type, getGoogleCoordinates(), this.defaultRadius );
             new ListViewTask().execute();
 
             this.mapView.stopLoading();

@@ -34,7 +34,7 @@ public class PlaceDetailActivity extends Activity {
         super.onCreate( savedInstanceState );
 
         this.gpSearch = new GooglePlacesSearch( getIntent().getExtras().getString( "gpSearchType" ), 
-                getIntent().getExtras().getString( "gpSearchGeoLocation" ) );
+                getIntent().getExtras().getString( "gpSearchGeoLocation" ), 1 );
         
         // Use custom title bar
         requestWindowFeature( Window.FEATURE_CUSTOM_TITLE );

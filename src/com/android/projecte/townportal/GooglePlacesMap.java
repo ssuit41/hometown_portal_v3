@@ -46,7 +46,7 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
     final private String defaultMapType = "roadmap";
     
     private String type, bestProvider, currentCoords, currentMapType; 
-    private int currentRadius, currentZoom;
+    private int currentRadius, currentZoom, savedFirstVisiblePosition;
     private GooglePlacesSearch gpSearch = null;
     private ArrayList<Place> places = null;
     private ListView placesList = null;
@@ -77,13 +77,21 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
         placesList.setOnItemClickListener( new OnItemClickListener() {
             
             @Override
-            public void onItemClick( AdapterView<?> parent, View view, int position, long id ) { 
+            public void onItemClick( AdapterView<?> parent, View view, int position, long id ) {
     
                 new DetailTask( places.get( (int) id ) ).execute();
             }
         });
         
         return view;
+    }
+    
+    @Override
+    public void onPause() {
+        
+        super.onPause();
+        
+        this.savedFirstVisiblePosition = this.placesList.getFirstVisiblePosition();
     }
     
     @Override
@@ -102,7 +110,7 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
             this.currentMapType = savedInstanceState.getString( "currentMapType" );
             
             gpSearch = new GooglePlacesSearch( type, this.currentCoords, this.currentRadius );
-            new ListViewTask().execute();
+            new ListViewTask( savedInstanceState.getInt( "firstVisiblePosition" ) ).execute();
             
             this.mapView.loadData( getMapHTML(), "text/html", "UTF-8" );
                     
@@ -111,7 +119,8 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
             if ( this.alreadyStarted ) {
                 
                 gpSearch = new GooglePlacesSearch( type, this.currentCoords, this.currentRadius );
-                new ListViewTask().execute();
+                
+                new ListViewTask( this.savedFirstVisiblePosition ).execute();
                 
                 this.mapView.loadData( getMapHTML(), "text/html", "UTF-8" );
                 
@@ -139,8 +148,13 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
         outState.putInt( "currentZoom", this.currentZoom );
         outState.putInt( "currentSpinnerIndex" , this.currentSpinnerIndex );
         outState.putString( "currentMapType", this.currentMapType );
+        outState.putInt( "firstVisiblePosition", this.placesList.getFirstVisiblePosition() );
     }
     
+    /*
+     * Initialize
+     * Description: Initializes the object for the first time or when it is restored.
+     */
     private void init() {
         
         this.alreadyStarted = true;
@@ -301,6 +315,18 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
      */
     private class ListViewTask extends AsyncTask<Void, Void, ArrayList<Place>> {
 
+        private int firstVisiblePosition;
+        
+        public ListViewTask() {
+
+            this.firstVisiblePosition = 0;
+        }
+        
+        public ListViewTask( int firstVisiblePosition ) {
+
+            this.firstVisiblePosition = firstVisiblePosition;
+        }
+        
         @Override
         protected ArrayList<Place> doInBackground( Void... unused ) {
 
@@ -313,6 +339,7 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
 
             adapter = new ArrayAdapter<Place>( context, android.R.layout.simple_list_item_1, places );
             placesList.setAdapter( adapter );
+            placesList.setSelection( this.firstVisiblePosition );
         }
     }
 

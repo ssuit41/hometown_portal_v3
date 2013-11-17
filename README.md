@@ -14,3 +14,4 @@ COP4656 Town Portal
 	* Fragments now being used in various parts of the App to avoid deprecation 
 * Activities now scalable across devices. No fixed sizes
 * Map WebView now supports updatable dragging/zooming
+* Ratings and price levels are given for any kind of place being looked at once detail is viewed

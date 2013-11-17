@@ -43,6 +43,8 @@ public abstract class FeedActivity extends Activity {
     protected Boolean viewingItem = false;
     protected String title, seeMoreUrl;
     
+    private int savedFirstVisiblePosition = 0;
+    
     final private Integer MAX_DESC_LENGTH = 200;
     
     @Override
@@ -182,6 +184,7 @@ public abstract class FeedActivity extends Activity {
         // Save WebView and viewing state
         this.webView.saveState( outState );
         outState.putBoolean( "viewingItem", this.viewingItem );
+        outState.putInt( "firstVisiblePosition", this.list.getFirstVisiblePosition() );
         
         super.onSaveInstanceState(outState);     
     }
@@ -192,6 +195,7 @@ public abstract class FeedActivity extends Activity {
         // Load WebView and viewing state
         this.webView.restoreState( state );
         this.viewingItem = state.getBoolean( "viewingItem" );
+        this.savedFirstVisiblePosition = state.getInt( "firstVisiblePosition" );
         
         // Check to see if we should keep showing article
         if ( this.viewingItem ) {
@@ -203,6 +207,7 @@ public abstract class FeedActivity extends Activity {
             this.courtesyText.setVisibility( View.GONE );
             this.webView.setVisibility( View.VISIBLE );
             this.loadingText.setVisibility( View.VISIBLE );
+        
         }
         
         super.onRestoreInstanceState( state );    
@@ -261,6 +266,8 @@ public abstract class FeedActivity extends Activity {
             adapter.notifyDataSetChanged();
             
             loadingText.setVisibility( View.INVISIBLE );
+            
+            list.setSelection( savedFirstVisiblePosition );
         }
     }
 

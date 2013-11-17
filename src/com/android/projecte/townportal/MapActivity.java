@@ -14,9 +14,9 @@ import android.widget.TextView;
 /*
  * Map Activity
  * Description: Used with Google Maps activity page to display tabs which are
- *   			sub-categories of a user selected category.
+ *              sub-categories of a user selected category.
  * Note: Uses fragments now to avoid deprecation
- * 		 http://developer.android.com/guide/components/fragments.html
+ *       http://developer.android.com/guide/components/fragments.html
  */
 public class MapActivity extends FragmentActivity {
 
@@ -50,17 +50,17 @@ public class MapActivity extends FragmentActivity {
 
         // Tab 2
         if ( pt2 != null ) {
-        	
-        	args = new Bundle();
-        	args.putString( "type", pt2.googleName );
+            
+            args = new Bundle();
+            args.putString( "type", pt2.googleName );
             tabHost.addTab( tabHost.newTabSpec( pt2.displayName ).setIndicator( pt2.displayName ), GooglePlacesMap.class, args );
         }
 
         // Tab 3
         if ( pt3 != null ) {
-        	
-        	args = new Bundle();
-        	args.putString( "type", pt3.googleName );
+            
+            args = new Bundle();
+            args.putString( "type", pt3.googleName );
             tabHost.addTab( tabHost.newTabSpec( pt3.displayName ).setIndicator( pt3.displayName ), GooglePlacesMap.class, args );
         }
 
@@ -71,7 +71,7 @@ public class MapActivity extends FragmentActivity {
         int heightValue = 30;
         for ( int i = 0; i < tabHost.getTabWidget().getTabCount(); i++ )
             tabHost.getTabWidget().getChildAt( i ).getLayoutParams().height = 
-            	(int) ( heightValue * this.getResources().getDisplayMetrics().density );
+                (int) ( heightValue * this.getResources().getDisplayMetrics().density );
 
     }
 }

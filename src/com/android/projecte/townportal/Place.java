@@ -22,10 +22,10 @@ public class Place {
     
     static Place jsonToPlace( JSONObject toPlace ) {
 
-    	Place result = null;
-    	
+        Place result = null;
+        
         try {
-        	
+            
             JSONObject location = (JSONObject) ( (JSONObject) toPlace.get( "geometry" ) ).get( "location" );
             
             // Create and set place

@@ -17,7 +17,7 @@ import android.widget.TextView;
 /*
  * Place Detail Activity
  * Description: Used with Place Detail Activity page to display detailed place 
- * 				information when user clicks on a place in Map Activity.
+ *              information when user clicks on a place in Map Activity.
  */
 public class PlaceDetailActivity extends Activity {
 
@@ -63,14 +63,14 @@ public class PlaceDetailActivity extends Activity {
         
         // Don't display dollar if it isn't there so we save space
         if ( dollars.isEmpty() )
-        	this.priceTextView.setVisibility( View.GONE );
+            this.priceTextView.setVisibility( View.GONE );
         else
-        	this.priceTextView.setText( dollars );
+            this.priceTextView.setText( dollars );
 
         String website = getIntent().getExtras().getString( "website" );
         
         if ( website != null )
-        	this.websiteTextView.setText( Html.fromHtml( "<a href=" + website + ">" + website ) );
+            this.websiteTextView.setText( Html.fromHtml( "<a href=" + website + ">" + website ) );
         
         new PhotoTask( getIntent().getExtras().getString( "photoRef" ) ).execute();
     }
@@ -82,7 +82,7 @@ public class PlaceDetailActivity extends Activity {
 
         public PhotoTask( String photoRef ) {
 
-        	this.photoReference = photoRef;
+            this.photoReference = photoRef;
         }
 
         @Override
@@ -98,7 +98,7 @@ public class PlaceDetailActivity extends Activity {
             if ( placePhoto.photo != null )
                 photoImageView.setImageBitmap( placePhoto.photo );
             else
-            	photoImageView.setVisibility( View.GONE );
+                photoImageView.setVisibility( View.GONE );
         }
 
     }
@@ -106,7 +106,7 @@ public class PlaceDetailActivity extends Activity {
     /*
      * Rating to Star
      * Description: Creates a star rating based off
-     * 				some integer out of 5.
+     *              some integer out of 5.
      */
     private String ratingToStar( int rating ) {
         
@@ -127,7 +127,7 @@ public class PlaceDetailActivity extends Activity {
     /*
      * Price to Dollar
      * Description: Creates a dollar representation
-     * 				of a price level.
+     *              of a price level.
      */
     private String priceToDollar( int price ) {
         

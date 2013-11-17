@@ -15,15 +15,15 @@ import android.view.Window;
 /*
  * Main Activity
  * Description: Main area for user to select different activities in this
- * 				application.
+ *              application.
  */
 public class MainActivity extends Activity {
 
     // Used for constructing types of places to views
     private Vector<PlaceType> vFood = new Vector<PlaceType>(),
-    						  vEnt = new Vector<PlaceType>(),
-    						  vShop = new Vector<PlaceType>(),
-						  	  vSchool = new Vector<PlaceType>();
+                              vEnt = new Vector<PlaceType>(),
+                              vShop = new Vector<PlaceType>(),
+                              vSchool = new Vector<PlaceType>();
     
     private String foodTitle, entertainmentTitle, shoppingTitle, schoolsTitle;
 
@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
     /*
      * Button On Click Listener
      * Description: Listens for any of the buttons being clicked
-     * 				and launches their respective activity
+     *              and launches their respective activity
      */
     public void onClick( View v ) {
 
@@ -131,7 +131,7 @@ public class MainActivity extends Activity {
         intent.putExtra( "title", title );
         
         for ( int i = 0; i < places.size(); i++ )
-        	intent.putExtra( "PlaceType" + Integer.toString( i + 1 ), places.get( i ) );
+            intent.putExtra( "PlaceType" + Integer.toString( i + 1 ), places.get( i ) );
         
         startActivity( intent );
     }

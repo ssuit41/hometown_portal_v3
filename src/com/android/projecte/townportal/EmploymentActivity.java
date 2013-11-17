@@ -32,10 +32,10 @@ import android.widget.TextView;
  */
 final public class EmploymentActivity extends FeedActivity {
     
-	private String jobsSource;
+    private String jobsSource;
     
     @SuppressLint("SetJavaScriptEnabled")
-	@Override
+    @Override
     protected void onCreate( Bundle savedInstanceState ) {
 
         super.onCreate( savedInstanceState );
@@ -47,12 +47,12 @@ final public class EmploymentActivity extends FeedActivity {
         this.jobsSource = getString( R.string.jobsRss );
         this.title = getString( R.string.empl_text );
         this.seeMoreUrl = getString( R.string.jobsViewMore );
-		
+        
         // Set title and courtesy
-		((TextView) findViewById( R.id.title ) ).setText( this.title );
-		this.courtesyText.setText( getString( R.string.emplCourtesy ) );
-		
-		new FeedTask().execute();
+        ((TextView) findViewById( R.id.title ) ).setText( this.title );
+        this.courtesyText.setText( getString( R.string.emplCourtesy ) );
+        
+        new FeedTask().execute();
     }
     
     /*
@@ -64,18 +64,18 @@ final public class EmploymentActivity extends FeedActivity {
         DefaultHttpClient client = new DefaultHttpClient();
         
         try {
-        	
-        	// Get HTML from URL
-        	HttpResponse response = client.execute( new HttpGet( url ) );
+            
+            // Get HTML from URL
+            HttpResponse response = client.execute( new HttpGet( url ) );
             HttpEntity message = response.getEntity();
             return message.getContent();
             
         } catch ( ClientProtocolException e ) {
-        	
+            
             e.printStackTrace();
             
         } catch ( IOException e ) {
-        	
+            
             e.printStackTrace();
         }
        
@@ -124,8 +124,8 @@ final public class EmploymentActivity extends FeedActivity {
     
     @Override
     protected String modifyUrl( String url ) {
-    	
-    	// Transform link to mobile version for visibility purposes
+        
+        // Transform link to mobile version for visibility purposes
         url = url.replace( "jobview", "m" );
         
         Matcher matcher = Pattern.compile(".com/.*-([0-9]+)\\.aspx").matcher( url );

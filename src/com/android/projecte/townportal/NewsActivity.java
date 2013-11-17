@@ -26,36 +26,36 @@ import android.widget.TextView;
  */
 final public class NewsActivity extends FeedActivity {
 
-	private String newsSource;
-	
-	@Override
+    private String newsSource;
+    
+    @Override
     protected void onCreate( Bundle savedInstanceState ) {
-		
-		super.onCreate( savedInstanceState );
-		
-		// Get strings
-		this.newsSource = getString( R.string.newsSource );
-		this.title = getString( R.string.news_text );
-		this.seeMoreUrl = getString( R.string.newsViewMore );
-		
-		// Set title and courtesy
-		((TextView) findViewById( R.id.title ) ).setText( this.title );
-		this.courtesyText.setText( getString( R.string.newsCourtesy ) );
-		
-		new FeedTask().execute();
-	}
-	
-	@Override
-	protected List<Item> getItems() {
-		
-		List<Item> result = new Vector<Item>();
+        
+        super.onCreate( savedInstanceState );
+        
+        // Get strings
+        this.newsSource = getString( R.string.newsSource );
+        this.title = getString( R.string.news_text );
+        this.seeMoreUrl = getString( R.string.newsViewMore );
+        
+        // Set title and courtesy
+        ((TextView) findViewById( R.id.title ) ).setText( this.title );
+        this.courtesyText.setText( getString( R.string.newsCourtesy ) );
+        
+        new FeedTask().execute();
+    }
+    
+    @Override
+    protected List<Item> getItems() {
+        
+        List<Item> result = new Vector<Item>();
 
-		// Allow user to refresh
-		result.add( new Item( "Refresh", null, null ) );
-		
+        // Allow user to refresh
+        result.add( new Item( "Refresh", null, null ) );
+        
         try {
             
-        	// Download news items
+            // Download news items
             Document htmlDoc = Jsoup.connect( String.format( newsSource + "default.aspx?section=%s", 
                     getString( R.string.topNews ) ) ).get();
             
@@ -70,7 +70,7 @@ final public class NewsActivity extends FeedActivity {
                 
                 // Get true link
                 List<NameValuePair> uriPairs = URLEncodedUtils.parse( 
-                		new URI( newsSource + element.select( "a" ).get( 0 ).attr( "href" ) ), "UTF-8" );
+                        new URI( newsSource + element.select( "a" ).get( 0 ).attr( "href" ) ), "UTF-8" );
                 
                 // Find link within pairs
                 for ( NameValuePair nvp : uriPairs ) {
@@ -92,7 +92,7 @@ final public class NewsActivity extends FeedActivity {
             e.printStackTrace();
             
         } catch ( URISyntaxException e ) {
-        	
+            
             e.printStackTrace();
         }
         
@@ -100,12 +100,12 @@ final public class NewsActivity extends FeedActivity {
         result.add( new Item( "See More", null, null ) );
 
         return result;
-	}
-	
-	@Override
+    }
+    
+    @Override
     protected String modifyUrl( String url ) {
-    	
-		// Use mobile version of article for visibility purposes
-    	return url.replaceFirst( "www", "m" );
+        
+        // Use mobile version of article for visibility purposes
+        return url.replaceFirst( "www", "m" );
     }
 }

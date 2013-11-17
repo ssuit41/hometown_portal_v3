@@ -27,24 +27,24 @@ import android.graphics.BitmapFactory;
 /*
  * Google Places Search
  * Description: Uses JSON query to retrieve Google Places information 
- *    			about places with a type selected by user.
+ *              about places with a type selected by user.
  */
 public class GooglePlacesSearch {
 
     public String location,
-    		      radius = "16100", // in meters - about 10 miles
+                  radius = "16100", // in meters - about 10 miles
                   types,
                   sensor = "false",
-    		      APIKey = "AIzaSyBz7p2E8oDDBYJYvL3RM3cFjHCJDkpuqwU",
-    			  reference = null;
+                  APIKey = "AIzaSyBz7p2E8oDDBYJYvL3RM3cFjHCJDkpuqwU",
+                  reference = null;
     
     BitmapFactory.Options bmOptions;
 
     public GooglePlacesSearch( String placeType, String geoLocation, int radius ) {
 
-    	this.types = placeType;
-    	this.location = geoLocation;
-    	this.radius = Integer.toString( radius );
+        this.types = placeType;
+        this.location = geoLocation;
+        this.radius = Integer.toString( radius );
     }
 
     /*
@@ -55,7 +55,7 @@ public class GooglePlacesSearch {
         String returnVal = new String();
 
         returnVal = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
-        		    + this.location + "&radius=" + this.radius + "&types=" + this.types
+                    + this.location + "&radius=" + this.radius + "&types=" + this.types
                     + "&sensor=" + this.sensor + "&key=" + this.APIKey;
 
         return returnVal;
@@ -64,16 +64,16 @@ public class GooglePlacesSearch {
     /*
      * Find Places
      * Descriptions: Finds and returns a list of places of a certain type in a
-     * 				 selected location
+     *               selected location
      */
     public ArrayList<Place> findPlaces() {
 
-    	ArrayList<Place> arrayList = null;
-    	
+        ArrayList<Place> arrayList = null;
+        
         String urlString = formGoogleSearchURL();
 
         try {
-        	
+            
             String json = getURLContent( urlString );
             JSONObject object = new JSONObject( json );
             JSONArray array = object.getJSONArray( "results" );
@@ -82,7 +82,7 @@ public class GooglePlacesSearch {
             
             // Add all results as Places
             for ( int i = 0; i < array.length(); i++ )
-            	arrayList.add( Place.jsonToPlace( (JSONObject) array.get( i ) ) );
+                arrayList.add( Place.jsonToPlace( (JSONObject) array.get( i ) ) );
             
             return arrayList;
             
@@ -100,14 +100,14 @@ public class GooglePlacesSearch {
      */
     private String getURLContent( String url ) {
 
-    	String result = null;
-    	
-    	DefaultHttpClient client = new DefaultHttpClient();
+        String result = null;
+        
+        DefaultHttpClient client = new DefaultHttpClient();
         
         try {
-        	
-        	// Get HTML from URL
-        	HttpResponse response = client.execute( new HttpGet( url ) );
+            
+            // Get HTML from URL
+            HttpResponse response = client.execute( new HttpGet( url ) );
             InputStream messageContent = response.getEntity().getContent();
             
             StringBuilder content = new StringBuilder( messageContent.available() );
@@ -120,11 +120,11 @@ public class GooglePlacesSearch {
             result = content.toString();
             
         } catch ( ClientProtocolException e ) {
-        	
+            
             e.printStackTrace();
             
         } catch ( IOException e ) {
-        	
+            
             e.printStackTrace();
         }
         
@@ -190,27 +190,27 @@ public class GooglePlacesSearch {
         String urlString = GetPlaceDetailPhotoUrl( photoReference );
         
         try {
-        	
+            
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
             request.setURI( new URI( urlString ) );
-				
-			Bitmap photo = BitmapFactory.decodeStream( client.execute( request ).getEntity().getContent() );
+                
+            Bitmap photo = BitmapFactory.decodeStream( client.execute( request ).getEntity().getContent() );
 
             placePhoto.photo = photo;
-	
+    
         } catch ( URISyntaxException e ) {
-		
-        	e.printStackTrace();
-		
+        
+            e.printStackTrace();
+        
         } catch ( ClientProtocolException e ) {
-			
-			e.printStackTrace();
-		
-		} catch ( IOException e ) {
-			
-			e.printStackTrace();
-		}
+            
+            e.printStackTrace();
+        
+        } catch ( IOException e ) {
+            
+            e.printStackTrace();
+        }
         
         return placePhoto;
     }

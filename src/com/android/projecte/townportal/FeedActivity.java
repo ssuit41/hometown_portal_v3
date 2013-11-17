@@ -30,7 +30,7 @@ import android.widget.TextView;
 /*
  * Feed Activity
  * Description: An abstract Activity whose purpose is to generate a
- * 				dynamic ListView of items from some feed source.
+ *              dynamic ListView of items from some feed source.
  */
 public abstract class FeedActivity extends Activity {
 
@@ -45,7 +45,7 @@ public abstract class FeedActivity extends Activity {
     
     final private Integer MAX_DESC_LENGTH = 200;
     
-	@Override
+    @Override
     protected void onCreate( Bundle savedInstanceState ) {
 
         super.onCreate( savedInstanceState );
@@ -72,23 +72,23 @@ public abstract class FeedActivity extends Activity {
                 
                 // Got some help from http://stackoverflow.com/questions/11722885/what-is-difference-between-android-r-layout-simple-list-item-1-and-android-r-lay
                 
-            	Item item = (Item) this.getItem( position );
+                Item item = (Item) this.getItem( position );
                 
                 convertView =  ( (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE) )
-                		.inflate( android.R.layout.simple_list_item_2, parent, false );
+                        .inflate( android.R.layout.simple_list_item_2, parent, false );
                 
                 TextView text1 = (TextView) convertView.findViewById( android.R.id.text1 ), 
-                		 text2 = (TextView) convertView.findViewById( android.R.id.text2 );
+                         text2 = (TextView) convertView.findViewById( android.R.id.text2 );
                 
                 text1.setText( item.title );
                 
                 // Center see more text
                 if ( ( ( position + 1 ) == items.size() && item.title.equals( "See More" ) )
-                		|| ( position == 0 && item.title.equals( "Refresh" ) ) ) {
-                	
-                	text1.setGravity( Gravity.CENTER );
-                	text1.setTextColor( getContext().getResources().getColor( R.color.darkBlue ) );
-                	
+                        || ( position == 0 && item.title.equals( "Refresh" ) ) ) {
+                    
+                    text1.setGravity( Gravity.CENTER );
+                    text1.setTextColor( getContext().getResources().getColor( R.color.darkBlue ) );
+                    
                 }
                 
                 // Shorten description
@@ -114,26 +114,26 @@ public abstract class FeedActivity extends Activity {
             @Override
             public void onItemClick( AdapterView<?> adapterView, View view, int position, long id ) {
 
-            	Item item = (Item) adapterView.getItemAtPosition( position );
-            	
-            	// See More and Refresh functionality
-            	if ( ( position + 1 ) == items.size() && item.title.equals( "See More" ) ) {
-            		
-            		// Load into outside browser
-            		Intent intent = new Intent(Intent.ACTION_VIEW);
+                Item item = (Item) adapterView.getItemAtPosition( position );
+                
+                // See More and Refresh functionality
+                if ( ( position + 1 ) == items.size() && item.title.equals( "See More" ) ) {
+                    
+                    // Load into outside browser
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData( Uri.parse( seeMoreUrl ) );
                     startActivity( intent );
                     
                     return;
                     
-            	} else if ( position == 0 && item.title.equals( "Refresh" ) ) {
-            		
-            		// Get items again
-            		new FeedTask().execute();
-            		return;
-            	}
-            	
-            	// Show WebView only
+                } else if ( position == 0 && item.title.equals( "Refresh" ) ) {
+                    
+                    // Get items again
+                    new FeedTask().execute();
+                    return;
+                }
+                
+                // Show WebView only
                 viewingItem = true;
                 titleText.setText( R.string.returnText );
                 
@@ -156,7 +156,7 @@ public abstract class FeedActivity extends Activity {
                 
                 // We need to start a new browser otherwise we will keep loading pages in the
                 // WebView. The override is necessary because adding a custom WebViewClient takes
-            	// away this standard behavior without one.
+                // away this standard behavior without one.
                 // Found out how the standard way is done through:
                 // http://stackoverflow.com/questions/14665671/android-webview-open-certain-urls-inside-webview-the-rest-externally
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -179,8 +179,8 @@ public abstract class FeedActivity extends Activity {
     @Override
     protected void onSaveInstanceState( Bundle outState ) {
         
-    	// Save WebView and viewing state
-    	this.webView.saveState( outState );
+        // Save WebView and viewing state
+        this.webView.saveState( outState );
         outState.putBoolean( "viewingItem", this.viewingItem );
         
         super.onSaveInstanceState(outState);     
@@ -189,20 +189,20 @@ public abstract class FeedActivity extends Activity {
     @Override
     protected void onRestoreInstanceState( Bundle state ) {
         
-    	// Load WebView and viewing state
-    	this.webView.restoreState( state );
-    	this.viewingItem = state.getBoolean( "viewingItem" );
+        // Load WebView and viewing state
+        this.webView.restoreState( state );
+        this.viewingItem = state.getBoolean( "viewingItem" );
         
         // Check to see if we should keep showing article
         if ( this.viewingItem ) {
 
-        	this.titleText.setText( R.string.returnText ); 
+            this.titleText.setText( R.string.returnText ); 
             
-        	this.list.setVisibility( View.GONE );
-        	this.divider.setVisibility( View.GONE );
-        	this.courtesyText.setVisibility( View.GONE );
-        	this.webView.setVisibility( View.VISIBLE );
-        	this.loadingText.setVisibility( View.VISIBLE );
+            this.list.setVisibility( View.GONE );
+            this.divider.setVisibility( View.GONE );
+            this.courtesyText.setVisibility( View.GONE );
+            this.webView.setVisibility( View.VISIBLE );
+            this.loadingText.setVisibility( View.VISIBLE );
         }
         
         super.onRestoreInstanceState( state );    
@@ -211,18 +211,18 @@ public abstract class FeedActivity extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         
-    	// Specially handle back button while viewingItem
+        // Specially handle back button while viewingItem
         if ( keyCode == KeyEvent.KEYCODE_BACK && this.viewingItem ) {
            
-        	this.webView.setVisibility( View.GONE );
-        	this.list.setVisibility( View.VISIBLE );
-        	this.divider.setVisibility( View.VISIBLE );
-        	this.courtesyText.setVisibility( View.VISIBLE );
+            this.webView.setVisibility( View.GONE );
+            this.list.setVisibility( View.VISIBLE );
+            this.divider.setVisibility( View.VISIBLE );
+            this.courtesyText.setVisibility( View.VISIBLE );
             
-        	this.viewingItem = false;
-        	this.titleText.setText( title );
+            this.viewingItem = false;
+            this.titleText.setText( title );
             
-        	this.webView.loadUrl("about:blank");
+            this.webView.loadUrl("about:blank");
             
             return true;
         }
@@ -233,7 +233,7 @@ public abstract class FeedActivity extends Activity {
     /*
      * Feed Task
      * Description: Grabs items from a specified feed implemented by
-     * 				a child class.
+     *              a child class.
      */
     protected class FeedTask extends AsyncTask<Void, Void, List<Item>> {
 
@@ -252,7 +252,7 @@ public abstract class FeedActivity extends Activity {
         @Override
         protected void onPostExecute( List<Item> items ) {
             
-        	// Reset and add new items
+            // Reset and add new items
             adapter.clear();
             
             for ( int i = 0 ; i < items.size(); ++i )
@@ -285,8 +285,8 @@ public abstract class FeedActivity extends Activity {
      * Description: Modifies a URL before loading it into the WebView.
      */
     protected String modifyUrl( String url ) {
-    	
-    	return url;
+        
+        return url;
     }
     
     abstract protected List<Item> getItems();

@@ -15,7 +15,7 @@ import android.graphics.Bitmap;
 /*
  * Place Detail
  * Description: Data structure used to store details of a place
- * 				in a Place Detail Activity.
+ *              in a Place Detail Activity.
  */
 public class PlaceDetail {
 
@@ -27,37 +27,37 @@ public class PlaceDetail {
 
         PlaceDetail placeDetail = null;
 
-		try {
-		    
-			// Create and set place detail
-		    placeDetail = new PlaceDetail();
-		
-		    if ( !result.isNull( "photos" ) ) {
-		        
-		    	JSONObject photo = result.getJSONArray( "photos" ).getJSONObject( 0 );
-		        placeDetail.photoRef = photo.getString( "photo_reference" );
-		    }
-		
-		    if ( !result.isNull( "formatted_phone_number" ) )
-		        placeDetail.phoneNumber =  result.getString( "formatted_phone_number" );;
-		
-		    if ( !result.isNull( "formatted_address" ) )
-		        placeDetail.address = result.getString( "formatted_address" );;
-		
-		    if ( !result.isNull( "website" ) )
-		        placeDetail.website = result.getString( "website" );;
-		
-		    if ( !result.isNull( "name" ) )
-		        placeDetail.siteName = result.getString( "name" );
-		    
-		}
-		
-		catch ( JSONException ex ) {
-		    
-		    Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null, ex );
-		}
-		
-		return placeDetail;
+        try {
+            
+            // Create and set place detail
+            placeDetail = new PlaceDetail();
+        
+            if ( !result.isNull( "photos" ) ) {
+                
+                JSONObject photo = result.getJSONArray( "photos" ).getJSONObject( 0 );
+                placeDetail.photoRef = photo.getString( "photo_reference" );
+            }
+        
+            if ( !result.isNull( "formatted_phone_number" ) )
+                placeDetail.phoneNumber =  result.getString( "formatted_phone_number" );;
+        
+            if ( !result.isNull( "formatted_address" ) )
+                placeDetail.address = result.getString( "formatted_address" );;
+        
+            if ( !result.isNull( "website" ) )
+                placeDetail.website = result.getString( "website" );;
+        
+            if ( !result.isNull( "name" ) )
+                placeDetail.siteName = result.getString( "name" );
+            
+        }
+        
+        catch ( JSONException ex ) {
+            
+            Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null, ex );
+        }
+        
+        return placeDetail;
    }
     
 }

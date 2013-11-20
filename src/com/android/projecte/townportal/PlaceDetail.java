@@ -4,9 +4,6 @@
 
 package com.android.projecte.townportal;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,9 +49,9 @@ public class PlaceDetail {
             
         }
         
-        catch ( JSONException ex ) {
-            
-            Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null, ex );
+        catch ( JSONException e ) {
+
+            e.printStackTrace();
         }
         
         return placeDetail;

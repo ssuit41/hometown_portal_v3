@@ -42,16 +42,13 @@ final public class NewsActivity extends FeedActivity {
         ((TextView) findViewById( R.id.title ) ).setText( this.title );
         this.courtesyText.setText( getString( R.string.newsCourtesy ) );
         
-        new FeedTask().execute();
+        new FeedTask( this.context ).execute();
     }
     
     @Override
     protected List<Item> getItems() {
         
         List<Item> result = new Vector<Item>();
-
-        // Allow user to refresh
-        result.add( new Item( "Refresh", null, null ) );
         
         try {
             
@@ -95,9 +92,6 @@ final public class NewsActivity extends FeedActivity {
             
             e.printStackTrace();
         }
-        
-        // Let user see more articles
-        result.add( new Item( "See More", null, null ) );
 
         return result;
     }

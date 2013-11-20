@@ -8,8 +8,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
@@ -39,7 +41,7 @@ public class GooglePlacesSearch {
                   reference = null;
     
     BitmapFactory.Options bmOptions;
-
+    
     public GooglePlacesSearch( String placeType, String geoLocation, int radius ) {
 
         this.types = placeType;
@@ -86,9 +88,13 @@ public class GooglePlacesSearch {
             
             return arrayList;
             
-        } catch ( JSONException ex ) {
+        } catch ( JSONException e ) {
             
-            ex.printStackTrace();
+            e.printStackTrace();
+            
+        } catch ( NullPointerException e ) {
+        	
+        	e.printStackTrace();
         }
         
         return arrayList;
@@ -120,13 +126,25 @@ public class GooglePlacesSearch {
             result = content.toString();
             
         } catch ( ClientProtocolException e ) {
-            
-            e.printStackTrace();
-            
-        } catch ( IOException e ) {
-            
-            e.printStackTrace();
-        }
+        	
+        	e.printStackTrace();
+        	
+        } catch ( UnknownHostException e ) {
+        	
+        	e.printStackTrace();
+        	
+    	} catch (ConnectException e) {
+    		
+    		e.printStackTrace();
+    		
+    	} catch ( IOException e ) {
+    		
+    		e.printStackTrace();
+    		
+        } catch ( Exception e ) {
+        	
+        	e.printStackTrace();
+        } 
         
         return result;
     }
@@ -174,9 +192,15 @@ public class GooglePlacesSearch {
 
             placeDetail = PlaceDetail.jsonToPlaceDetail( result );
 
-        } catch ( JSONException ex ) {
-            ex.printStackTrace();
+        } catch ( JSONException e ) {
+        	
+            e.printStackTrace();
+            
+        } catch ( NullPointerException e ) {
+        
+        	e.printStackTrace();
         }
+        
         return placeDetail;
     }
 

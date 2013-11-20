@@ -4,6 +4,8 @@
 
 package com.android.projecte.townportal;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,11 +24,13 @@ import android.widget.TextView;
 public class PlaceDetailActivity extends Activity {
 
     private TextView nameTextView, ratingTextView, priceTextView, 
-                addressTextView, phoneNumberTextView, websiteTextView;
-    
+                addressTextView, phoneNumberTextView, websiteTextView,
+                loadingText;
     private ImageView photoImageView;
     
     private GooglePlacesSearch gpSearch;
+    
+    private AtomicInteger loadingCounter;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -50,6 +54,7 @@ public class PlaceDetailActivity extends Activity {
         this.phoneNumberTextView = (TextView) findViewById( R.id.phoneNumberText );
         this.websiteTextView = (TextView) findViewById( R.id.websiteText );
         this.photoImageView = (ImageView) findViewById( R.id.photoImage );
+        this.loadingText = (TextView) findViewById( R.id.loading );
         
         // Set TextViews
         this.nameTextView.setText( getIntent().getExtras().getString( "name" ) );
@@ -58,6 +63,7 @@ public class PlaceDetailActivity extends Activity {
         this.phoneNumberTextView.setText( getIntent().getExtras().getString( "phonenumber" ) );
         this.websiteTextView.setClickable( true );
         this.websiteTextView.setMovementMethod( LinkMovementMethod.getInstance() );
+        this.loadingCounter = (AtomicInteger) getIntent().getExtras().getSerializable( "loadingCounter" );
         
         String dollars = priceToDollar( getIntent().getExtras().getInt( "price" ) );
         
@@ -84,6 +90,15 @@ public class PlaceDetailActivity extends Activity {
 
             this.photoReference = photoRef;
         }
+        
+        @Override
+        protected void onPreExecute() {
+        	
+        	loadingCounter.addAndGet( 1 );
+        	
+        	if ( loadingCounter.get() == 1 )
+        		loadingText.setVisibility( View.VISIBLE );
+        }
 
         @Override
         protected PlacePhoto doInBackground( Void... unused ) {
@@ -94,6 +109,11 @@ public class PlaceDetailActivity extends Activity {
         @Override
         protected void onPostExecute( PlacePhoto placePhoto ) {
             
+        	loadingCounter.addAndGet( -1 );
+        	
+        	if ( loadingCounter.get() == 0 )
+        		loadingText.setVisibility( View.GONE );
+        	
             // Set Photo ImageView
             if ( placePhoto.photo != null )
                 photoImageView.setImageBitmap( placePhoto.photo );

@@ -4,9 +4,6 @@
 
 package com.android.projecte.townportal;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,9 +37,9 @@ public class Place {
             result.rating = toPlace.has( "rating" ) ? toPlace.getDouble( "rating" ) : 0;
             result.price = toPlace.has( "price_level" ) ? toPlace.getInt( "price_level" ) : 0;
 
-        } catch ( JSONException ex ) {
+        } catch ( JSONException e ) {
             
-            Logger.getLogger( Place.class.getName() ).log( Level.SEVERE, null, ex );
+            e.printStackTrace();
         }
         
         return result;

@@ -4,11 +4,15 @@
 
 package com.android.projecte.townportal;
 
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Vector;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -46,6 +50,8 @@ public abstract class FeedActivity extends Activity {
     private int savedFirstVisiblePosition = 0;
     
     final private Integer MAX_DESC_LENGTH = 200;
+    
+    protected Context context = this;
     
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -131,7 +137,7 @@ public abstract class FeedActivity extends Activity {
                 } else if ( position == 0 && item.title.equals( "Refresh" ) ) {
                     
                     // Get items again
-                    new FeedTask().execute();
+                    new FeedTask( context ).execute();
                     return;
                 }
                 
@@ -242,10 +248,36 @@ public abstract class FeedActivity extends Activity {
      */
     protected class FeedTask extends AsyncTask<Void, Void, List<Item>> {
 
+    	private Context context;
+    	
+    	public FeedTask( Context c ) {
+    		
+    		this.context = c;
+    	}
+    	
         @Override
         protected List<Item> doInBackground( Void... arg0 ) {
             
-            return getItems();
+        	List<Item> result = null;
+        	
+        	try {
+            
+        		result = getItems();
+        	
+        	} catch ( UnknownHostException e ) {
+        		
+        		e.printStackTrace();
+        		
+        	} catch ( ConnectException e ) {
+        		
+        		e.printStackTrace();
+        		
+			} catch ( Exception e ) {
+				
+				e.printStackTrace();
+			} 
+        	
+        	return result;
         }
         
         @Override
@@ -255,19 +287,57 @@ public abstract class FeedActivity extends Activity {
         }
         
         @Override
-        protected void onPostExecute( List<Item> items ) {
+        protected void onPostExecute( List<Item> result ) {
             
-            // Reset and add new items
-            adapter.clear();
+        	// Make sure we received something
+        	if ( result != null && !result.isEmpty() ) {
+        		
+            	// Allow user to refresh
+        		result.add( 0, new Item( "Refresh", null, null ) );
+                
+                // Let user see more jobs
+        		result.add( new Item( "See More", null, null ) );
+        		
+        		// Reset and add new items
+                adapter.clear();
+                
+                for ( int i = 0 ; i < result.size(); ++i )
+                    adapter.add( result.get( i ) );
+                
+                adapter.notifyDataSetChanged();
+                
+                loadingText.setVisibility( View.INVISIBLE );
+                
+                list.setSelection( savedFirstVisiblePosition );
+        	
+        	} else {
+        		
+        		AlertDialog.Builder builder = new AlertDialog.Builder( context );
+        		builder.setMessage( "Failed to retrieve feed. Check your internet connection" ).setTitle( "Error" )
+        			.setPositiveButton( "Ok", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {}
+					} );
+        		
+        		builder.create().show();
+        		
+        		// Add a special list with only refresh
+        		result = new Vector<Item>();
+        		
+        		// Allow user to refresh
+        		result.add( 0, new Item( "Refresh", null, null ) );
+        		
+        		// Reset and add new items
+                adapter.clear();
+                
+                adapter.add( result.get( 0 ) );
+                
+                adapter.notifyDataSetChanged();
+                
+                loadingText.setVisibility( View.INVISIBLE );
+        	}
             
-            for ( int i = 0 ; i < items.size(); ++i )
-                adapter.add( items.get( i ) );
-            
-            adapter.notifyDataSetChanged();
-            
-            loadingText.setVisibility( View.INVISIBLE );
-            
-            list.setSelection( savedFirstVisiblePosition );
         }
     }
 
@@ -296,5 +366,5 @@ public abstract class FeedActivity extends Activity {
         return url;
     }
     
-    abstract protected List<Item> getItems();
+    abstract protected List<Item> getItems() throws UnknownHostException, ConnectException, Exception;
 }

@@ -152,9 +152,9 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
     @Override
     public void onPause() {
         
-        super.onPause();
-        
         this.savedFirstVisiblePosition = this.placesList.getFirstVisiblePosition();
+        
+        super.onPause();
     }
     
     @Override

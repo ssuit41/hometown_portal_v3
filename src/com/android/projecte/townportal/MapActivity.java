@@ -4,6 +4,8 @@
 
 package com.android.projecte.townportal;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -20,6 +22,11 @@ import android.widget.TextView;
  */
 public class MapActivity extends FragmentActivity {
 
+	// Multiple fragments can make loadingText appear and disappear
+    // so we need to make sure that if anyone is loading that it stays
+    // there.
+    private AtomicInteger loadingCounter = new AtomicInteger( 0 );
+	
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
 
@@ -46,6 +53,7 @@ public class MapActivity extends FragmentActivity {
         
         // Tab 1 - first tab is required, others may be null
         args.putString( "type", pt1.googleName );
+        args.putSerializable( "loadingCounter" , loadingCounter );
         tabHost.addTab( tabHost.newTabSpec( pt1.displayName ).setIndicator( pt1.displayName ), GooglePlacesMap.class, args );
 
         // Tab 2
@@ -53,6 +61,7 @@ public class MapActivity extends FragmentActivity {
             
             args = new Bundle();
             args.putString( "type", pt2.googleName );
+            args.putSerializable( "loadingCounter" , loadingCounter );
             tabHost.addTab( tabHost.newTabSpec( pt2.displayName ).setIndicator( pt2.displayName ), GooglePlacesMap.class, args );
         }
 
@@ -61,6 +70,7 @@ public class MapActivity extends FragmentActivity {
             
             args = new Bundle();
             args.putString( "type", pt3.googleName );
+            args.putSerializable( "loadingCounter" , loadingCounter );
             tabHost.addTab( tabHost.newTabSpec( pt3.displayName ).setIndicator( pt3.displayName ), GooglePlacesMap.class, args );
         }
 

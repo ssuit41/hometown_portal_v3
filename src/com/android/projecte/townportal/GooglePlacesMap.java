@@ -65,11 +65,9 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
     private FragmentActivity context;
     private int currentSpinnerIndex;
     private boolean alreadyStarted = false;
-    
-    // Multiple fragments can make loadingText appear and disappear
-    // so we need to make sure that if anyone is loading that it stays
-    // there.
-    static private AtomicInteger loadingCounter = new AtomicInteger( 0 );
+    private List<ListViewTask> listViewTasks = new Vector<ListViewTask>();
+    private List<DetailTask> detailTasks = new Vector<DetailTask>(); 
+    private AtomicInteger loadingCounter;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -137,6 +135,18 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
         });
         
         return view;
+    }
+    
+    @Override
+    public void onDestroy() {
+    	
+    	for ( ListViewTask task : this.listViewTasks )
+    		task.cancel( true );
+    	
+    	for ( DetailTask task : this.detailTasks )
+    		task.cancel( true );
+    	
+    	super.onDestroy();
     }
     
     @Override
@@ -221,6 +231,7 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
         
         Bundle arguments = this.getArguments();
         this.type = arguments.getString( "type" );
+        this.loadingCounter = (AtomicInteger) arguments.getSerializable( "loadingCounter" );
         
         this.context = this.getActivity();
         
@@ -407,6 +418,8 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
         @Override
         protected void onPreExecute() {
         	
+        	listViewTasks.add( this );
+        	
         	loadingCounter.addAndGet( 1 );
         	
         	if ( loadingCounter.get() == 1 )
@@ -422,6 +435,9 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
 
         @Override
         protected void onPostExecute( ArrayList<Place> result ) {
+        	
+        	if ( isCancelled() )
+        		return;
         	
         	loadingCounter.addAndGet( -1 );
         	
@@ -486,6 +502,8 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
         @Override
         protected void onPreExecute() {
         	
+        	detailTasks.add( this );
+        	
         	loadingCounter.addAndGet( 1 );
         	
         	if ( loadingCounter.get() == 1 )
@@ -500,6 +518,9 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
 
         @Override
         protected void onPostExecute( PlaceDetail placeDetail ) {
+        	
+        	if ( isCancelled() )
+        		return;
         	
         	loadingCounter.addAndGet( -1 );
         	

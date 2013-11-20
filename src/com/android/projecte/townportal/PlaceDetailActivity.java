@@ -4,6 +4,8 @@
 
 package com.android.projecte.townportal;
 
+import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.Activity;
@@ -29,8 +31,8 @@ public class PlaceDetailActivity extends Activity {
     private ImageView photoImageView;
     
     private GooglePlacesSearch gpSearch;
-    
     private AtomicInteger loadingCounter;
+    private List<PhotoTask> photoTasks = new Vector<PhotoTask>();
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -81,6 +83,15 @@ public class PlaceDetailActivity extends Activity {
         new PhotoTask( getIntent().getExtras().getString( "photoRef" ) ).execute();
     }
     
+    @Override
+    protected void onDestroy() {
+    	
+    	for ( PhotoTask task : this.photoTasks )
+    		task.cancel( true );
+    	
+    	super.onDestroy();
+    }
+    
     // Async Task to get Google Places Photo
     class PhotoTask extends AsyncTask<Void, Void, PlacePhoto> {
 
@@ -109,6 +120,9 @@ public class PlaceDetailActivity extends Activity {
         @Override
         protected void onPostExecute( PlacePhoto placePhoto ) {
             
+        	if ( isCancelled() )
+        		return;
+        	
         	loadingCounter.addAndGet( -1 );
         	
         	if ( loadingCounter.get() == 0 )

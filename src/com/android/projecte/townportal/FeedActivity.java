@@ -52,6 +52,7 @@ public abstract class FeedActivity extends Activity {
     final private Integer MAX_DESC_LENGTH = 200;
     
     protected Context context = this;
+    private List<FeedTask> feedTasks = new Vector<FeedTask>();
     
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -185,6 +186,15 @@ public abstract class FeedActivity extends Activity {
     }
     
     @Override
+    protected void onDestroy() {
+    	
+    	for ( FeedTask task : this.feedTasks )
+    		task.cancel( true );
+    	
+    	super.onDestroy();
+    }
+    
+    @Override
     protected void onSaveInstanceState( Bundle outState ) {
         
         // Save WebView and viewing state
@@ -283,12 +293,16 @@ public abstract class FeedActivity extends Activity {
         @Override
         protected void onPreExecute() {
             
+        	feedTasks.add( this );
             loadingText.setVisibility( View.VISIBLE );
         }
         
         @Override
         protected void onPostExecute( List<Item> result ) {
             
+        	if ( isCancelled() )
+        		return;
+        	
         	// Make sure we received something
         	if ( result != null && !result.isEmpty() ) {
         		
@@ -337,7 +351,6 @@ public abstract class FeedActivity extends Activity {
                 
                 loadingText.setVisibility( View.INVISIBLE );
         	}
-            
         }
     }
 
@@ -345,7 +358,7 @@ public abstract class FeedActivity extends Activity {
      * Item
      * Description: Basic structure for storing feed data
      */
-    static protected class Item {
+     protected class Item {
 
         protected String title, description, link;
 

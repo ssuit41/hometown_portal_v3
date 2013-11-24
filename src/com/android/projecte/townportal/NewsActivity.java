@@ -61,6 +61,7 @@ final public class NewsActivity extends FeedActivity {
             // Iterate through all items
             for ( Element element : newsItems ) {
                 
+                // Used http://jsoup.org/cookbook/ to figure out how to parse
                 String title = element.select( "div[id=storySummary] h1, h2, h3, h4, h5, h6" ).get( 0 ).text();
                 String description = element.select( "div[id=storySummary] p" ).get( 0 ).text();
                 String link = null;

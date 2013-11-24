@@ -94,6 +94,7 @@ final public class EmploymentActivity extends FeedActivity {
         // Create Document from RSS content
         try {
             
+            // Used http://jsoup.org/cookbook/ to figure out how to parse
             Document rssDoc = Jsoup.parse( getWebContents( this.jobsSource ), "UTF-8", "", Parser.xmlParser() );
             
             Elements jobItems = rssDoc.select("item");

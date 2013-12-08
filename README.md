@@ -12,7 +12,7 @@ COP4656 Town Portal
 * News and Employment listings are fetched and displayed dynamically for easier consumption
 * Activities now scalable across devices. No fixed sizes
 * Rotation supported (except for news/jobs webview which won't bring you back to scrolled location)
-* Map WebView now supports updatable places after dragging/zwooming
+* Map WebView now supports updatable places after dragging/zooming
 * App doesn't crash when an AsyncTask is running and the current activity is destroyed
 * App is resistant to network connection issues and provides refresh buttons in this scenario 
 * Loading text introduced to give users a visual cue

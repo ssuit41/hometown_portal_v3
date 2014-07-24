@@ -5,10 +5,12 @@
 	android:orientation="vertical"
 	android:weightSum="1" >
 	
+	
 	<WebView android:id="@+id/mapview"
 	   android:layout_weight=".50"
 	   android:layout_width="match_parent"
 	   android:layout_height="0dip" />
+
 	
 	<Spinner android:id="@+id/spinner1"
 	    android:layout_weight=".10"

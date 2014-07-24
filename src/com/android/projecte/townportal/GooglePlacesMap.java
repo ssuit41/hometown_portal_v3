@@ -79,6 +79,7 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
         // Get views
         this.spinner = (Spinner) view.findViewById( R.id.spinner1 );
         this.mapView = (WebView) view.findViewById( R.id.mapview );
+        
         this.placesList = (ListView) view.findViewById( R.id.list );
         this.loadingText = (TextView) getActivity().findViewById( R.id.loading );
         

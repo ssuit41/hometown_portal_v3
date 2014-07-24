@@ -1,5 +1,5 @@
 /* MainActivity.java
- * Project E - Eric Daniels
+ * House Droidaryen!
  */
 
 package com.android.projecte.townportal;

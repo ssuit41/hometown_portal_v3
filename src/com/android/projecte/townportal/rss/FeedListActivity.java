@@ -1,3 +1,12 @@
+/*
+ * House Droidaryen!
+ * FeedListActivity is the primary launching point of a feed. By passing in feedType, city and state 
+ * with the intent a various number of feeds are able to be produced on a large selection of data.
+ * 
+ * FeedListActivity was developed using the tutorial http://javatechig.com/android/json-feed-reader-in-android
+ * along with the documentation for JSON and Google Feeds api
+ */
+
 package com.android.projecte.townportal.rss;
 
 import java.io.BufferedReader;

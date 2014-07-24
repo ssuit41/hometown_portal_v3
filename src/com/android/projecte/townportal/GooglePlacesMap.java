@@ -1,22 +1,14 @@
 /* GooglePlacesMap.java
- * Project E - Eric Daniels
+ * House Droidaryen!
  */
 
 package com.android.projecte.townportal;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,7 +22,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +36,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 @SuppressLint ( "SetJavaScriptEnabled")
 /*
  * Google Places Map Activity
@@ -55,11 +47,12 @@ import android.widget.Toast;
  */
 public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelectedListener {
 
+    // Panama City Beach Coordinates
+    final private double panamaLat = 30.205971, panamaLong = -85.858862;
     final private int defaultRadius = 5997, defaultZoom = 13;
     final private String defaultMapType = "roadmap";
     
     private String type, bestProvider, currentCoords, currentMapType; 
-    private double lat, lng;
     private String city, state;
     private int currentRadius, currentZoom, savedFirstVisiblePosition;
     private GooglePlacesSearch gpSearch = null;
@@ -200,7 +193,7 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
                 
                 this.init();
                 
-                this.currentCoords = this.getGoogleCoordinates( this.lat, this.lng );
+                this.currentCoords = this.getGoogleCoordinates( this.panamaLat, this.panamaLong );
                 this.currentRadius = this.defaultRadius;
                 this.currentZoom = this.defaultZoom;
                 this.currentMapType = this.defaultMapType;
@@ -245,10 +238,9 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
         this.currentSpinnerIndex = 0;
         this.city = arguments.getString("city");
         this.state = arguments.getString("state");
-        String url = "http://nominatim.openstreetmap.org/search?city=" + city + "&state=" + state + "&format=jsonv2&limit=1";
-        new DownloadFilesTask().execute(url);
-        
-        
+        // Potential source of long and lat of any city, state through a json query
+        // "http://nominatim.openstreetmap.org/search?city=" city "&state=" state "&format=json&limit=1"
+
         
         // Acquire a reference to the system Location Manager
         this.locationManager = (LocationManager) this.context.getSystemService( Context.LOCATION_SERVICE );
@@ -498,58 +490,6 @@ public class GooglePlacesMap extends Fragment implements AdapterView.OnItemSelec
             
         }
     }
-    
-private class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
-		
-		
-		@Override
-		protected void onProgressUpdate(Integer... values) {
-		}
-
-		@Override
-		protected Void doInBackground(String... params) {
-			String url = params[0];
-			JSONArray loc = null;
-			String json = null;
-
-			try {
-				URL site = new URL(url);
-				URLConnection connection = site.openConnection();
-				connection.addRequestProperty("Referer", "https://github.com/ssuit41/hometown_portal_v3");
-				
-				String line = null;
-				StringBuilder sb = new StringBuilder();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				while ((line = reader.readLine()) != null) {
-					sb.append(line + "\n");
-				}
-				json = sb.toString();
-				Log.i("Msg", sb.toString() );
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				loc = new JSONArray(json);
-				Log.i("MSG", loc.toString());
-			} catch (JSONException e) {
-				Log.e("JSON Parser", "Error parsing data " + e.toString());
-			}
-			try{
-		        lat =  loc.getJSONObject(0).getDouble("lat");
-		        lng =  loc.getJSONObject(0).getDouble("lon");
-		        Log.i("MSG", "Number:" + lat);
-		        Log.i("MSG", "Number:" + lng);
-			}catch(JSONException e)
-			{
-				e.printStackTrace();
-			}
-			
-			return null;
-		}
-	}
 
     /* 
      * Detail Task
@@ -652,11 +592,11 @@ private class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
 
                 } else {
 
-                    // Default to Current City
+                    // Default to Panama City
                     this.spinner.setSelection( 1 );
                     this.currentSpinnerIndex = 1;
                     location = this.spinner.getItemAtPosition( this.currentSpinnerIndex ).toString();
-                    Toast toast = Toast.makeText( this.context, "Failed to get current location. Defaulting to Current City. Try again soon.",
+                    Toast toast = Toast.makeText( this.context, "Failed to get current location. Defaulting to Panama City. Try again soon.",
                                     Toast.LENGTH_SHORT );
                     
                     toast.setGravity( Gravity.CENTER_HORIZONTAL, 0, 0 );
@@ -665,9 +605,9 @@ private class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
             }
         }
 
-        if ( location.equals( "Current City" ) ) {
+        if ( location.equals( "Panama City" ) ) {
 
-            this.currentCoords = this.getGoogleCoordinates( this.lat, this.lng);
+            this.currentCoords = this.getGoogleCoordinates( this.panamaLat, this.panamaLong );
     
             // Update GP Search Parameters
             this.gpSearch = new GooglePlacesSearch( type, this.currentCoords, this.defaultRadius );

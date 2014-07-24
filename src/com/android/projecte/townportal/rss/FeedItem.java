@@ -1,12 +1,13 @@
+/*
+ * House Droidaryen!
+ *FeedItem represents a single item in the feed storing various data along with the appropriate setters and getters to move the data.
+ * * 
+ * FeedListActivity was developed using the tutorial http://javatechig.com/android/json-feed-reader-in-android
+ * along with the documentation for JSON and Google Feeds api
+ */
 package com.android.projecte.townportal.rss;
 
 import java.io.Serializable;
-
-/*
- * Feed item represents a single item in the feed storing data with various setters and getters
- * Feeditem and the rest of the rss code was from http://javatechig.com/android/json-feed-reader-in-android
- * which was tweaked and modified.
- */
 
 public class FeedItem implements Serializable {
 

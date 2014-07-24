@@ -1,3 +1,11 @@
+/*
+ * House Droidaryen!
+ * WebViewActivity launches a webview of the selected feed when either the title or button is clicked.
+ * 
+ * WebViewActivity was developed using the tutorial http://javatechig.com/android/json-feed-reader-in-android
+ * along with the documentation for JSON and Google Feeds api
+ */
+
 package com.android.projecte.townportal.rss;
 
 import android.app.Activity;

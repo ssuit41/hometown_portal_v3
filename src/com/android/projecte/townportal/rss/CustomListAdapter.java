@@ -1,3 +1,13 @@
+/*
+ * House Droidaryen!
+ * CustomLIstAdapter properly configures the listview in a style of our choosing.
+ * TODO:
+ * Potentially add a content snippet to the listview as a content preview.
+ * 
+ * CustomListAdapter was developed using the tutorial http://javatechig.com/android/json-feed-reader-in-android
+ * along with the documentation for JSON and Google Feeds api
+ */
+
 package com.android.projecte.townportal.rss;
 
 import java.util.ArrayList;

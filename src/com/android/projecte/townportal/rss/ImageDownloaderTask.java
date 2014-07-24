@@ -1,3 +1,12 @@
+/*
+ * House Droidaryen!
+ * ImageDownloaderTask is called to load an image on a background thread when there is an image present.
+ * 
+ * ImageDownloadedTask was developed using the tutorial http://javatechig.com/android/json-feed-reader-in-android
+ * along with the documentation for JSON and Google Feeds api
+ */
+
+
 package com.android.projecte.townportal.rss;
 
 import java.io.InputStream;

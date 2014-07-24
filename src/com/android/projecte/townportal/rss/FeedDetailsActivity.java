@@ -1,3 +1,11 @@
+/*
+ * House Droidaryen!
+ * FeedDetailsActivity serves to deliver more details about a selected feed including a short content snippet.
+ * 
+ * FeedDetailsActivity was developed using the tutorial http://javatechig.com/android/json-feed-reader-in-android
+ * along with the documentation for JSON and Google Feeds api
+ */
+
 package com.android.projecte.townportal.rss;
 
 import android.app.Activity;
@@ -72,6 +80,7 @@ public class FeedDetailsActivity extends Activity {
 	    }
 	}
 
+	//Uses an intent to share content using the phones resources.
 	private void shareContent() {
 		Intent sendIntent = new Intent();
 		sendIntent.setAction(Intent.ACTION_SEND);

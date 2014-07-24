@@ -44,6 +44,9 @@ public class FeedListActivity extends Activity {
 		city = (String) this.getIntent().getSerializableExtra("city");
 		state = (String) this.getIntent().getSerializableExtra("state");
 		String url = findFeed + city + ",%20" + state + "%20" + feedType;
+		
+		//All feeds are the same except employment which search specific sites.
+		//In this case the sites are passed in and loaded directly to aggregatelist
 		if(feedType.equals("employment"))
 		{
 			aggregateList = new ArrayList<String>();
@@ -158,12 +161,11 @@ public class FeedListActivity extends Activity {
 		try{
 			
 			if (json.getString("responseDetails").equalsIgnoreCase("null")) {
-				
-				//json = json.getJSONObject("entries");
 				//Log.i("JSON", json.toString());
 				Log.i("JSON", json.getJSONObject("responseData").getString("query"));
 				JSONArray feeds = json.getJSONObject("responseData").getJSONArray("entries");
 				
+				//Stores the urls from JSON to generate a list of feeds
 				for(int i = 0; i < feeds.length(); ++i)
 				{
 					JSONObject feed = (JSONObject) feeds.getJSONObject(i);
@@ -186,7 +188,8 @@ public class FeedListActivity extends Activity {
 			// parsing json feed object
 			if (json.getString("responseDetails").equalsIgnoreCase("null")) {
 				JSONArray posts = json.getJSONObject("responseData").getJSONObject("feed").getJSONArray("entries");
-
+				//Obtains relevant data from JSON to generate a feed list.
+				//Uncomment content if feedDetails is going to show the entire article
 				for (int i = 0; i < posts.length(); i++) {
 					JSONObject post = (JSONObject) posts.getJSONObject(i);
 					FeedItem item = new FeedItem();
@@ -194,7 +197,7 @@ public class FeedListActivity extends Activity {
 					item.setDate(post.getString("publishedDate"));
 					item.setContentPreview(post.getString("contentSnippet"));
 					item.setUrl(post.getString("link"));
-					item.setContent(post.getString("content"));
+					//item.setContent(post.getString("content"));
 					JSONArray attachments = post.optJSONArray("mediaGroups");
 
 					if (null != attachments && attachments.length() > 0) {

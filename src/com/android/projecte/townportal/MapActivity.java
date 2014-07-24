@@ -53,6 +53,8 @@ public class MapActivity extends FragmentActivity {
         
         // Tab 1 - first tab is required, others may be null
         args.putString( "type", pt1.googleName );
+        args.putString("city", (String)intent.getSerializableExtra("city"));
+        args.putString("state", (String)intent.getSerializableExtra("state"));
         args.putSerializable( "loadingCounter" , loadingCounter );
         tabHost.addTab( tabHost.newTabSpec( pt1.displayName ).setIndicator( pt1.displayName ), GooglePlacesMap.class, args );
 

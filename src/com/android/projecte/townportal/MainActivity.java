@@ -142,31 +142,19 @@ public class MainActivity extends Activity {
         }
         
         case R.id.btnNews:{
-            
-            Intent newsIntent = new Intent( this, FeedListActivity.class );
-            newsIntent.putExtra("feedType", "News");
-            newsIntent.putExtra("city", city);
-            newsIntent.putExtra("state", state);
-            startActivity( newsIntent );
-            
+            openRSS("News");
             break;
         }
         /*
         case R.id.btnSports:{
-        	Intent sportsIntent = new Intent(this, FeedListActivity.class);
-        	sportsIntent.putExtra("feedType", "Sports");
-        	sportsIntent.putExtra("city", city);
-        	sportsIntent.putExtra("state", state);
-        	startActivity( sportsIntent);
+        	openRSS("Sports");
+        	break;
         }
         */
         /*
         case R.id.btnWeather:{
-        	Intent weatherIntent = new Intent(this, FeedListActivity.class);
-        	weatherIntent.putExtra("feedType", "%20Weather");
-        	weatherIntent.putExtra("city", city + ",");
-        	weatherIntent.putExtra("state", "%20" + state);
-        	startActivity( weatherIntent);
+        	openRSS("Weather");
+        	break;
         }
         */
         default:
@@ -182,6 +170,8 @@ public class MainActivity extends Activity {
 
         Intent intent = new Intent( this, MapActivity.class );
         intent.putExtra( "title", title );
+        intent.putExtra("city", city);
+    	intent.putExtra("state", state);
         
         for ( int i = 0; i < places.size(); i++ )
             intent.putExtra( "PlaceType" + Integer.toString( i + 1 ), places.get( i ) );
@@ -226,5 +216,18 @@ public class MainActivity extends Activity {
 		});
     	alert.show();
     	
+    }
+    
+    /*
+     * Starts the FeedListActivity by passing in the correct search term to generate the feed
+     */
+    
+    private void openRSS (String feedType)
+    {
+    	Intent intent = new Intent(this, FeedListActivity.class);
+    	intent.putExtra("feedType", feedType);
+    	intent.putExtra("city", city);
+    	intent.putExtra("state", state);
+    	startActivity(intent);
     }
 }

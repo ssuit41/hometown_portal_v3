@@ -5,14 +5,21 @@
 package com.android.projecte.townportal;
 
 import java.util.Vector;
-
 import com.android.projecte.townportal.rss.FeedListActivity;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  * Main Activity
@@ -28,16 +35,18 @@ public class MainActivity extends Activity {
                               vSchool = new Vector<PlaceType>();
     
     private String foodTitle, entertainmentTitle, shoppingTitle, schoolsTitle;
+    private String city, state;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
 
         super.onCreate( savedInstanceState );
-
-        // Use custom title bar
+      //Custom Title Bar
         requestWindowFeature( Window.FEATURE_CUSTOM_TITLE );
         setContentView( R.layout.activity_main );
         getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title );
+        
+        
         
         // Get titles
         this.foodTitle = getString( R.string.food_text );
@@ -63,8 +72,27 @@ public class MainActivity extends Activity {
         // Setup Schools
         this.vSchool.add( new PlaceType( "school", "Schools" ) );
         this.vSchool.add( new PlaceType( "university", "Universities" ) );
+        
+        popLocation();
     }
-
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.mainscreen, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		 switch (item.getItemId()) {
+	        case R.id.location:
+	        	popLocation();	        	
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+    
     /*
      * Button On Click Listener
      * Description: Listens for any of the buttons being clicked
@@ -104,7 +132,10 @@ public class MainActivity extends Activity {
         
         case R.id.btnEmployment: {
             
-            Intent employmentIntent = new Intent( this, EmploymentActivity.class );
+            Intent employmentIntent = new Intent( this, FeedListActivity.class );
+            employmentIntent.putExtra("feedType", "employment");
+            employmentIntent.putExtra("simplyHiredURL", "http://www.simplyhired.com/a/job-feed/rss/q-" + city + "," + state);
+            employmentIntent.putExtra("indeedURL", "http://rss.indeed.com/rss?q=" + city + "," + state);
             startActivity( employmentIntent );
             
             break; 
@@ -113,11 +144,31 @@ public class MainActivity extends Activity {
         case R.id.btnNews:{
             
             Intent newsIntent = new Intent( this, FeedListActivity.class );
+            newsIntent.putExtra("feedType", "News");
+            newsIntent.putExtra("city", city);
+            newsIntent.putExtra("state", state);
             startActivity( newsIntent );
             
             break;
         }
-        
+        /*
+        case R.id.btnSports:{
+        	Intent sportsIntent = new Intent(this, FeedListActivity.class);
+        	sportsIntent.putExtra("feedType", "Sports");
+        	sportsIntent.putExtra("city", city);
+        	sportsIntent.putExtra("state", state);
+        	startActivity( sportsIntent);
+        }
+        */
+        /*
+        case R.id.btnWeather:{
+        	Intent weatherIntent = new Intent(this, FeedListActivity.class);
+        	weatherIntent.putExtra("feedType", "%20Weather");
+        	weatherIntent.putExtra("city", city + ",");
+        	weatherIntent.putExtra("state", "%20" + state);
+        	startActivity( weatherIntent);
+        }
+        */
         default:
             break;
         }
@@ -136,5 +187,44 @@ public class MainActivity extends Activity {
             intent.putExtra( "PlaceType" + Integer.toString( i + 1 ), places.get( i ) );
         
         startActivity( intent );
+    }
+    
+    private void popLocation ()
+    {
+    	LayoutInflater inflater = getLayoutInflater();
+    	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    	alert.setTitle("Please insert City and State");
+    	View view = inflater.inflate(R.layout.locationprompt, null);
+    	alert.setView(view);
+    	final EditText cityPrompt = (EditText) view.findViewById(R.id.city);
+    	final EditText statePrompt = (EditText) view.findViewById(R.id.state);
+    	
+    	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+				if(cityPrompt.getText().toString() == null || statePrompt.getText().toString() == null)
+				{
+					Toast.makeText(getApplicationContext(), "Invalid City,  State", Toast.LENGTH_SHORT).show();
+					popLocation();
+					
+				}else
+				{
+					city = cityPrompt.getText().toString();
+					state = statePrompt.getText().toString();
+					((TextView) findViewById( R.id.title ) ).setText( "Welcome to "+ city + "," + state );
+				
+				}
+				
+			}
+    	});
+    	
+    	alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+    		@Override
+			public void onClick(DialogInterface dialog, int which) {}
+		});
+    	alert.show();
+    	
     }
 }

@@ -2,21 +2,11 @@ package com.android.projecte.townportal.rss;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Vector;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,13 +30,27 @@ public class FeedListActivity extends Activity {
 	private String findFeed = "https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=";
 	private String loadFeed = "https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=";
 	private ArrayList<String> aggregateList;
+	private String city;
+	private String state;
+	private String feedType;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_posts_list);
 		progressbar = (ProgressBar) findViewById(R.id.progressBar);
-		String url = findFeed + "Chicago";
+				
+		feedType = (String) this.getIntent().getSerializableExtra("feedType");
+		city = (String) this.getIntent().getSerializableExtra("city");
+		state = (String) this.getIntent().getSerializableExtra("state");
+		String url = findFeed + city + ",%20" + state + "%20" + feedType;
+		if(feedType.equals("employment"))
+		{
+			aggregateList = new ArrayList<String>();
+			aggregateList.add((String) this.getIntent().getSerializableExtra("indeedURL"));
+			Log.i("AgLoad", aggregateList.get(0).toString());
+			aggregateList.add((String) this.getIntent().getSerializableExtra("simplyHiredURL"));
+		}
 		new DownloadFilesTask().execute(url);
 	}
 
@@ -93,15 +97,16 @@ public class FeedListActivity extends Activity {
 			String url = params[0];
 
 			// Get list of aggregate feeds
-			Log.i("URL", url);
-			JSONObject json = getJSONFromUrl(url);
-			parseAggregateFeeds(json);
-			Log.i("AggFeed", "Finish");
+			if(!feedType.equals("employment"))
+			{
+				Log.i("URL", url);
+				JSONObject json = getJSONFromUrl(url);
+				parseAggregateFeeds(json);
+			}
 			// Parse each feed that returned from the query
 			feedList = new ArrayList<FeedItem>();
 			for(int i = 0; i < aggregateList.size(); ++i)
 			{
-				Log.i("Loop", "Looping");
 				String link = loadFeed + aggregateList.get(i);
 				Log.i("Data", link);
 				JSONObject feeds = getJSONFromUrl(link);
@@ -113,26 +118,10 @@ public class FeedListActivity extends Activity {
 
 	
 	public JSONObject getJSONFromUrl(String url) {
-		//InputStream is = null;
 		JSONObject jObj = null;
 		String json = null;
 
-		// Making HTTP request
 		try {
-			// defaultHttpClient
-			/*
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(url);
-
-			HttpResponse httpResponse = httpClient.execute(httpPost);
-			HttpEntity httpEntity = httpResponse.getEntity();
-			is = httpEntity.getContent();
-
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					is, "iso-8859-1"), 8);
-			StringBuilder sb = new StringBuilder();
-			*/
-			
 			URL site = new URL(url);
 			URLConnection connection = site.openConnection();
 			connection.addRequestProperty("Referer", "https://github.com/ssuit41/hometown_portal_v3");
@@ -142,15 +131,10 @@ public class FeedListActivity extends Activity {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			while ((line = reader.readLine()) != null) {
 				sb.append(line + "\n");
-				//sb.append(line);
 			}
-			//is.close();
-			//json = sb.toString().substring(0, sb.toString().length() - 1);
 			json = sb.toString();
 			//Log.i("Msg", sb.toString() );
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,10 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.FacebookDialog;
+
 
 /*
  * Main Activity
@@ -36,6 +41,9 @@ public class MainActivity extends Activity {
     
     private String foodTitle, entertainmentTitle, shoppingTitle, schoolsTitle;
     private String city, state;
+    
+    private UiLifecycleHelper uiHelper;  //facebook implement
+
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -73,10 +81,57 @@ public class MainActivity extends Activity {
         this.vSchool.add( new PlaceType( "school", "Schools" ) );
         this.vSchool.add( new PlaceType( "university", "Universities" ) );
         
+        //Setup facebook
+        uiHelper = new UiLifecycleHelper(this, null);  //facebook
+        uiHelper.onCreate(savedInstanceState);         //facebook
+
+        
         popLocation();
     }
     
-	@Override
+    /*//facebook start
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
+            @Override
+            public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
+                Log.e("Activity", String.format("Error: %s", error.toString()));
+            }
+
+            @Override
+            public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
+                Log.i("Activity", "Success!");
+            }
+        });
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        uiHelper.onResume();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }//facebook end */ 
+    
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.mainscreen, menu);
@@ -144,6 +199,18 @@ public class MainActivity extends Activity {
         case R.id.btnNews:{
             openRSS("News");
             break;
+        }
+        
+        case R.id.btnFacebook: {   //implementing facebook action
+            
+        	 FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)  
+             .setLink("https://play.google.com/store/apps/details?id=com.app_cocoabeach.layout&hl=en")
+             .build();  //facebook
+             uiHelper.trackPendingDialogCall(shareDialog.present());//facebook
+             
+             
+            
+            break; 
         }
         /*
         case R.id.btnSports:{

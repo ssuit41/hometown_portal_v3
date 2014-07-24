@@ -125,6 +125,7 @@
 
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="@string/empl_text"
                 android:textSize="12sp" />
             
@@ -151,5 +152,25 @@
         </LinearLayout>
         
     </LinearLayout>
+    
+        <ImageButton
+        android:id="@+id/btnFacebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/FaceBookShare"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="54dp"
+        android:src="@drawable/share"
+        android:onClick="onClick" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:text="@string/FaceBookShare"
+        android:textSize="12sp" />
 
 </RelativeLayout>

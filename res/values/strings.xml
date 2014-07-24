@@ -35,5 +35,7 @@
         <item>My Location</item>
         <item>Current City</item>
     </string-array>
+    <string name="FaceBookShare">Share on Facebook</string>
+    <string name="app_id">329534050537885</string>
 
 </resources>

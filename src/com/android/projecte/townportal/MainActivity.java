@@ -23,9 +23,16 @@ public class MainActivity extends Activity {
     private Vector<PlaceType> vFood = new Vector<PlaceType>(),
                               vEnt = new Vector<PlaceType>(),
                               vShop = new Vector<PlaceType>(),
-                              vSchool = new Vector<PlaceType>();
+                              vSchool = new Vector<PlaceType>(),
+    						  vHotel = new Vector<PlaceType>(),
+    						  vHealth = new Vector<PlaceType>(),
+    						  vGovernment = new Vector<PlaceType>(),
+    						  vTransportation = new Vector<PlaceType>(),
+    						  vReligion = new Vector<PlaceType>(),
+    						  vEmergency = new Vector<PlaceType>();
     
-    private String foodTitle, entertainmentTitle, shoppingTitle, schoolsTitle;
+    private String foodTitle, entertainmentTitle, shoppingTitle, schoolsTitle, hotelTitle, governmentTitle, 
+    				healthTitle, transportationTitle, religionTitle, emergencyTitle;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -42,6 +49,11 @@ public class MainActivity extends Activity {
         this.entertainmentTitle = getString( R.string.entertainment_text );
         this.shoppingTitle = getString( R.string.shopping_text );
         this.schoolsTitle = getString( R.string.schools_text );
+        this.hotelTitle = getString( R.string.lodging_text);
+        this.healthTitle = getString( R.string.health_text);
+        this.transportationTitle = getString( R.string.transportation_text);
+        this.religionTitle = getString( R.string.religion_text);
+        this.emergencyTitle = getString(R.string.emergency_text);
 
         // Setup food
         this.vFood.add( new PlaceType( "cafe", "Cafes" ) );
@@ -61,6 +73,32 @@ public class MainActivity extends Activity {
         // Setup Schools
         this.vSchool.add( new PlaceType( "school", "Schools" ) );
         this.vSchool.add( new PlaceType( "university", "Universities" ) );
+        
+        // Setup hotels
+        this.vHotel.add(  new PlaceType( "lodging", "Hotels") );
+        
+        //Setup Health places
+        this.vHealth.add( new PlaceType( "hospital", "Hospitals"));
+        this.vHealth.add( new PlaceType( "doctor", "Doctors"));
+        this.vHealth.add( new PlaceType( "pharmacy", "Pharmacies"));
+        
+        //Setup Government
+        this.vGovernment.add( new PlaceType( "city_hall", "City Hall"));
+        this.vGovernment.add( new PlaceType( "courthouse", "Court Houses"));
+        
+        //Setup Transportation
+        this.vTransportation.add(new PlaceType( "airport", "Airports"));
+        this.vTransportation.add(new PlaceType( "bus_station", "Bus Stations"));
+        this.vTransportation.add(new PlaceType( "subway_station", "Subway Stations"));
+
+        //Setup Religion 
+        this.vReligion.add(new PlaceType( "church", "Churches"));
+        this.vReligion.add(new PlaceType( "synagogue", "Synagogues"));
+        this.vReligion.add(new PlaceType( "mosque", "Mosques"));
+        
+        //Setup Emergency 
+        this.vEmergency.add(new PlaceType( "police", "Police Stations"));
+        this.vEmergency.add(new PlaceType( "fire_station", "Fire Stations"));
     }
 
     /*
@@ -100,6 +138,48 @@ public class MainActivity extends Activity {
             break; 
         }
         
+        case R.id.btnHotels:{
+	
+        	openPlaceList( this.hotelTitle, this.vHotel);
+        	
+        	break;
+        }
+        
+        case R.id.btnEmergency:{
+        	
+        	openPlaceList( this.emergencyTitle, this.vEmergency);
+        	
+        	break;
+        }
+        
+        case R.id.btnGovernment:{
+        	
+        	openPlaceList( this.governmentTitle, this.vGovernment);
+        	
+        	break;
+        	
+        }
+        
+        case R.id.btnHealth:{
+        	
+        	openPlaceList( this.healthTitle, this.vHealth);
+        	
+        	break;
+        }
+        
+        case R.id.btnReligion:{
+        	
+        	openPlaceList( this.religionTitle, this.vReligion);
+        	
+        	break;
+        }
+        
+        case R.id.btnTransporation:{
+        	
+        	openPlaceList( this.transportationTitle, this.vTransportation);
+        	
+        	break;
+        }
         case R.id.btnEmployment: {
             
             Intent employmentIntent = new Intent( this, EmploymentActivity.class );
@@ -115,7 +195,7 @@ public class MainActivity extends Activity {
             
             break;
         }
-        
+     
         default:
             break;
         }

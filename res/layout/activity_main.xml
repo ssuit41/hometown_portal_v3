@@ -9,147 +9,327 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <LinearLayout android:id="@+id/row1"
+    <LinearLayout
+        android:id="@+id/row1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
+        android:baselineAligned="false"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:baselineAligned="false" >
+        android:orientation="horizontal" >
 
-        <LinearLayout android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical" >
 
-            <ImageButton android:id="@+id/btnFood"
+            <ImageButton
+                android:id="@+id/btnFood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/restaurants"
                 android:contentDescription="@string/food_text"
                 android:onClick="onClick" />
 
-            <TextView android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/food_text"
                 android:textSize="12sp" />
-            
         </LinearLayout>
 
-        <LinearLayout android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical" >
 
-            <ImageButton android:id="@+id/btnEntertainment"
+            <ImageButton
+                android:id="@+id/btnEntertainment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/entertainment"
                 android:contentDescription="@string/entertainment_text"
                 android:onClick="onClick" />
 
-            <TextView android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/entertainment_text"
                 android:textSize="12sp" />
-            
         </LinearLayout>
 
-        <LinearLayout android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical" >
 
-            <ImageButton android:id="@+id/btnShopping"
+            <ImageButton
+                android:id="@+id/btnShopping"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shopping"
                 android:contentDescription="@string/shopping_text"
                 android:onClick="onClick" />
 
-            <TextView android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/shopping_text"
                 android:textSize="12sp" />
-            
         </LinearLayout>
-        
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/row2"
+    <LinearLayout
+        android:id="@+id/row2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/row1"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
+        android:baselineAligned="false"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:baselineAligned="false" >
+        android:orientation="horizontal" >
 
-        <LinearLayout android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical" >
 
-            <ImageButton android:id="@+id/btnSchools"
+            <ImageButton
+                android:id="@+id/btnSchools"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/schools"
                 android:contentDescription="@string/schools_text"
                 android:onClick="onClick" />
 
-            <TextView android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/schools_text"
                 android:textSize="12sp" />
-            
         </LinearLayout>
 
-        <LinearLayout android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical" >
 
-            <ImageButton android:id="@+id/btnEmployment"
+            <ImageButton
+                android:id="@+id/btnEmployment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/employment"
                 android:contentDescription="@string/empl_text"
                 android:onClick="onClick" />
 
-            <TextView android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/empl_text"
                 android:textSize="12sp" />
-            
         </LinearLayout>
 
-        <LinearLayout android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical" >
 
-            <ImageButton android:id="@+id/btnNews"
+            <ImageButton
+                android:id="@+id/btnNews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/news"
                 android:contentDescription="@string/news_text"
                 android:onClick="onClick" />
 
-            <TextView android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/news_text"
                 android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/row3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/row2"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.76"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/btnHotels"
+                android:layout_width="74dp"
+                android:layout_height="57dp"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/lodging"
+                android:contentDescription="@string/lodging_text"
+                android:onClick="onClick" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lodging_text"
+                android:textSize="12sp" />
             
         </LinearLayout>
-        
+
+        <LinearLayout
+             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/btnTransporation"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="57dp"
+                android:layout_height="59dp"
+                android:background="@drawable/transportation"
+                android:contentDescription="@string/transportation_text"
+                android:gravity="center"
+                android:onClick="onClick" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/transportation_text"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/btnHealth"
+                android:layout_width="79dp"
+                android:layout_height="44dp"
+                android:background="@drawable/health"
+                android:contentDescription="@string/health_text"
+                android:gravity="right"
+                android:onClick="onClick" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/health_text"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+    <LinearLayout
+       android:id="@+id/row4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/row3"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"  >
+
+            <ImageButton
+                android:id="@+id/btnReligion"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="53dp"
+                android:layout_height="76dp"
+                android:background="@drawable/religion"
+                android:contentDescription="@string/religion_text"
+                android:gravity="left"
+                android:onClick="onClick" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/religion_text"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"  >
+
+            <ImageButton
+                android:id="@+id/btnGovernment"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="89dp"
+                android:layout_height="59dp"
+                android:background="@drawable/government"
+                android:contentDescription="@string/government_text"
+                android:gravity="center"
+                android:onClick="onClick" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/government_text"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"  >
+
+            <ImageButton
+                android:id="@+id/btnEmergency"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="68dp"
+                android:layout_height="79dp"
+                android:background="@drawable/emergency"
+                android:contentDescription="@string/emergency_text"
+                android:gravity="right"
+                android:onClick="onClick" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/emergency_text"
+                android:textSize="12sp" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

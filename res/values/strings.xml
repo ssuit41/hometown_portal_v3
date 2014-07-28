@@ -16,6 +16,16 @@
     <string name="schools_text">Schools</string>
     <string name="news_text">News</string>
     <string name="empl_text">Employment</string>
+    
+    <string name="lodging_text">Lodging</string>
+   <string name="health_text">Health</string>
+   <string name="transportation_text">Transportation</string>
+   <string name="religion_text">Religion</string>
+   <string name="government_text">Government</string>
+   <string name="emergency_text">Emergency</string>
+   <string name="sports_text">Sports</string>
+   <string name="weather_text">Weather</string>
+   
     <string name="loading_text">Loading&#8230;</string>
     <string name="returnText">Press Back to Return</string>
     
@@ -35,7 +45,7 @@
         <item>My Location</item>
         <item>Current City</item>
     </string-array>
-    <string name="FaceBookShare">Share on Facebook</string>
+    <string name="FaceBookShare">Facebook</string>
     <string name="app_id">329534050537885</string>
 
 </resources>

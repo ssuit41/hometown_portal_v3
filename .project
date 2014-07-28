@@ -3,6 +3,7 @@
 	<name>townportal</name>
 	<comment></comment>
 	<projects>
+		<project>FacebookSDK</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

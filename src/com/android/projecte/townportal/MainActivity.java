@@ -4,13 +4,20 @@
 
 package com.android.projecte.townportal;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Vector;
 import com.android.projecte.townportal.rss.FeedListActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,7 +31,8 @@ import android.widget.Toast;
 
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
-
+//Facebook implementation code from developers.Facebook.com following official 
+//Facebook developer instructions
 
 /*
  * Main Activity
@@ -37,9 +45,17 @@ public class MainActivity extends Activity {
     private Vector<PlaceType> vFood = new Vector<PlaceType>(),
                               vEnt = new Vector<PlaceType>(),
                               vShop = new Vector<PlaceType>(),
-                              vSchool = new Vector<PlaceType>();
+                              vSchool = new Vector<PlaceType>(),
+                              //added from Nigel
+                              		vHotel = new Vector<PlaceType>(),
+                              		vHealth = new Vector<PlaceType>(),
+                              		vGovernment = new Vector<PlaceType>(),
+                              		vTransportation = new Vector<PlaceType>(),
+                              		vReligion = new Vector<PlaceType>(),
+                              		vEmergency = new Vector<PlaceType>();
     
-    private String foodTitle, entertainmentTitle, shoppingTitle, schoolsTitle;
+    private String foodTitle, entertainmentTitle, shoppingTitle, schoolsTitle, 
+    hotelTitle, governmentTitle, healthTitle, transportationTitle, religionTitle, emergencyTitle;  // added from Nigel
     private String city, state;
     
     private UiLifecycleHelper uiHelper;  //facebook implement
@@ -55,12 +71,35 @@ public class MainActivity extends Activity {
         getWindow().setFeatureInt( Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title );
         
         
+        //code for generating a key hash in logcat window, tried to use this in fixing facebook issue
+        /*try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.android.projecte.townportal", 
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                }
+        } catch (NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }*/
+        
+        
         
         // Get titles
         this.foodTitle = getString( R.string.food_text );
         this.entertainmentTitle = getString( R.string.entertainment_text );
         this.shoppingTitle = getString( R.string.shopping_text );
         this.schoolsTitle = getString( R.string.schools_text );
+        
+        this.hotelTitle = getString( R.string.lodging_text);   //added from Nigel
+        this.healthTitle = getString( R.string.health_text);
+        this.transportationTitle = getString( R.string.transportation_text);
+        this.religionTitle = getString( R.string.religion_text);
+        this.emergencyTitle = getString(R.string.emergency_text);
 
         // Setup food
         this.vFood.add( new PlaceType( "cafe", "Cafes" ) );
@@ -81,6 +120,32 @@ public class MainActivity extends Activity {
         this.vSchool.add( new PlaceType( "school", "Schools" ) );
         this.vSchool.add( new PlaceType( "university", "Universities" ) );
         
+        // Setup hotels
+        this.vHotel.add(  new PlaceType( "lodging", "Hotels") );
+        
+        //Setup Health places
+        this.vHealth.add( new PlaceType( "hospital", "Hospitals"));
+        this.vHealth.add( new PlaceType( "doctor", "Doctors"));
+        this.vHealth.add( new PlaceType( "pharmacy", "Pharmacies"));
+        
+        //Setup Government
+        this.vGovernment.add( new PlaceType( "city_hall", "City Hall"));
+        this.vGovernment.add( new PlaceType( "courthouse", "Court Houses"));
+        
+        //Setup Transportation
+        this.vTransportation.add(new PlaceType( "airport", "Airports"));
+        this.vTransportation.add(new PlaceType( "bus_station", "Bus Stations"));
+        this.vTransportation.add(new PlaceType( "subway_station", "Subway Stations"));
+
+        //Setup Religion 
+        this.vReligion.add(new PlaceType( "church", "Churches"));
+        this.vReligion.add(new PlaceType( "synagogue", "Synagogues"));
+        this.vReligion.add(new PlaceType( "mosque", "Mosques"));
+        
+        //Setup Emergency 
+        this.vEmergency.add(new PlaceType( "police", "Police Stations"));
+        this.vEmergency.add(new PlaceType( "fire_station", "Fire Stations"));
+        
         //Setup facebook
         uiHelper = new UiLifecycleHelper(this, null);  //facebook
         uiHelper.onCreate(savedInstanceState);         //facebook
@@ -89,7 +154,7 @@ public class MainActivity extends Activity {
         popLocation();
     }
     
-    /*//facebook start
+    //facebook start
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -201,6 +266,36 @@ public class MainActivity extends Activity {
             break;
         }
         
+        case R.id.btnHotels:{   //added from Nigel
+        	openPlaceList( this.hotelTitle, this.vHotel);
+        	break;
+        }
+        
+        case R.id.btnEmergency:{   //added from Nigel
+        	openPlaceList( this.emergencyTitle, this.vEmergency);
+        	break;
+        }
+        
+        case R.id.btnGovernment:{   //added from Nigel
+        	openPlaceList( this.governmentTitle, this.vGovernment);
+        	break;
+        }
+        
+        case R.id.btnHealth:{   //added from Nigel
+        	openPlaceList( this.healthTitle, this.vHealth);
+        	break;
+        }
+        
+        case R.id.btnReligion:{   //added from Nigel
+        	openPlaceList( this.religionTitle, this.vReligion);
+        	break;
+        }
+        
+        case R.id.btnTransporation:{   //added from Nigel
+        	openPlaceList( this.transportationTitle, this.vTransportation);
+        	break;
+        }
+        
         case R.id.btnFacebook: {   //implementing facebook action
             
         	 FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)  
@@ -212,18 +307,18 @@ public class MainActivity extends Activity {
             
             break; 
         }
-        /*
-        case R.id.btnSports:{
+        
+        case R.id.btnSports:{   //re-added from Shawn
         	openRSS("Sports");
         	break;
         }
-        */
-        /*
-        case R.id.btnWeather:{
+        
+        
+        case R.id.btnWeather:{   //re-added from Shawn
         	openRSS("Weather");
         	break;
         }
-        */
+        
         default:
             break;
         }
